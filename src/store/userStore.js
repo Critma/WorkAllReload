@@ -2,16 +2,42 @@ import { defineStore } from "pinia";
 import { ref, computed } from 'vue'
 
 export const useUserStore = defineStore("userStore", () => {
-    const id = ref(null);
+    const ID = ref(null);
     const login = ref("");
-    const isAuthenticated = ref(false);
+    const name = ref("");
     const jwt = ref("");
+    const isAuthenticated = ref(false);
+    const isLoading = ref(false);
+    const isEmployer = ref(false);
 
-    
+    const asignUser = (user) => {
+        ID.value = user.id;
+        login.value = user.login;
+        jwt.value = user.jwt;
+        name.value = user.name
+        isAuthenticated.value = true
+        isEmployer.value = user.isEmployer;
+    }
+
+    const clearUser = () => {
+        ID.value = null;
+        login.value = "";
+        name.value = "";
+        jwt.value = "";
+        isAuthenticated.value = false
+        isLoading.value = false;
+    }
+
     return{
-        id,
+        ID,
         login,
         isAuthenticated,
-        jwt
+        jwt,
+        isLoading,
+        name,
+        isEmployer,
+
+        asignUser,
+        clearUser
     }
 });

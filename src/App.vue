@@ -1,22 +1,27 @@
 <template>
-  <div>
-      <p> 
-        {{ response }}
-      </p>
-      <button class="btn btn-success" @click="getJWT()">Отправить запрос</button>
-  </div>
+  <MenuPanel id="menu" ref="menu" />
+  <main :style="{ paddingTop: menuPanelHeight + 'px' }">
+    <RouterView />
+  </main>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { loginCandidate } from "@/service/accessingService.js"
+import MenuPanel from './components/MenuPanel.vue'
+import { ref, onMounted } from 'vue'
+import { checkJWT } from '@/service/accessingService';
+import useTheming from '@/composibles/useTheming.js'
 
-var response = ref("");
+// auto adjust height of menu panel
+const menuPanelHeight = ref(0);
+onMounted(() => {
+  const menu = document.getElementById('menu');
+  menuPanelHeight.value = menu.clientHeight * 1.2;
+});
 
-async function getJWT() {
-  response.value = await loginCandidate("nickolay@bk.ru", "Hard123Password!)");
-}
+checkJWT();
+
+useTheming().UpdateTheme();
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss"></style>
