@@ -9,6 +9,7 @@ const paths = {
     Account: "/Account/:id",
     Responses: "/Responses",
     CompanyVacancies: "/CompanyVacancies",
+    CreateVacancy: "/CreateVacancy",
 }
 
 export default paths;

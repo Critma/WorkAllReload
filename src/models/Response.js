@@ -1,4 +1,3 @@
-// aka Otklik
 export default class Response {
     constructor(id, user_id, vakans_id, status_id){
         this.id = id,

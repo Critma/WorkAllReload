@@ -5,9 +5,13 @@ export const useServerStore = defineStore("serverStore", () => {
     const baseURL = "https://isp-workall.online/api/v1/"
     const empURL = baseURL + 'emp';
     const candidateURL = baseURL + 'user';
-    
-    return{
+    const employerURL = baseURL + 'emp';
+    const vacancyURL = baseURL + 'vac';
+
+    return {
         empURL,
-        candidateURL
+        candidateURL,
+        vacancyURL,
+        employerURL
     }
 });

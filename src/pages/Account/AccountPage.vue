@@ -4,11 +4,17 @@
         <div class="hrefs">
             <a class="nav-link" :class="{ active: accountSection === 'InfoView' }"
                 @click="updateAccountSection('InfoView')">Ваши данные</a>
-            <a class="nav-link" :class="{ active: accountSection === 'ResumeView' }"
+            <a v-if="!userStore.isEmployer" class="nav-link" :class="{ active: accountSection === 'ResumeView' }"
                 @click="updateAccountSection('ResumeView')">Ваше резюме</a>
         </div>
+        <div class="message__container">
+            <div v-if="isSuccess" class="message">
+                Данные успешно сохранены!
+            </div>
+        </div>
         <div class="account-info">
-            <KeepAlive>
+            <loader v-if="isLoading"></loader>
+            <KeepAlive v-if="!isLoading">
                 <component :is="section" :user="user" />
             </KeepAlive>
         </div>
@@ -21,19 +27,49 @@
 
 <script setup>
 import User from '@/models/User.js';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import InfoView from './InfoView.vue';
 import ResumeView from './ResumeView.vue';
 import paths from '@/router/paths.js';
 import router from '@/router/router';
 import { useUserStore } from '@/store/userStore';
 import { logout } from '@/service/accessingService';
+import { getCandidateSelf, saveCandidate } from '../../service/candidateService';
+import { getEmployerSelf, saveEmployer } from '../../service/employerService';
 
 const userStore = useUserStore();
-let user = ref(new User(1, "Артём Салимов", "+7982312321", "artur.kilogram@umail.ru", 1, 1))
-let accountSection = ref("InfoView")
+const user = ref();
+const isLoading = ref(false);
+const isSuccess = ref(false);
+const accountSection = ref("InfoView")
 
-CheckSection();
+watch(accountSection, () => {
+    isSuccess.value = false;
+})
+
+GetUserInfo()
+
+async function GetUserInfo() {
+    if (isLoading.value) {
+        return;
+    }
+    isLoading.value = true;
+    let result = {};
+    if (userStore.isEmployer) {
+        result = await getEmployerSelf();
+    } else {
+        result = await getCandidateSelf();
+    }
+    if (result.success) {
+        user.value = result.data;
+    }
+    else {
+        console.log(`Ошибка при получении данных личного кабинета${result.error}`);
+    }
+    isLoading.value = false;
+}
+
+
 
 function Logout() {
     logout();
@@ -52,17 +88,20 @@ function updateAccountSection(section) {
     localStorage.setItem("accountSection", section);
 }
 
-function CheckSection() {
-    let savedSection = localStorage.getItem("accountSection");
-    if (savedSection != null) {
-        updateAccountSection(savedSection);
-    }
-}
-
-function handleSave() {
+async function handleSave() {
+    let result = {};
     if (accountSection.value == 'InfoView') {
-        //TODO: сохранить
+        result = await (userStore.isEmployer ? saveEmployer(user.value) : saveCandidate(user.value));
     } else if (accountSection.value == 'ResumeView') {
+
+    }
+    if (result.success) {
+        isSuccess.value = true;
+        setTimeout(() => {
+            isSuccess.value = false;
+        }, 5000);
+    } else {
+        console.log("Ошибка при сохранении данных " + result.error);
     }
 }
 
@@ -78,6 +117,8 @@ function handleSave() {
 
 .hrefs {
     margin: 40px auto;
+    display: flex;
+    justify-content: center;
 }
 
 .nav-link {

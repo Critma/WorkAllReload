@@ -16,7 +16,7 @@ $pd-medium: $pd * 2;
 $pd-large: $pd * 3;
 $pd-xlarge: $pd * 4;
 
-.fbtn{
+.fbtn {
     font-size: $button-fs;
     font-weight: bold;
 }
@@ -32,4 +32,22 @@ $pd-xlarge: $pd * 4;
     background-color: colors.$main;
     margin: 0 auto;
     margin-bottom: $pd-large;
+}
+
+.title__line {
+    width: 40%;
+    opacity: 1;
+    height: 2px;
+    background-color: colors.$main;
+    margin: 0 auto;
+    margin-bottom: $pd-large;
+}
+
+.message__container {
+    height: 30px;
+}
+
+.message {
+    font-size: 30px;
+    color: colors.$second;
 }

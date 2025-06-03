@@ -3,12 +3,18 @@
         <form class="login__form" @submit.prevent="RegisterHandler">
             <text v-if="isUserRegister">Создайте свой аккаунт</text>
             <text v-else>Регистрация организации</text>
+            <div style="height: 100px;" class="message__container">
+                <div v-if="errorMessage != ''" class="text-danger message">
+                    {{ errorMessage }}
+                </div>
+            </div>
             <input v-model="email" type="text" name="email" placeholder="Введите почту">
             <input v-model="password" type="password" name="password" placeholder="Введите пароль">
             <input v-if="isUserRegister" class="fbtn" type="submit" name="confirm" value="Подтвердить">
             <input v-else type="submit" class="fbtn" id="org-reg" name="confirm" value="Зарегистрироваться">
             <RouterLink :to="paths.Auth" class="router__link">Уже есть аккаунт? Войдите!</RouterLink>
-            <RouterLink v-if="isUserRegister" :to="paths.RegOrg" class="router__link">Создать аккаунт организации</RouterLink>
+            <RouterLink v-if="isUserRegister" :to="paths.RegOrg" class="router__link">Создать аккаунт организации
+            </RouterLink>
         </form>
     </div>
 </template>
@@ -37,11 +43,11 @@ function RegisterHandler() {
 @use "@/assets/styles/components.scss";
 @use "@/assets/styles/colors.scss";
 
-#org-reg{
+#org-reg {
     background-color: colors.$second;
     color: colors.$main;
 
-    &:hover{
+    &:hover {
         opacity: 0.9;
     }
 }

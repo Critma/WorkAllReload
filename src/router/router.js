@@ -12,12 +12,14 @@ import AccountPage from "@/pages/Account/AccountPage.vue";
 import Responses from "@/pages/ResponsesPage.vue";
 import NotFound from "@/pages/NotFoundPage.vue";
 import CompanyVacancies from "@/pages/CompanyVacancies.vue";
+import CreateVacancy from "../pages/CreateVacancy.vue";
 
 const routes = [
     { path: paths.Home, component: Vacancies },
     { path: paths.Vacancies, component: Vacancies },
     { path: paths.Vacancy, component: VacancyPage, name: names.Vacancy, props: true },
     { path: paths.CompanyVacancies, component: CompanyVacancies },
+    { path: paths.CreateVacancy, component: CreateVacancy },
 
     { path: paths.Auth, component: AuthPage, meta: { authExit: true } },
     { path: paths.Reg, component: Reg, meta: { authExit: true } },

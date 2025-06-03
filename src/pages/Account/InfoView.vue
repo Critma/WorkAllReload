@@ -15,7 +15,7 @@
             <label for="email">Почта</label>
             <input id="email" class="input" type="email" name="email" v-model="localUser.email" required readonly>
 
-            
+
             <!-- <label for="city">Город проживания</label>
             <input id="city" class="input" type="text" name="city">
              
@@ -26,14 +26,13 @@
 </template>
 
 <script setup>
-    import { defineProps, reactive } from 'vue';
+import { defineProps, reactive, toRef } from 'vue';
 
-    const props = defineProps(['user']);
-    const localUser = reactive({...props.user});
+const props = defineProps(['user']);
+const localUser = toRef(props, 'user')
 
 </script>
 
 <style lang="scss" scoped>
 @use 'account-styles.scss';
-    
 </style>

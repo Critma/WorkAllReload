@@ -24,9 +24,10 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, toRef } from 'vue';
 
 let props = defineProps(['user']);
+const localUser = toRef(props, 'user')
 
 </script>
 

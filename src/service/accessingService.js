@@ -1,6 +1,7 @@
 import { useUserStore } from "@/store/userStore";
 import { useServerStore } from "@/store/serverStore";
 import axios from "axios";
+import Result from "../models/Result";
 
 
 async function login(email, password) {
@@ -9,6 +10,7 @@ async function login(email, password) {
     if (!result.success) {
         result = await loginEmployer(email, password);
     }
+    result.error = 'Неправильные данные для входа';
     return result;
 }
 
@@ -22,39 +24,25 @@ async function loginCandidate(email, password) {
         email: email,
         password: password
     }
-    let result = {
-        success: false,
-        error: "",
-        obj: "",
-    };
+    let result = {};
 
     try {
         const response = (await axios.get(url, { params: userData }))
-        // console.log(response)
         const data = response.data
         const user = {
-            jwt: data.token,
-            login: data.candidate_Info.Email,
-            id: data.candidate_Info.ID,
-            name: data.candidate_Info.Name,
+            jwt: data.Token,
+            login: data.CandidateInfo.Email,
+            id: data.CandidateInfo.ID,
+            name: data.CandidateInfo.Name,
             isEmployer: false
         }
         localStorage.setItem('user', JSON.stringify(user));
         userStore.asignUser(user);
-        result = {
-            ...result,
-            success: true,
-            obj: response
-        }
+        result = new Result(true, "", response);
     }
     catch (error) {
         console.log(error)
-        result = {
-            ...result,
-            success: false,
-            error: error.response.data.info,
-            obj: ""
-        }
+        result = new Result(false, error.response.data.Info, error);
     }
     finally {
         userStore.isLoading = false
@@ -63,7 +51,7 @@ async function loginCandidate(email, password) {
 }
 
 async function loginEmployer(email, password) {
-        const userStore = useUserStore()
+    const userStore = useUserStore()
     const serverStore = useServerStore()
 
     userStore.isLoading = true;
@@ -83,10 +71,10 @@ async function loginEmployer(email, password) {
         console.log(response)
         const data = response.data
         const user = {
-            jwt: data.token,
-            login: data.Employee_Info.Email,
-            id: data.Employee_Info.ID,
-            name: data.Employee_Info.NameOrganization,
+            jwt: data.Token,
+            login: data.EmployerInfo.Email,
+            id: data.EmployerInfo.ID,
+            name: data.EmployerInfo.NameOrganization,
             isEmployer: true
         }
         localStorage.setItem('user', JSON.stringify(user));
@@ -102,7 +90,7 @@ async function loginEmployer(email, password) {
         result = {
             ...result,
             success: false,
-            error: error.response.data.info,
+            error: error.response.data.Info,
             obj: ""
         }
     }
