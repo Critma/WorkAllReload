@@ -1,29 +1,52 @@
 <template>
-    <div class="vacancy__card">
-        <div class="card-info">
-            <text id="name">{{ vacancy.name }}</text>
-            <text id="salary">{{ vacancy.salary }}</text>
-            <text id="location">{{ vacancy.location }}</text>
-            <!-- {{  }} -->
-            <text id="company-name">Название компании</text> 
+    <div class="card mb-3" style="max-width: 400px;">
+        <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">Вакансия : {{ response.status.name }}</h5>
+            <div :class="background">
+                <small> Статус : <span>{{ response.status.name }}</span></small>
+            </div>
         </div>
-        <div class="card-buttons">
-            <button class="card-button fbtn" id="about" @click="pushToVacancy(vacancy.id)">Подробнее</button>
-            <button class="card-button fbtn" id="delete-response" @click="deleteResponse(vacancy.id)">Убрать отклик</button>
+        <div class="card-body">
+            <p class="card-text"><strong>Вакансия:</strong> {{ response.vacancy.name }}</p>
+            <p class="card-text"><strong>Зарплата:</strong> {{ response.vacancy.salary }} ₽</p>
+            <p class="card-text"><strong>Email:</strong> {{ response.vacancy.email }}</p>
+            <p class="card-text"><strong>Телефон:</strong> {{ response.vacancy.phoneNumber }}</p>
+            <p class="card-text"><strong>Локация:</strong> {{ response.vacancy.location }}</p>
+            <p class="card-text"><strong>Опыт:</strong> {{ response.vacancy.experience.name }}</p>
+            <p class="card-text"><strong>Описание работы:</strong> {{ response.vacancy.aboutWork }}</p>
+            <p class="card-text"><small class="text-muted">Вакансия создана: {{ formatDate(response.vacancy.created_at)
+                    }}</small></p>
+            <p class="card-text"><small class="text-muted">Вакансия обновлена: {{
+                formatDate(response.vacancy.updated_at) }}</small></p>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+            <button class="btn btn-outline-primary" @click="pushToVacancy(response.vacancy.id)">Подробнее</button>
+            <button class="btn btn-outline-danger" @click="deleteCandidate">Удалить</button>
         </div>
     </div>
 </template>
 
 <script setup>
-// TODO: название компании
-
 import { useRouter } from 'vue-router';
-import { defineProps, ref } from 'vue';
+import { ref, computed } from 'vue';
 
-const props = defineProps(['vacancy'])
-const vacancy = ref(props.vacancy);
-
+const props = defineProps(['response'])
 const router = useRouter();
+
+const background = computed(() => {
+    switch (props.response.status.name.toLowerCase()) {
+        case 'приглашение':
+            return ['bg-success'];
+        case 'отказ':
+            return ['bg-danger'];
+        case 'ожидание':
+            return ['bg-warning'];
+        case 'на рассмотрении':
+            return ['bg-info'];
+        default:
+            return ['bg-primary'];
+    }
+})
 
 function pushToVacancy(id) {
     //TODO: runtime-core.esm-bundler.js:238 [Vue warn]: Extraneous non-props attributes (id) were passed to component but could not be automatically inherited because component renders fragment or text or teleport root nodes.
@@ -36,69 +59,30 @@ function deleteResponse(id) {
     console.log(id)
 }
 
+function formatDate(dateStr) {
+    if (!dateStr) return '-';
+    const d = new Date(dateStr);
+    return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+}
+
 </script>
 
 <style lang="scss" scoped>
 @use '@/assets/styles/components.scss';
 @use '@/assets/styles/colors.scss';
 
-.vacancy__card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0.5rem 0;
-    padding: 0.5rem;
-    border: 2px solid colors.$main;
-    font-size: components.$fs-large;
+.card {
+    margin: 0px 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 0.5rem;
 }
 
-.card-info{
-    text-align: left;
-    display: flex;
-    flex-direction: column;
+.card-header {
+    border-bottom: none;
 }
 
-.card-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    // justify-content: center;
-    // align-items: center;
-}
-
-.card-button {
-    border-radius: 5px;
-    width: 200px;
-    height: 30px;
-    border: 1px solid rgba(0, 0, 0, 0.24);
-    margin-right: components.$pd-medium;
-    cursor: pointer;
-}
-
-.card-button:hover {
-    opacity: 0.8;
-}
-
-text{
-    margin: components.$pd-small;
-}
-
-#name{
-    font-weight: 300;
-}
-
-#salary {
-    font-size: components.$fs-large;
-    font-weight: bold;
-}
-
-#about {
-    background-color: colors.$main;
-    color: colors.$background;
-}
-
-#delete-response {
-    background-color: colors.$red;
-    color: colors.$main;
+.card-footer {
+    background-color: transparent;
+    border-top: none;
 }
 </style>

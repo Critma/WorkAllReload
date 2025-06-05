@@ -9,7 +9,10 @@
         </div>
         <div class="message__container">
             <div v-if="isSuccess" class="message">
-                Данные успешно сохранены!
+                <Success success="Данные успешно сохранены" />
+            </div>
+            <div v-if="errorMessage != ''" class="message__container">
+                <Error :errorMessage="errorMessage" />
             </div>
         </div>
         <div class="account-info">
@@ -36,11 +39,14 @@ import { useUserStore } from '@/store/userStore';
 import { logout } from '@/service/accessingService';
 import { getCandidateSelf, saveCandidate } from '../../service/candidateService';
 import { getEmployerSelf, saveEmployer } from '../../service/employerService';
+import Error from '@/components/global/Error.vue';
+import Success from '@/components/global/Success.vue';
 
 const userStore = useUserStore();
 const user = ref();
 const isLoading = ref(false);
 const isSuccess = ref(false);
+const errorMessage = ref('');
 const accountSection = ref("InfoView")
 
 watch(accountSection, () => {
@@ -93,7 +99,7 @@ async function handleSave() {
     if (accountSection.value == 'InfoView') {
         result = await (userStore.isEmployer ? saveEmployer(user.value) : saveCandidate(user.value));
     } else if (accountSection.value == 'ResumeView') {
-
+        //TODO: 
     }
     if (result.success) {
         isSuccess.value = true;
@@ -102,6 +108,10 @@ async function handleSave() {
         }, 5000);
     } else {
         console.log("Ошибка при сохранении данных " + result.error);
+        errorMessage.value = "Произошла ошибка при сохранении, попробуйте повторить операцию позже";
+        setTimeout(() => {
+            errorMessage.value = '';
+        }, 5000);
     }
 }
 

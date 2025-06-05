@@ -3,6 +3,9 @@
         Вакансии
     </div>
     <div class="line"></div>
+    <div v-if="isLoading" class="loader">
+        <Loader/>
+    </div>
     <div class="vacancies__container">
         <div class="vacancies-list">
             <template v-for="vacancy in vacancies" :key="vacancy.id">

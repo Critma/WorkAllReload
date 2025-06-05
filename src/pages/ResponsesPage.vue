@@ -4,36 +4,52 @@
             Ваши отклики
         </div>
         <div class="line"></div>
-        <div class="responses__container" v-if="vacancies.length > 0">
-            <template v-for="vacancy in vacancies" :key="vacancy.id">
-                <ResponseCard :vacancy="vacancy" />
+        <div v-if="isLoading">
+            <Loader />
+        </div>
+        <div class="responses__container" v-if="responses.length > 0">
+            <template v-for="response in responses" :key="response.id">
+                <ResponseCard :response="response" />
             </template>
         </div>
-        <div v-else class="no-responses__container">
+        <div v-if="!isLoading && responses.length <= 0" class="no-responses__container">
             <h2>Вы пока что не откликнулись ни на одну вакансию</h2>
         </div>
     </div>
 </template>
 
 <script setup>
-import Response from '@/models/Response';
+import CandidateResponse from '@/models/CandidateResponse';
+import { getCandidateResponses } from '@/service/candidateService.js'
 import Vacancy from '@/models/Vacancy';
 import ResponseCard from '../components/ResponseCard.vue';
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 
-const responses = ref([new Response(1, 1, 1, 1)], new Response(2, 1, 2, 1));
-const vacancies = ref([
-    new Vacancy(1, "Программист", "40000", "artem@mail.ru", "+79823412342", "Москва", 1, "Описание вакансии", false, 1),
-    new Vacancy(2, "Програмер", "70000", "artem@mail.ru", "+79823412342", "Москва", 1, "Описание вакансии", false, 1)
-]);
+const responses = ref([]);
+const isLoading = ref(false);
+
+onMounted(async () => {
+    isLoading.value = true;
+    var result = await getCandidateResponses();
+    if (result.success) {
+        responses.value = result.data;
+    }
+    else {
+        console.log(`get responses error: ${result.error}`);
+    }
+    isLoading.value = false;
+})
 
 </script>
 
 <style lang="scss" scoped>
 @use '@/assets/styles/components.scss';
 
-.responses__container{
-    margin: 0 components.$pd-medium;
+.responses__container {
+    // margin: 0 40px;
+    margin: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 .no-responses__container {

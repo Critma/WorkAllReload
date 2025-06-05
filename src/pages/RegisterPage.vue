@@ -5,7 +5,7 @@
             <text v-else>Регистрация организации</text>
             <div style="height: 100px;" class="message__container">
                 <div v-if="errorMessage != ''" class="text-danger message">
-                    {{ errorMessage }}
+                    <Error :errorMessage="errorMessage" />
                 </div>
             </div>
             <input v-model="email" type="text" name="email" placeholder="Введите почту">
@@ -24,10 +24,11 @@ import { RouterLink } from 'vue-router';
 import paths from '@/router/paths'
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import Error from '@/components/global/Error.vue';
 
 const route = useRoute();
 const isUserRegister = computed(() => route.path === paths.Reg);
-
+const errorMessage = ref("");
 const email = ref("");
 const password = ref("");
 

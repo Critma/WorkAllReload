@@ -30,7 +30,7 @@ async function getEmployerSelf() {
 
 async function saveEmployer(user) {
     const serverStore = useServerStore()
-    const url = serverStore.candidateURL;
+    const url = serverStore.empURL;
     let response;
     const body = {
         Email: user.email,

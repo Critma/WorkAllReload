@@ -4,7 +4,7 @@
             <text>Войдите в свой аккаунт</text>
             <div style="height: 100px;" class="message__container">
                 <div v-if="errorMessage != ''" class="text-danger message">
-                    {{ errorMessage }}
+                    <Error :errorMessage="errorMessage" />
                 </div>
             </div>
             <input type="text" name="username" placeholder="Введите логин" v-model="localAuth.login">
@@ -33,7 +33,7 @@ import Eye from '@/assets/images/Eye.png'
 import EyeOff from '@/assets/images/EyeOff.png'
 
 const userStore = useUserStore();
-const localAuth = reactive({ login: 'nickolay@bk.ru', password: 'Hard123Password!)' });
+const localAuth = reactive({ login: '', password: '' });
 const type = ref('password');
 const eye = ref(EyeOff);
 const errorMessage = ref("");

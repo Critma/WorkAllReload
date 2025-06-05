@@ -17,9 +17,9 @@
                     <h5 class="card-title mb-3">Зарплата: <span id="vacancy-salary">{{ vacancy.salary }}</span></h5>
                     <p><strong>Email:</strong> <a href="mailto:example@company.com" id="vacancy-email">{{ vacancy.email
                     }}</a></p>
-                    <p><strong>Телефон:</strong> <a href="tel:+79991234567" id="vacancy-phone">{{ vacancy.phone }}</a>
+                    <p><strong>Телефон:</strong> <a href="tel:+79991234567" id="vacancy-phone">{{ vacancy.phoneNumber }}</a>
                     </p>
-                    <p><strong>Локация:</strong> <span id="vacancy-location">{{ vacancy.phone }}</span></p>
+                    <p><strong>Локация:</strong> <span id="vacancy-location">{{ vacancy.location }}</span></p>
                     <!-- <p><strong>Опыт (ID):</strong> <span id="vacancy-experience_id">{{ vacancy.experience_id }}</span></p> -->
                     <p><strong>Описание работы:</strong> <br /><span id="vacancy-aboutWork">{{ vacancy.aboutWork
                     }}</span></p>
@@ -78,6 +78,17 @@ function GoToCreateVacancy() {
 
 <style lang="scss" scoped>
 @use "../assets/styles/components.scss";
+
+.vacancy__list{
+    display: grid;
+    grid-template-columns: 1f;
+}
+
+@media (min-width: 780px) {
+    .vacancy__list{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
 .card {
     max-width: 600px;
