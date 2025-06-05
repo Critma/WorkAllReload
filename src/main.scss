@@ -1,0 +1,24 @@
+@use '@/assets/styles/colors.scss';
+
+#app {
+    height: 100vh;
+}
+
+
+#app {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-family: Roboto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: colors.$main;
+}
+
+.blue-theme {
+    background-color: colors.$background;
+}
+
+.light-theme {
+    // background-color: colors.$background;
+    background-color: colors.$main;
+}

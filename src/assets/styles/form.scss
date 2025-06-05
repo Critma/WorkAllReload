@@ -1,0 +1,51 @@
+@use "@/assets/styles/colors.scss";
+@use "@/assets/styles/components.scss";
+
+.login__form {
+    display: flex;
+    width: 500px;
+    flex-direction: column;
+    margin: 0 auto;
+}
+
+.login__form label, .login__form text {
+    margin-bottom: 30px;
+    font-size: components.$fs-xxlarge;
+    font-weight: bold;
+}
+
+.login__form input {
+    border-radius: 5px;
+    border: 1px solid white;
+    margin-bottom: 10px;
+    height: 40px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-size: components.$fs-medium;
+}
+
+.login__form input[type="button"],
+.login__form input[type="submit"] {
+    background-color: colors.$background;
+    color: colors.$main;
+    border: 1px solid colors.$main;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover{
+        background-color: colors.$second;
+    }
+}
+
+.router__link{
+    font-size: components.$fs-regular;
+    color: colors.$main;
+    // text-decoration: underline;
+    text-decoration: none;
+    // border-bottom: 1px solid colors.$main;
+    margin-top: 15px;
+
+    &:hover{
+        // background-color: colors.$second;
+        opacity: 0.9;
+    }
+ }

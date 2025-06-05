@@ -1,0 +1,52 @@
+@use './colors.scss';
+
+$fs: 10px;
+$fs-xxlarge: $fs * 3.5;
+$fs-xlarge: $fs * 3;
+$fs-large: $fs * 2.5;
+$fs-medium: $fs * 2;
+$fs-regular: $fs * 1.5;
+$fs-small: $fs * 1;
+
+$button-fs: $fs-medium;
+
+$pd : 5px;
+$pd-small: $pd * 1;
+$pd-medium: $pd * 2;
+$pd-large: $pd * 3;
+$pd-xlarge: $pd * 4;
+
+.fbtn {
+    font-size: $button-fs;
+    font-weight: bold;
+}
+
+.title {
+    font-size: $fs-xxlarge;
+    margin-bottom: 10px;
+}
+
+.line {
+    width: 40%;
+    height: 2px;
+    background-color: colors.$main;
+    margin: 0 auto;
+    margin-bottom: $pd-large;
+}
+
+.title__line {
+    width: 40%;
+    opacity: 1;
+    height: 2px;
+    background-color: colors.$main;
+    margin: 0 auto;
+    margin-bottom: $pd-large;
+}
+
+.message__container {
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px
+}
