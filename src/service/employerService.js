@@ -50,5 +50,28 @@ async function saveEmployer(user) {
     return new Result(true, "", data);
 };
 
+async function registerEmployer(employer) {
+    const serverStore = useServerStore()
+    const url = serverStore.empURL;
+    const body = {
+        Email: employer.Email,
+        INN: employer.INN,
+        NameOrganization: employer.Name,
+        Password: employer.Password,
+        PhoneNumber: employer.PhoneNumber,
+        StatusId: 3,
+    }
+    let response = {};
+    try {
+        response = await axios.post(url, body, jwtHeader());
+    }
+    catch (error) {
+        console.log('register candidate error' + error)
+        return new Result(false, error.response.data.Error, error);
+    }
+    const data = response.data;
+    return new Result(true, "", data);
+}
 
-export { getEmployerInfo, getEmployerSelf, saveEmployer };
+
+export { getEmployerInfo, getEmployerSelf, saveEmployer, registerEmployer };

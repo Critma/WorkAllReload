@@ -13,7 +13,7 @@
             </template>
         </div>
         <div v-if="!isLoading && responses.length <= 0" class="no-responses__container">
-            <h2>Вы пока что не откликнулись ни на одну вакансию</h2>
+            <h2 style="color: white;">Вы пока что не откликнулись ни на одну вакансию</h2>
         </div>
     </div>
 </template>

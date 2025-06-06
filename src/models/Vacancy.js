@@ -1,5 +1,6 @@
 export default class Vacancy {
-    constructor(id, name, salary, email, phoneNumber, location, experience_id, aboutWork, visible, employer_id, created_at, updated_at, experience = null, employerName = null) {
+    constructor(id, name, salary, email, phoneNumber, location, experience_id, aboutWork, visible,
+        employer_id, created_at, updated_at, experience = null, employerName = null, employer = null) {
         this.id = id;
         this.employer_id = employer_id;
         this.name = name;
@@ -14,6 +15,7 @@ export default class Vacancy {
         this.updated_at = updated_at;
         this.experience = experience;
         this.employerName = employerName
+        this.employer = employer;
 
         this.url = `/${id}`
     }

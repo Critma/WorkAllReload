@@ -84,4 +84,59 @@ async function getVacansiesFromSelfEmployer() {
     return result;
 }
 
-export { getVacansies, getVacansiesFromSelfEmployer };
+// vacancy : Vacancy
+async function addVacancy(vacancy) {
+    const serverStore = useServerStore()
+    const url = serverStore.vacancyURL;
+    const body = {
+        About: vacancy.aboutWork,
+        Email: vacancy.email,
+        ExperienceID: vacancy.experience_id,
+        IsVisible: vacancy.visible,
+        Location: vacancy.location,
+        PhoneNumber: vacancy.phoneNumber,
+        Price: vacancy.salary,
+        VacancyName: vacancy.name,
+    }
+    let response = {};
+    try {
+        response = await axios.post(url, body, jwtHeader());
+    }
+    catch (error) {
+        console.log('add vacancy error ' + error)
+        return new Result(false, error.response.data.Error, error);
+    }
+    // console.log(response);
+    const data = response.data.EmployerInfo;
+    return new Result(true, "", data);
+}
+
+
+async function GetVacancyInfo(id) {
+    const serverStore = useServerStore()
+    let result = {};
+    let response = {};
+    const queryData = {
+        vacancyID: id,
+    }
+    try {
+        response = await axios.get(`${serverStore.vacancyURL}/info`, { params: queryData });
+    } catch (error) {
+        console.log(`Error : ${error}`)
+        return result = new Result(false, error.response.data.Info, "Ошибка получения информации о вакансии")
+    }
+    const data = response.data.VacancyInfo;
+    try {
+
+        const vacancy = new Vacancy(data.ID, data.Name, data.Price, data.Email, data.PhoneNumber,
+            data.Location, data.ExperienceInfo.ID, data.AboutWork, data.IsVisible, data.EmployerInfo.ID, data.CreatedAt,
+            data.UpdatedAt, data.ExperienceInfo, data.EmployerInfo.NameOrganization, data.EmployerInfo);
+        result = new Result(true, "", vacancy)
+    }
+    catch(error){
+        result = new Result(false, error, "Ошибка парсинга полученных данных")
+    }
+
+    return result;
+}
+export { getVacansies, getVacansiesFromSelfEmployer, addVacancy, GetVacancyInfo };

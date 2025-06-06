@@ -28,7 +28,7 @@
                     <template v-if="userStore.isEmployer">
                         <RouterLink :to="paths.Vacancies">Все Вакансии</RouterLink>
                         <RouterLink :to="paths.CompanyVacancies">Ваши Вакансии</RouterLink>
-                        <RouterLink :to="{ name: names.Account, params: { id: userStore.ID } }">
+                        <RouterLink :to="paths.Account">
                             <div class="col">
                                 <span class="role">Работодатель</span>
                             </div>
@@ -40,7 +40,7 @@
                     <template v-else>
                         <RouterLink :to="paths.Vacancies">Вакансии</RouterLink>
                         <RouterLink :to="paths.Responses">Отклики</RouterLink>
-                                                <RouterLink :to="{ name: names.Account, params: { id: userStore.ID } }">
+                        <RouterLink :to="{ name: names.Account }">
                             <div class="col">
                                 <span class="role">Соискатель</span>
                             </div>
@@ -158,7 +158,7 @@ h3 {
 }
 
 .router__navbar {
-    font-size: components.$fs-large;
+    font-size: components.$fs-medium;
     font-weight: bold;
     margin-left: auto;
     margin-right: 1%;
@@ -200,7 +200,7 @@ h3 {
     background-color: colors.$main;
 }
 
-.role{
+.role {
     color: colors.$second;
     font-weight: bolder;
 }

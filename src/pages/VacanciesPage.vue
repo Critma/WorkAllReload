@@ -1,18 +1,18 @@
 <template>
     <div class="title">
-        Вакансии
+        Список вакансий
     </div>
     <div class="line"></div>
-    <div v-if="isLoading" class="loader">
-        <Loader/>
-    </div>
     <div class="vacancies__container">
+        <div v-if="isLoading" class="loader">
+            <Loader />
+        </div>
         <div class="vacancies-list">
             <template v-for="vacancy in vacancies" :key="vacancy.id">
                 <VacancyCard :vacancy="vacancy" />
             </template>
         </div>
-        <div class="vacancies__tabs">
+        <div v-show="!isLoading" class="vacancies__tabs">
             <span class="vacancies__tab" @click="goBack">&lt;</span>
             <p class="page" v-show="!isLoading">{{ page + 1 }}</p>
             <span class="vacancies__tab" @click="goNext">&gt;</span>
@@ -82,15 +82,16 @@ async function goBack() {
 
 .vacancies__container {
     padding-bottom: 5px;
+    min-height: 400px;
 }
 
 .vacancies__tabs {
     display: flex;
-    width: 100%;
+    width: 98%;
     border: 2px solid colors.$main;
     justify-content: space-between;
     align-items: center;
-    // margin-bottom: 40px;
+    margin: 0 auto;
 }
 
 .vacancies__tab {

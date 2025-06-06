@@ -1,65 +1,78 @@
 <template>
-    <div class="login__container">
-        <form class="login__form">
-            <text>Войдите в свой аккаунт</text>
-            <div style="height: 100px;" class="message__container">
-                <div v-if="errorMessage != ''" class="text-danger message">
+    <main class="auth-page">
+        <h1 class="form-title">Войти в аккаунт</h1>
+        <section class="form-card">
+            <form @submit.prevent="onSubmit" novalidate>
+                <div class="mb-4">
+                    <label for="email" class="form-label">Email</label>
+                    <input id="email" type="email" v-model="form.Email" required class="form-control"
+                        placeholder="Введите email" autocomplete="email" />
+                </div>
+                <div class="mb-4 position-relative">
+                    <label for="password" class="form-label">Пароль</label>
+                    <input :type="showPassword ? 'text' : 'password'" id="password" v-model="form.Password" required
+                        class="form-control pe-5" placeholder="Введите пароль" autocomplete="new-password"
+                        minlength="6" />
+                    <button type="button" class="password-toggle" @click="togglePasswordVisibility"
+                        :aria-label="showPassword ? 'Скрыть пароль' : 'Показать пароль'">
+                        <img :src="showPassword ? Eye : EyeOff" alt="" />
+                    </button>
+                </div>
+                <div v-if="errorMessage" class="reg__alert" role="alert">
                     <Error :errorMessage="errorMessage" />
                 </div>
-            </div>
-            <input type="text" name="username" placeholder="Введите логин" v-model="localAuth.login">
-            <div class="password__container">
-                <input id="password" :type="type" name="password" placeholder="Введите пароль"
-                    v-model="localAuth.password">
-                <img :src="eye" class="img__button" @click="showPassword">
-            </div>
-            <input :disabled="userStore.isLoading" class="fbtn" id="confirm" type="button" @click="navToAccount"
-                name="confirm" value="Подтвердить">
+                <button type="submit" class="btn btn__contrast__primary w-100 py-3 fw-semibold" :disabled="isLoading">
+                    {{ isLoading ? 'Загрузка...' : 'Вход' }}
+                </button>
+            </form>
+        </section>
+        <div class="register__links">
             <RouterLink :to="paths.Reg" class="router__link">Нету аккаунта? Создайте!</RouterLink>
-            <RouterLink :to="paths.ForgetPassword" class="router__link">Забыли пароль?</RouterLink>
-        </form>
-    </div>
+            <!-- TODO: <RouterLink :to="paths.ForgetPassword" class="router__link">Забыли пароль?</RouterLink> -->
+        </div>
+    </main>
+
 </template>
 
 <script setup>
 import { RouterLink } from 'vue-router';
 import paths from '@/router/paths'
 import router from '@/router/router';
-import { reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { useUserStore } from '@/store/userStore';
 import names from '@/router/names';
-import { login } from '@/service/accessingService';
+import { login } from '@/service/accessingService.js';
+import { isFormValid } from '@/helpers/formHelper.js';
 import Eye from '@/assets/images/Eye.png'
 import EyeOff from '@/assets/images/EyeOff.png'
+import Loader from '@/components/global/Loader.vue';
 
 const userStore = useUserStore();
-const localAuth = reactive({ login: '', password: '' });
-const type = ref('password');
-const eye = ref(EyeOff);
+const form = reactive({ Email: '', Password: '' });
+const showPassword = ref(false);
 const errorMessage = ref("");
 
-function showPassword() {
-    if (type.value === 'password') {
-        type.value = 'text';
-        eye.value = Eye;
-    } else {
-        type.value = 'password';
-        eye.value = EyeOff;
-    }
+function togglePasswordVisibility() {
+    showPassword.value = !showPassword.value;
 }
 
-async function navToAccount() {
+const isLoading = computed(() => userStore.isLoading);
+
+async function onSubmit() {
     if (userStore.isLoading) return;
-    const result = await login(localAuth.login, localAuth.password)
+    const { success, error } = isFormValid(form);
+    if (!success) {
+        errorMessage.value = error;
+        return;
+    }
+
+    const result = await login(form.Email, form.Password)
     if (result.success === true) {
         console.log(`Пользователь ${userStore.name} как ${userStore.isEmployer ? 'Работодатель' : 'Соискатель'} авторизован`)
-        router.push({ name: names.Account, params: { id: userStore.ID } });
+        router.push({ name: names.Account, });
     }
     else {
         errorMessage.value = `Ошибка авторизации - ${result.error}`;
-        setTimeout(() => {
-            errorMessage.value = "";
-        }, 4000);
     }
 }
 
@@ -71,24 +84,33 @@ async function navToAccount() {
 @use "@/assets/styles/components.scss";
 @use "@/assets/styles/colors.scss";
 
+
+.auth-page {
+    // min-height: 100vh;
+    background-color: colors.$background;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.form-card {
+    max-width: 700px;
+}
+
+.register__links {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
 .router__link {
     font-size: components.$fs-regular;
 }
 
-.password__container {
+.reg__alert {
     display: flex;
-    // align-items: center;
-    // justify-content: center;
-}
-
-.img__button {
-    border: 1px solid colors.$second;
-    border-radius: 5px;
-    height: 40px;
-    cursor: pointer;
-}
-
-#password {
-    width: 474px;
+    justify-content: center;
+    align-items: center;
 }
 </style>
