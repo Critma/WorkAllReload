@@ -7,19 +7,19 @@
             <a v-if="!userStore.isEmployer" class="nav-link" :class="{ active: accountSection === 'ResumeView' }"
                 @click="updateAccountSection('ResumeView')">Ваше резюме</a>
         </div>
-        <div class="message__container">
+        <div class="account-info">
+            <KeepAlive v-if="!isLoading">
+                <component :is="section" :user="user" />
+            </KeepAlive>
+            <loader v-if="isLoading"></loader>
+        </div>
+                <div class="message__container">
             <div v-if="isSuccess" class="message">
                 <Success success="Данные успешно сохранены" />
             </div>
             <div v-if="errorMessage != ''" class="message__container">
                 <Error :errorMessage="errorMessage" />
             </div>
-        </div>
-        <div class="account-info">
-            <loader v-if="isLoading"></loader>
-            <KeepAlive v-if="!isLoading">
-                <component :is="section" :user="user" />
-            </KeepAlive>
         </div>
         <div class="account-buttons">
             <button id="save-button" class="account-button fbtn" @click="handleSave">Сохранить</button>
@@ -100,6 +100,8 @@ async function handleSave() {
         result = await (userStore.isEmployer ? saveEmployer(user.value) : saveCandidate(user.value));
     } else if (accountSection.value == 'ResumeView') {
         //TODO: 
+        alert("Данный функционал в разработке");
+        return;
     }
     if (result.success) {
         isSuccess.value = true;
@@ -120,6 +122,7 @@ async function handleSave() {
 <style lang="scss" scoped>
 @use '@/assets/styles/colors.scss';
 @use '@/assets/styles/components.scss';
+@use '@/assets/styles/form.scss';
 
 .title {
     font-size: components.$fs-xxlarge;

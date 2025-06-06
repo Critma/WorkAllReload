@@ -1,28 +1,167 @@
 <template>
-    <div>
+    <div class="create__page">
         <div class="title">
             Создать вакансию
         </div>
-        <hr class="title__line" />
-        <div class="container vacancy__list">
-            форма
-        </div>
-        <div class="container">
-            <button type="button" class="btn btn-warning btn-lg" @click="GoBack">Назад</button>
-        </div>
+        <section class="form-card">
+            <div class="reg__alert" role="alert">
+                <Error v-if="errorMessage != ''" :errorMessage="errorMessage" />
+                <Success v-if="successMesage != ''" :success="successMesage" />
+            </div>
+            <form @submit.prevent="onSubmit" novalidate>
+                <div class="row">
+                    <div class="col">
+                        <div class="mb-4">
+                            <label for="name" class="form-label">Название организации <span
+                                    style="color: red;">*</span></label>
+                            <input id="name" type="text" v-model="vacancy.name" required class="form-control"
+                                placeholder="Введите имя вакансии" autocomplete="companyName" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="form-label">Email <span style="color: red;"> *</span></label>
+                            <input id="email" type="email" v-model="vacancy.email" required class="form-control"
+                                placeholder="Введите email" autocomplete="email" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="location" class="form-label">Город <span style="color: red;"> *</span></label>
+                            <input id="location" type="text" v-model="vacancy.location" required class="form-control"
+                                placeholder="Введите город" autocomplete="location" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-4">
+                            <label for="phone" class="form-label">Номер телефона <span
+                                    style="color: red;">*</span></label>
+                            <input id="phone" type="tel" v-model="vacancy.phoneNumber" placeholder="+7 (999) 999-99-99"
+                                class="form-control" autocomplete="tel" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="salary" class="form-label">Зарплата<span style="color: red;"> *</span></label>
+                            <input id="salary" type="number" v-model.number="vacancy.salary" placeholder="90000"
+                                class="form-control" autocomplete="salary" />
+                        </div>
+                        <div class="mb-4">
+                            <label for="experience" class="form-label">Опыт <span style="color: red;">*</span></label>
+                            <select id="experience" class="form-control" v-model="vacancy.experience_id" required>
+                                <option v-for="exp in experiences" :value="exp.id">{{ exp.name }}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-4">
+                        <label for="about" class="form-label">О работе <span style="color: red;">*</span></label>
+                        <textarea id="about" class="form-control" v-model="vacancy.aboutWork" rows="2"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn__contrast__primary w-100 py-3 fw-semibold" :disabled="isLoading">
+                    {{ isLoading ? 'Загрузка...' : 'Сохранить' }}
+                </button>
+            </form>
+        </section>
+        <button id="back" class="btn btn-warning btn-lg w-50" @click="GoBack()">Назад</button>
     </div>
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router';
 import paths from '../router/paths';
+import { reactive, ref, onMounted } from 'vue';
+import Vacancy from '@/models/Vacancy';
 const router = useRouter();
+import { isEmailValid } from '@/helpers/formHelper';
+import { GetExperiences } from '@/service/experienceService';
+import { addVacancy } from '@/service/vacancyService';
+
+const isLoading = ref(true);
+const errorMessage = ref("");
+const successMesage = ref("");
+const vacancy = reactive(new Vacancy(null, "", "0", "", "", "", 1, "", true, null, null, null));
+const experiences = ref([]);
 
 function GoBack() {
     router.push(paths.CompanyVacancies);
 }
 
-</script>
-@use "../assets/styles/components.scss";
+onMounted(async () => {
+    const result = await GetExperiences();
+    if (result.success) {
+        experiences.value = result.data;
+    } else {
+        errorMessage = result.error;
+    }
+    isLoading.value = false;
+})
 
-<style lang="scss" scoped></style>
+async function onSubmit() {
+    if (!isCorrect()) {
+        setTimeout(() => {
+            errorMessage.value = "";
+        }, 3000);
+        return;
+    }
+    isLoading.value = true;
+    const result = await addVacancy(vacancy);
+    if (result.success) {
+        successMesage.value = "Вакансия успешно создана! Переход обратно через 3 секунды...";
+        setTimeout(() => {
+            router.push(paths.CompanyVacancies);
+        }, 3000);
+    } else {
+        errorMessage.value = result.error;
+        isLoading.value = false;
+    }
+
+}
+
+function isCorrect() {
+    if (vacancy.email == "" || vacancy.email == null) {
+        errorMessage.value = "Поле email не может быть пустым!";
+        return false;
+    }
+
+    if (vacancy.name == "" || vacancy.name == null) {
+        errorMessage.value = "Поле имя не может быть пустым!";
+        return false;
+    }
+    if (vacancy.salary == "" || vacancy.salary == null) {
+        errorMessage.value = "Поле зарплата не может быть пустым!";
+        return false;
+    }
+    if (vacancy.phoneNumber == "" || vacancy.phoneNumber == null) {
+        errorMessage.value = "Поле номер телефона не может быть пустым!";
+        return false;
+    }
+    if (vacancy.aboutWork == "" || vacancy.aboutWork == null) {
+        errorMessage.value = "Поле описание не может быть пустым!";
+        return false;
+    }
+    if (isEmailValid(vacancy.email).success == false) {
+        errorMessage.value = "Введите корректный email!";
+        return false;
+    }
+
+    return true;
+}
+
+</script>
+
+<style lang="scss" scoped>
+@use "@/assets/styles/components.scss";
+@use "@/assets/styles/form.scss";
+@use "@/assets/styles/colors.scss";
+
+.create__page {
+    background-color: colors.$background;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+#back {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    width: 200px;
+}
+</style>

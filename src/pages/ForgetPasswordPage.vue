@@ -1,6 +1,6 @@
 <template>
     <div class="login__container">
-        <form class="login__form">
+        <form class="form">
             <label>Воставновление пароля</label>
             <input type="text" name="email" placeholder="Введите пароль">
             <input type="button" name="confirm" value="Подтвердить">
@@ -17,14 +17,15 @@ import paths from '@/router/paths'
 
 <style lang="scss" scoped>
 @use "@/assets/styles/components.scss";
-    label{
-        font-size: components.$fs-medium;
-        font-weight: bold;
-    }
+
+// TODO:
+
+label {
+    font-size: components.$fs-medium;
+    font-weight: bold;
+}
 </style>
 
 <style lang="scss">
 @use "@/assets/styles/form.scss"
-
-
 </style>

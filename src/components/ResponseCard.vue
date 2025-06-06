@@ -15,13 +15,13 @@
             <p class="card-text"><strong>Опыт:</strong> {{ response.vacancy.experience.name }}</p>
             <p class="card-text"><strong>Описание работы:</strong> {{ response.vacancy.aboutWork }}</p>
             <p class="card-text"><small class="text-muted">Вакансия создана: {{ formatDate(response.vacancy.created_at)
-                    }}</small></p>
+            }}</small></p>
             <p class="card-text"><small class="text-muted">Вакансия обновлена: {{
                 formatDate(response.vacancy.updated_at) }}</small></p>
         </div>
         <div class="card-footer d-flex justify-content-between">
             <button class="btn btn-outline-primary" @click="pushToVacancy(response.vacancy.id)">Подробнее</button>
-            <button class="btn btn-outline-danger" @click="deleteCandidate">Удалить</button>
+            <button class="btn btn-outline-danger" @click="deleteResponse()">Удалить</button>
         </div>
     </div>
 </template>
@@ -49,14 +49,12 @@ const background = computed(() => {
 })
 
 function pushToVacancy(id) {
-    //TODO: runtime-core.esm-bundler.js:238 [Vue warn]: Extraneous non-props attributes (id) were passed to component but could not be automatically inherited because component renders fragment or text or teleport root nodes.
-    console.log(id);
     router.push({ name: 'Vacancy', params: { id: id } });
 }
 
 function deleteResponse(id) {
     //TODO: delete respones from server
-    console.log(id)
+    alert("Функционал в разработке")
 }
 
 function formatDate(dateStr) {

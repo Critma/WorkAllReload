@@ -1,34 +1,14 @@
 @use '@/assets/styles/colors.scss';
 @use "@/assets/styles/components.scss";
+@use "@/assets/styles/form.scss";
 
-form{
-    display: flex;
-    flex-direction: column;
-    align-items: left;
+
+.container {
+    align-items: center;
     justify-content: center;
-    width: 50%;
-    margin: 10px auto;
-    font-size: components.$fs-medium;
+    display: flex;
 }
 
-.red-text{
+.red-text {
     color: red;
-}
-
-label{
-    margin: 10px 0px;
-    text-align: left;
-}
-
-input{
-    border-radius: 5px;
-    border: 1px solid colors.$main;
-    height: 30px;
-    margin-bottom: 5px;
-    font-size: components.$fs-medium;
-
-    //TODO: черное выделение при фокусе
-    // :focus{
-    //     border: 1px solid colors.$second;
-    // }
 }

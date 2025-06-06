@@ -13,4 +13,12 @@ function isFormValid(form) {
     return new Result(true, null, null);
 }
 
-export { isFormValid };
+function isEmailValid(email) {
+    if (!email) {
+        return new Result(false, 'Введите корректный email.', null);
+    }
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return new Result(isValid, isValid ? null : 'Введите корректный email.', null);
+}
+
+export { isFormValid, isEmailValid };

@@ -40,7 +40,7 @@
                     <template v-else>
                         <RouterLink :to="paths.Vacancies">Вакансии</RouterLink>
                         <RouterLink :to="paths.Responses">Отклики</RouterLink>
-                        <RouterLink :to="{ name: names.Account, params: { id: userStore.ID } }">
+                        <RouterLink :to="{ name: names.Account }">
                             <div class="col">
                                 <span class="role">Соискатель</span>
                             </div>

@@ -12,7 +12,7 @@
                 <VacancyCard :vacancy="vacancy" />
             </template>
         </div>
-        <div class="vacancies__tabs">
+        <div v-show="!isLoading" class="vacancies__tabs">
             <span class="vacancies__tab" @click="goBack">&lt;</span>
             <p class="page" v-show="!isLoading">{{ page + 1 }}</p>
             <span class="vacancies__tab" @click="goNext">&gt;</span>

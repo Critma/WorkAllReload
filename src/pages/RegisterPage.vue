@@ -55,13 +55,13 @@
                     <Error v-if="errorMessage != ''" :errorMessage="errorMessage" />
                     <Success v-if="success != ''" :success="success" />
                 </div>
-                <button v-if="isUserRegister" type="submit" class="btn btn btn-outline-primary w-100 py-3 fw-semibold"
+                <button v-if="isUserRegister" type="submit" class="btn btn__contrast__primary w-100 py-3 fw-semibold"
                     :disabled="isLoading">
                     {{ isLoading ? 'Регистрируем...' : 'Зарегистрироваться' }}
                 </button>
-                <button v-else type="submit" class="btn btn btn-outline-success w-100 py-3 fw-semibold"
+                <button v-else type="submit" class="btn btn__contrast__success w-100 py-3 fw-semibold"
                     :disabled="isLoading">
-                    {{ isLoading ? 'Регистрируем...' : 'Зарегистрироваться' }}
+                    {{ isLoading ? 'Загрузка...' : 'Зарегистрироваться' }}
                 </button>
             </form>
         </section>
@@ -179,97 +179,6 @@ function RegisterHandler() {
     box-sizing: border-box;
 }
 
-.form-card {
-    width: 100%;
-    max-width: 1000px;
-    background-color: white;
-    border-radius: 0.75rem;
-    box-shadow: 0 8px 20px rgb(0 0 0 / 0.07);
-    padding: 3rem 2.5rem;
-    box-sizing: border-box;
-}
-
-.form-title {
-    font-weight: bold;
-    font-size: components.$fs-xxlarge;
-    line-height: 1.1;
-    color: colors.$main;
-    margin-bottom: 2.5rem;
-    text-align: center;
-}
-
-.form-control {
-    font-size: components.$fs-regular;
-    border-radius: 0.5rem;
-    border-color: #d1d5db;
-    padding: 0.75rem 1rem;
-    transition: border-color 0.3s ease;
-    box-shadow: none;
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgb(37 99 235 / 0.4);
-}
-
-.form-label {
-    font-weight: 600;
-    font-size: components.$fs-regular;
-    color: #374151;
-    margin-bottom: 0.5rem;
-    display: block;
-}
-
-.password-toggle {
-    position: absolute;
-    right: 1rem;
-    transform: translateY(-180%);
-    background: transparent;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-
-.password-toggle img {
-    width: 22px;
-    height: 22px;
-    user-select: none;
-    pointer-events: none;
-}
-
-/* Submit button */
-.btn-outline-success,
-.btn-outline-primary {
-    font-weight: 700;
-    font-size: components.$button-fs;
-    border-radius: 0.625rem;
-    transition: background-color 0.3s ease;
-}
-
-.btn-outline-success:disabled,
-.btn-outline-success[disabled],
-.btn-outline-primary:disabled,
-.btn-outline-primary[disabled] {
-    background-color: rgb(18, 18, 231);
-    border-color: #6b7280;
-    cursor: not-allowed;
-    opacity: 0.8;
-}
-
-/* Responsive for smaller screens */
-@media (max-width: 480px) {
-    .form-card {
-        padding: 2rem 1.5rem;
-    }
-
-    .form-title {
-        font-size: components.$fs-large;
-    }
-}
-
 .register__links {
     display: flex;
     flex-direction: column;
@@ -278,11 +187,5 @@ function RegisterHandler() {
 
 .router__link {
     font-size: components.$fs-regular;
-}
-
-.reg__alert {
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 </style>

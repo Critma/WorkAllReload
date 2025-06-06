@@ -1,6 +1,6 @@
 <template>
     <div class="resume-container">
-        <form class="resume-form">
+        <!-- <form class="resume-form">
             <label id="prof" for="profession">Профессия/Специальность</label>
             <input id="profession" name="profession" type="text" />
             <label for="education">Образование</label>
@@ -12,13 +12,19 @@
             <label for="exp">Опыт работы</label>
             <input id="exp" name="exp" type="text" />
             <label for="skills">Расскажите об умениях / достижениях</label>
-            <!-- <input name="skills" type="text" /> -->
+            <input name="skills" type="text" />
             <textarea name="skills" id="skills" rows="10"></textarea>
             <label for="languages">Языки</label>
             <input id="languages" name="languages" type="text" />
             <label for="additional-info">О себе</label>
-            <!-- <input name="additional-info" type="text" /> -->
+            <input name="additional-info" type="text" />
             <textarea id="additional-info" name="additional-info" rows="10"></textarea>
+        </form> -->
+        <form class="form-card">
+            <label for="resume" class="form-label mb-2">Резюме</label>
+            <textarea id="resume" class="form-control" rows="8" readonly>
+                В данный момент в разработке.
+            </textarea>
         </form>
     </div>
 </template>
@@ -33,4 +39,10 @@ const localUser = toRef(props, 'user')
 
 <style lang="scss" scoped>
 @use 'account-styles.scss';
+
+.resume-container {
+    display: flex;
+    width: 1000px;
+    margin: 0 auto;
+}
 </style>

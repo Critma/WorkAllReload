@@ -3,58 +3,95 @@
         <div class="title">
             Вакансия
         </div>
-        <div class="line"></div>
+        <hr class="title__line" />
+        <div class="container py-5" v-if="vacancy" style="max-width: 1200px;">
+            <div class="card shadow-sm rounded-3 border-0">
+                <div class="card-body px-5 py-4">
+                    <h1 class="fw-bold display-4 mb-3 text-primary">{{ vacancy.name }}</h1>
+                    <h5 id="company" class="text fw-bold display-6 mb-4"><span class="text-muted">Компания:</span> {{
+                        vacancy.employerName }}</h5>
+                    <div class="mb-4">
+                        <span class="badge bg-danger fs-4">{{ vacancy.experience.Name }}</span>
+                        <span class="badge bg-success ms-2 fs-4">{{ vacancy.location }}</span>
+                    </div>
+                    <p class="text-dark fs-4 mb-4" style="white-space: pre-line;"><span class="text-muted">Информация о
+                            вакансии:</span> <br> {{
+                                vacancy.aboutWork }}</p>
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <h6 class="text-uppercase fw-semibold  fs-4 mb-1">Заработная плата</h6>
+                            <p class="fs-3 fw-bold text-dark">{{ vacancy.salary ? vacancy.salary : 'Договорная' }} ₽</p>
+                        </div>
+                        <div class="col-md-6 d-flex flex-column justify-content-center">
+                            <h6 class="text-uppercase text-muted fs-5 fw-semibold mb-2">Контактная информация</h6>
+                            <p class="mb-1 fs-4"><strong>Email:</strong><br>
+                                <a :href="`mailto:${vacancy.email}`"
+                                    class="text-decoration-none text-primary hover-underline">
+                                    {{ vacancy.email }}
+                                </a>
+                            </p>
+                            <p class="mb-0 fs-4"><strong>Телефонный номер:</strong><br>
+                                <a :href="`tel:${vacancy.phoneNumber}`"
+                                    class="text-decoration-none text-primary hover-underline">
+                                    {{ vacancy.phoneNumber }}
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-center align-items-center mb-4">
+                        <button v-if="!userStore.isEmployer" @click="sendResponse"
+                            class="btn btn-success btn-lg px-4">Откликнуться</button>
+                    </div>
+                    <div class="d-flex justify-content-between text-muted">
+                        <div>Создана: {{ formatDate(vacancy.created_at) }}</div>
+                        <div>Последний раз обновлена: {{ formatDate(vacancy.updated_at) }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container py-5 my-5 text-center" v-else>
+            <Loader />
+        </div>
     </div>
-    <main>
-        <div class="info__container">
-            <h3 id="name">{{ vacancy.name }}</h3>
-            <h4 id="salary">{{ vacancy.salary }} {{ currency }}</h4>
-            <div id="expririence">Опыт от {{ vacancy.experience_id }} лет</div>
-        </div>
-        <div class="line-big"></div>
-        <div class="work-info__container">
-            <div id="company-info">О компании</div>
-        </div>
-        <div class="contacts__container">
-            <div id="contacts-title">Связь с работодателем</div>
-            <li v-for="contact in contacts" :key="contact.id">
-                {{ contact.phone }}
-            </li>
-        </div>
-        <div class="buttons__container">
-            <button v-if="userStore.isAuthenticated" class="buttons fbtn" id="message">Написать</button>
-            <button v-if="userStore.isAuthenticated" class="buttons fbtn" id="add-response">Откликнуться</button>
-            <button v-if="userStore.isAuthenticated" class="buttons fbtn" id="delete-response">Убрать отклик</button>
-            <button class="buttons fbtn" id="back" @click="BackToVacancies()">Назад</button>
-        </div>
-    </main>
 </template>
 
 <script setup>
-import { watch, ref, computed } from 'vue';
+import { ref, onMounted } from 'vue';
+import { formatDate } from '@/helpers/componentHelper';
 import { useRoute, useRouter } from 'vue-router';
 import Vacancy from '../models/Vacancy';
 import paths from '../router/paths'
 import { useUserStore } from '@/store/userStore';
+import usePageRefs from '@/composibles/usePageRefs';
+import Loader from '@/components/global/Loader.vue';
+import { GetVacancyInfo } from '@/service/vacancyService';
+
+const { isLoading, errorMessage, successMesage } = usePageRefs();
+const userStore = useUserStore();
 
 const route = useRoute();
 const router = useRouter();
-const userStore = useUserStore;
-let currency = 'рублей'
+const vacancy = ref(null);
+// const userStore = useUserStore;
+// let currency = 'рублей'
 
-function BackToVacancies() {
-    router.push(paths.Vacancies)
+function sendResponse() {
+    // TODO: Функционал добавления отклика
+    alert("Фукнционал в разработке");
 }
 
-watch(
-    () => route.params.id,
-    (newId, oldId) => {
-        console.log(newId, oldId)
+onMounted(async () => {
+    isLoading.value = true;
+    const result = await GetVacancyInfo(route.params.id);
+    if (result.success) {
+        vacancy.value = result.data;
+        isLoading.value = false;
+    } else {
+        router.push(paths.NotFound);
     }
-)
+})
 
-let vacancy = ref(new Vacancy(1, "Программист", "40000", "artem@mail.ru", "+79823412342", "Москва", 1, "Описание вакансии", false, 1));
-const contacts = ref([{ id: 1, phone: "+7 9(823) 41 23-42" }, { id: 2, phone: "+7 (898) 432 70-42" }, { id: 3, phone: "+7 (823) 94-23" }])
 
 </script>
 
@@ -166,5 +203,9 @@ main {
         color: colors.$background;
         opacity: 0.9;
     }
+}
+
+#company {
+    color: colors.$black;
 }
 </style>
