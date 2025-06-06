@@ -13,7 +13,7 @@ import { computed, useSlots } from 'vue';
 
 // const slots = useSlots();
 const props = defineProps(['success']);
-const displayMessage = computed(() => 
+const displayMessage = computed(() =>
   props.success || 'Операция выполнена успешно!'
 );
 </script>
@@ -35,6 +35,7 @@ const displayMessage = computed(() =>
   align-items: center;
   gap: 1rem;
   animation: slideIn 0.5s ease forwards;
+  margin-bottom: 10px;
 }
 
 @keyframes slideIn {
@@ -42,6 +43,7 @@ const displayMessage = computed(() =>
     opacity: 0;
     transform: translateY(-15px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

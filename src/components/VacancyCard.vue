@@ -1,14 +1,24 @@
 <template>
-    <div class="card">
-        <div class="card__holder">
-            <div class="card__info">
-                <label id="vacancyName">{{ vacancy.name }}</label>
-                <label id="salary">{{ vacancy.salary }}</label>
-                <label id="city">{{ vacancy.location }}</label>
-                <label id="companyName">{{ vacancy.aboutWork }}</label>
+    <div class="card mb-3" style="max-width: 1000px;">
+        <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0 vacancy">{{ vacancy.name }}</h5>
+        </div>
+        <div class="row g-0">
+            <div class="card-body text-start col-md-8">
+                <p class="card-text"><strong>Вакансия:</strong> {{ vacancy.name }}</p>
+                <p class="card-text"><strong>Зарплата:</strong> {{ vacancy.salary }} ₽</p>
+                <p class="card-text"><strong>Email:</strong> {{ vacancy.email }}</p>
+                <p class="card-text"><strong>Телефон:</strong> {{ vacancy.phoneNumber }}</p>
+                <p class="card-text"><strong>Город:</strong> {{ vacancy.location }}</p>
+                <!-- <p class="card-text"><strong>Опыт:</strong> {{ vacancy.experience.name }}</p> -->
+                <p class="card-text"><strong>Описание работы:</strong> {{ vacancy.aboutWork }}</p>
+                <p class="card-text"><small class="text-muted">Вакансия создана: {{ formatDate(vacancy.created_at)
+                        }}</small></p>
+                <p class="card-text"><small class="text-muted">Вакансия обновлена: {{
+                    formatDate(vacancy.updated_at) }}</small></p>
             </div>
-            <div class="card__button">
-                <button class="fbtn" @click="navToVacancy()">Подробнее</button>
+            <div class="col-md-2 d-flex justify-content-center buttons">
+                <button class="btn btn-outline-primary" @click="pushToVacancy(vacancy.id)">Подробнее</button>
             </div>
         </div>
     </div>
@@ -17,6 +27,7 @@
 <script setup>
 import { defineProps, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { formatDate } from '@/helpers/componentHelper';
 import names from '@/router/names.js'
 
 const router = useRouter()
@@ -24,8 +35,8 @@ const router = useRouter()
 let props = defineProps(['vacancy'])
 let vacancy = ref(props.vacancy)
 
-function navToVacancy() {
-    router.push({ name : names.Vacancy, params: { id: vacancy.value.id  } });
+function pushToVacancy() {
+    router.push({ name: names.Vacancy, params: { id: vacancy.value.id } });
 }
 
 </script>
@@ -34,60 +45,45 @@ function navToVacancy() {
 @use "@/assets/styles/colors.scss";
 @use "@/assets/styles/components.scss";
 
-.card{
-    background-color: colors.$background;
-    margin-bottom: 15px;
-    border: 2px solid colors.$main;
-    color: colors.$main;
-    font-size: components.$fs-large;
+.card {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 0.5rem;
+    margin: 0 auto;
 }
 
-.card__holder {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+.card-body {
+    justify-content: left;
+    align-items: flex-start;
 }
 
-.card__info {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    margin: components.$pd-small;
+
+
+.card-header {
+    border-bottom: none;
 }
 
-label{
-    margin: components.$pd-small;
+.card-footer {
+    background-color: transparent;
+    border-top: none;
 }
 
-#salary{
-    font-weight: bolder;
+.btn {
+    max-height: 100px;
 }
 
-.card__button{
-    display: flex;
+.buttons {
+    justify-content: center;
     align-items: center;
-    margin-right: 30px;
+    margin: 10px;
 }
 
-button {
-    border: 1px colors.$main solid;
-    background-color: colors.$background;
-    border-radius: 5px;
-    width: 250px;
-    height: 35px;
-    cursor: pointer;
-    color: colors.$main;
-    transition: background-color 0.3s ease;
-
-    &:hover{
-        background-color: colors.$second;
-        color: colors.$background;
-    }
+.vacancy {
+    font-size: 1.4rem;
 }
 
-.card__underline {
-    background: none;
-    height: 1px;
-    background-color: black;
+.card-text {
+    margin: 2px;
 }
+
+button {}
 </style>

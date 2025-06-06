@@ -1,14 +1,14 @@
 @use './colors.scss';
 
-$fs: 10px;
-$fs-xxlarge: $fs * 3.5;
+$fs: 15px;
+$fs-xxlarge: $fs * 3;
 $fs-xlarge: $fs * 3;
 $fs-large: $fs * 2.5;
 $fs-medium: $fs * 2;
 $fs-regular: $fs * 1.5;
 $fs-small: $fs * 1;
 
-$button-fs: $fs-medium;
+$button-fs: $fs-regular;
 
 $pd : 5px;
 $pd-small: $pd * 1;
@@ -22,8 +22,10 @@ $pd-xlarge: $pd * 4;
 }
 
 .title {
+    margin-top: 10px;
+    font-weight: bold;
     font-size: $fs-xxlarge;
-    margin-bottom: 10px;
+    // margin-bottom: 5px;
 }
 
 .line {
@@ -31,7 +33,7 @@ $pd-xlarge: $pd * 4;
     height: 2px;
     background-color: colors.$main;
     margin: 0 auto;
-    margin-bottom: $pd-large;
+    margin-bottom: 40px;
 }
 
 .title__line {

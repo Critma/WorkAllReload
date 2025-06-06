@@ -31,6 +31,7 @@
   align-items: center;
   gap: 1rem;
   animation: slideIn 0.5s ease forwards;
+  margin: 10px 0px;
 }
 
 @keyframes slideIn {

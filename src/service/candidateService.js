@@ -65,6 +65,7 @@ async function getCandidateResponses() {
     }
     const data = response.data.Data;
     const responses = [];
+    if (data === null) return responses;
     data.forEach(response => {
         const vacan = response.VacancyInfo;
         responses.push(new CandidateResponse(response.ID,
@@ -76,4 +77,26 @@ async function getCandidateResponses() {
     return new Result(true, "", responses);
 }
 
-export { getCandidateInfo, getCandidateSelf, saveCandidate,  getCandidateResponses }
+async function registerCandidate(user) {
+    const serverStore = useServerStore()
+    const url = serverStore.candidateURL;
+    const body = {
+        Email: user.Email,
+        Name: user.Name,
+        Password: user.Password,
+        PhoneNumber: user.PhoneNumber,
+        StatusId: 3,
+    }
+    let response = {};
+    try {
+        response = await axios.post(url, body, jwtHeader());
+    }
+    catch (error) {
+        console.log('register candidate error' + error)
+        return new Result(false, error.response.data.Error, error);
+    }
+    const data = response.data;
+    return new Result(true, "", data);
+}
+
+export { getCandidateInfo, getCandidateSelf, saveCandidate, getCandidateResponses, registerCandidate }
