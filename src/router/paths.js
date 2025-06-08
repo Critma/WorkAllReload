@@ -9,7 +9,7 @@ const paths = {
     Account: "/Account",
     Responses: "/Responses",
     CompanyVacancies: "/CompanyVacancies",
-    CreateVacancy: "/CreateVacancy",
+    CreateVacancy: "/CreateVacancy", EditVacancy: "/EditVacancy/:id",
     NotFound: "/NotFound"
 }
 

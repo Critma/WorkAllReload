@@ -11,7 +11,6 @@
                 <p class="card-text"><strong>Телефон:</strong> {{ vacancy.phoneNumber }}</p>
                 <p class="card-text"><strong>Город:</strong> {{ vacancy.location }}</p>
                 <!-- <p class="card-text"><strong>Опыт:</strong> {{ vacancy.experience.name }}</p> -->
-                <!-- <p class="card-text"><strong>Описание работы:</strong> {{ vacancy.aboutWork }}</p> -->
                 <p class="card-text"><small class="text-muted">Вакансия создана: {{ formatDate(vacancy.created_at)
                         }}</small></p>
                 <p class="card-text"><small class="text-muted">Вакансия обновлена: {{

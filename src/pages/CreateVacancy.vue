@@ -8,11 +8,12 @@
                 <Error v-if="errorMessage != ''" :errorMessage="errorMessage" />
                 <Success v-if="successMesage != ''" :success="successMesage" />
             </div>
+            <Loader v-if="isLoading" />
             <form @submit.prevent="onSubmit" novalidate>
                 <div class="row">
                     <div class="col">
                         <div class="mb-4">
-                            <label for="name" class="form-label">Название организации <span
+                            <label for="name" class="form-label">Название вакансии <span
                                     style="color: red;">*</span></label>
                             <input id="name" type="text" v-model="vacancy.name" required class="form-control"
                                 placeholder="Введите имя вакансии" autocomplete="companyName" />
@@ -54,7 +55,8 @@
                         <textarea id="about" class="form-control" v-model="vacancy.aboutWork" rows="2"></textarea>
                     </div>
                 </div>
-                <button type="submit" class="btn btn__contrast__primary w-100 py-3 fw-semibold" :disabled="isLoading">
+                <button type="submit" class="btn btn__contrast__primary w-100 py-3 fw-semibold"
+                    :disabled="isLoading || !isActive">
                     {{ isLoading ? 'Загрузка...' : 'Сохранить' }}
                 </button>
             </form>
@@ -64,57 +66,83 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import paths from '../router/paths';
-import { reactive, ref, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import Vacancy from '@/models/Vacancy';
-const router = useRouter();
 import { isEmailValid } from '@/helpers/formHelper';
 import { GetExperiences } from '@/service/experienceService';
-import { addVacancy } from '@/service/vacancyService';
+import { getVacancyInfo, addVacancy, updateVacancy } from '../service/vacancyService';
+import useApi from '@/composibles/useApi';
+import names from '../router/names';
 
-const isLoading = ref(true);
-const errorMessage = ref("");
-const successMesage = ref("");
-const vacancy = reactive(new Vacancy(null, "", "0", "", "", "", 1, "", true, null, null, null));
+const { isLoading, errorMessage, successMesage, ExecuteApiCommand } = useApi();
+let vacancy = ref(new Vacancy(null, "", "0", "", "", "", 1, "", true, null, null, null));
+const router = useRouter();
 const experiences = ref([]);
+const route = useRoute();
+const isEdit = ref(false);
+const isActive = ref(true);
 
 function GoBack() {
     router.push(paths.CompanyVacancies);
 }
 
 onMounted(async () => {
-    const result = await GetExperiences();
-    if (result.success) {
-        experiences.value = result.data;
-    } else {
-        errorMessage = result.error;
+    Getexps();
+    if (route.path.includes(names.EditVacancy)) {
+        isEdit.value = true;
+        await ExecuteApiCommand(() => getVacancyInfo(route.params.id), (result) => { vacancy.value = result.data; }, () => { router.push(paths.NotFound); })
     }
-    isLoading.value = false;
 })
 
+async function Getexps() {
+    ExecuteApiCommand(GetExperiences,
+        (result) => {
+            experiences.value = result.data;
+        },
+        (result) => {
+            errorMessage.value = result.error;
+        }
+    );
+}
+
 async function onSubmit() {
-    if (!isCorrect()) {
+    if (!isCorrect(vacancy.value)) {
         setTimeout(() => {
             errorMessage.value = "";
         }, 3000);
         return;
     }
     isLoading.value = true;
-    const result = await addVacancy(vacancy);
-    if (result.success) {
-        successMesage.value = "Вакансия успешно создана! Переход обратно через 3 секунды...";
-        setTimeout(() => {
-            router.push(paths.CompanyVacancies);
-        }, 3000);
+    if (isEdit.value) {
+        console.log(vacancy.value);
+        await ExecuteApiCommand(() => updateVacancy(vacancy.value),
+            () => {
+                successMesage.value = "Вакансия успешно обновлена! Переход обратно через 3 секунды...";
+                isActive.value = false;
+                setTimeout(() => {
+                    router.push(paths.CompanyVacancies);
+                }, 3000);
+            },
+            (result) => {
+                errorMessage.value = result.error;
+            });
     } else {
-        errorMessage.value = result.error;
-        isLoading.value = false;
+        await ExecuteApiCommand(() => addVacancy(vacancy.value),
+            () => {
+                successMesage.value = "Вакансия успешно создана! Переход обратно через 3 секунды...";
+                isActive.value = false;
+                setTimeout(() => {
+                    router.push(paths.CompanyVacancies);
+                }, 3000);
+            }, (result) => {
+                errorMessage.value = result.error;
+            })
     }
-
 }
 
-function isCorrect() {
+function isCorrect(vacancy) {
     if (vacancy.email == "" || vacancy.email == null) {
         errorMessage.value = "Поле email не может быть пустым!";
         return false;

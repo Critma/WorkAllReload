@@ -19,7 +19,7 @@ const routes = [
     { path: paths.Vacancies, component: Vacancies },
     { path: paths.Vacancy, component: VacancyPage, name: names.Vacancy, props: true },
     { path: paths.CompanyVacancies, component: CompanyVacancies },
-    { path: paths.CreateVacancy, component: CreateVacancy },
+    { path: paths.CreateVacancy, component: CreateVacancy }, { path: paths.EditVacancy, component: CreateVacancy, name: names.EditVacancy },
 
     { path: paths.Auth, component: AuthPage, meta: { authExit: true } },
     { path: paths.Reg, component: Reg, meta: { authExit: true } },

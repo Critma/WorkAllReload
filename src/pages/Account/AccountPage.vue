@@ -8,12 +8,12 @@
                 @click="updateAccountSection('ResumeView')">Ваше резюме</a>
         </div>
         <div class="account-info">
-            <KeepAlive v-if="!isLoading">
+            <KeepAlive v-if="!isLoading || user != null">
                 <component :is="section" :user="user" />
             </KeepAlive>
             <loader v-if="isLoading"></loader>
         </div>
-                <div class="message__container">
+        <div class="message__container">
             <div v-if="isSuccess" class="message">
                 <Success success="Данные успешно сохранены" />
             </div>
@@ -29,7 +29,6 @@
 </template>
 
 <script setup>
-import User from '@/models/User.js';
 import { ref, computed, watch } from 'vue';
 import InfoView from './InfoView.vue';
 import ResumeView from './ResumeView.vue';
@@ -41,13 +40,13 @@ import { getCandidateSelf, saveCandidate } from '../../service/candidateService'
 import { getEmployerSelf, saveEmployer } from '../../service/employerService';
 import Error from '@/components/global/Error.vue';
 import Success from '@/components/global/Success.vue';
+import useApi from '../../composibles/useApi';
 
 const userStore = useUserStore();
-const user = ref();
-const isLoading = ref(false);
+const user = ref(null);
 const isSuccess = ref(false);
-const errorMessage = ref('');
 const accountSection = ref("InfoView")
+const { isLoading, errorMessage, successMessage } = useApi();
 
 watch(accountSection, () => {
     isSuccess.value = false;
@@ -70,12 +69,11 @@ async function GetUserInfo() {
         user.value = result.data;
     }
     else {
+        errorMessage.value = "Произошла ошибка при получении данных пользователя";
         console.log(`Ошибка при получении данных личного кабинета${result.error}`);
     }
     isLoading.value = false;
 }
-
-
 
 function Logout() {
     logout();
@@ -91,7 +89,6 @@ const section = computed(() => {
 
 function updateAccountSection(section) {
     accountSection.value = section;
-    localStorage.setItem("accountSection", section);
 }
 
 async function handleSave() {

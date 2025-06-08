@@ -9,12 +9,11 @@
 </template>
 
 <script setup>
-import { computed, useSlots } from 'vue';
+import { computed } from 'vue';
 
-// const slots = useSlots();
-const props = defineProps(['success']);
+const props = defineProps(['successMessage', 'success']);
 const displayMessage = computed(() =>
-  props.success || 'Операция выполнена успешно!'
+  props.success || props.successMessage || 'Операция выполнена успешно!'
 );
 </script>
 
