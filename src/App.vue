@@ -18,7 +18,6 @@ onMounted(() => {
   menuPanelHeight.value = menu.clientHeight * 1.2;
 });
 
-// TODO: не зависимая от вертикального скролла?
 checkJWT();
 
 useTheming().UpdateTheme();

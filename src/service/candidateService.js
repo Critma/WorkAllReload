@@ -14,7 +14,7 @@ async function getCandidateInfo(candidateID) {
     const serverStore = useServerStore()
     try {
         const url = serverStore.candidateURL;
-        const params = { ...jwtHeader(), params: { candidateID: candidateID } };
+        const params = { ...jwtHeader(), params: { СandidateID : candidateID } };
         const response = await axios.get(url, params);
         const info = response.data.CandidateInfo;
         const candidate = new User(info.ID, info.Name, info.PhoneNumber, info.Email, null, info.StatusInfo.ID, info.CreatedAt, info.UpdatedAt);
@@ -38,7 +38,9 @@ async function saveCandidate(user) {
         Name: user.name,
         PhoneNumber: user.phone,
         StatusId: user.statusId,
+        Password: ""
     }
+    console.log(body)
     let response = {};
     try {
         response = await axios.put(url, body, jwtHeader());
@@ -63,7 +65,7 @@ async function getCandidateResponses() {
         console.log(error)
         return new Result(false, error.response.data.Info, error);
     }
-    const data = response.data.Data;
+    const data = response.data.Responses;
     const responses = [];
     if (data === null) return responses;
     data.forEach(response => {

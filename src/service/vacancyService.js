@@ -34,12 +34,10 @@ function toVacancy(vacansies) {
 // return vacacy[]
 async function getVacansies(limit, lastId) {
     const serverStore = useServerStore()
-
     const queryData = {
-        limit: limit,
-        last_id: lastId,
+        Limit: limit,
+        LastID: lastId,
     }
-
     let result = {};
     let response = {};
     try {
@@ -48,6 +46,7 @@ async function getVacansies(limit, lastId) {
         console.log(`Error : ${error}`)
         result = new Result(false, error.response.data.Info, "Ошибка получения вакансий")
     }
+    // console.log(response);
     const data = toVacancy(response.data.VacancyInfo)
     result = new Result(true, "", data)
     return result;
@@ -98,6 +97,7 @@ async function addVacancy(vacancy) {
         Price: vacancy.salary,
         VacancyName: vacancy.name,
     }
+    // console.log(body)
     let response = {};
     try {
         response = await axios.post(url, body, jwtHeader());
@@ -106,18 +106,18 @@ async function addVacancy(vacancy) {
         console.log('add vacancy error ' + error)
         return new Result(false, error.response.data.Error, error);
     }
-    // console.log(response);
     const data = response.data.EmployerInfo;
+    // console.log(response);
     return new Result(true, "", data);
 }
 
 
-async function GetVacancyInfo(id) {
+async function getVacancyInfo(id) {
     const serverStore = useServerStore()
     let result = {};
     let response = {};
     const queryData = {
-        vacancyID: id,
+        VacancyID: id,
     }
     try {
         response = await axios.get(`${serverStore.vacancyURL}/info`, { params: queryData });
@@ -133,10 +133,83 @@ async function GetVacancyInfo(id) {
             data.UpdatedAt, data.ExperienceInfo, data.EmployerInfo.NameOrganization, data.EmployerInfo);
         result = new Result(true, "", vacancy)
     }
-    catch(error){
+    catch (error) {
         result = new Result(false, error, "Ошибка парсинга полученных данных")
     }
 
     return result;
 }
-export { getVacansies, getVacansiesFromSelfEmployer, addVacancy, GetVacancyInfo };
+
+async function updateVacancy(vacancy) {
+    const serverStore = useServerStore()
+    const url = serverStore.vacancyURL;
+    const body = {
+        ID: vacancy.id,
+        About: vacancy.aboutWork,
+        Email: vacancy.email,
+        ExperienceID: vacancy.experience_id,
+        IsVisible: vacancy.visible,
+        Location: vacancy.location,
+        PhoneNumber: vacancy.phoneNumber,
+        Price: vacancy.salary,
+        VacancyName: vacancy.name,
+    }
+    // console.log(body)
+    let response = {};
+    try {
+        response = await axios.put(url, body, jwtHeader());
+    }
+    catch (error) {
+        console.log(error.response.data)
+        return new Result(false, error.response.data.Error, error);
+    }
+    const data = response.data;
+    return new Result(true, "", data);
+}
+
+async function deleteVacancy(id) {
+    const serverStore = useServerStore()
+    const url = serverStore.vacancyURL;
+    const queryData = {
+        VacancyID: id,
+    }
+    let result = {};
+    try {
+        await axios.delete(url, { params: queryData, ...jwtHeader() },)
+        result = new Result(true, "", "")
+    }
+    catch (error) {
+        console.log(error.response)
+        result = new Result(false, "", error)
+    }
+    return result;
+}
+
+async function toggleVisibilityVacancy(vacancy) {
+    const serverStore = useServerStore()
+    const url = serverStore.vacancyURL;
+    const body = {
+        ID: vacancy.id,
+        About: vacancy.aboutWork,
+        Email: vacancy.email,
+        ExperienceID: vacancy.experience_id,
+        IsVisible: !vacancy.visible,
+        Location: vacancy.location,
+        PhoneNumber: vacancy.phoneNumber,
+        Price: vacancy.salary,
+        VacancyName: vacancy.name,
+    }
+    // console.log(body)
+    let response = {};
+    try {
+        response = await axios.put(url, body, jwtHeader());
+    }
+    catch (error) {
+        console.log(error.response.data)
+        return new Result(false, error.response.data.Error, error);
+    }
+    const data = response.data;
+    return new Result(true, "", data);
+}
+
+export { getVacansies, getVacansiesFromSelfEmployer, addVacancy, getVacancyInfo, updateVacancy, deleteVacancy, toggleVisibilityVacancy };

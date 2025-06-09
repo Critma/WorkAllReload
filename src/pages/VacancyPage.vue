@@ -39,13 +39,14 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="d-flex justify-content-center align-items-center mb-4">
-                        <button v-if="!userStore.isEmployer" @click="sendResponse"
-                            class="btn btn-success btn-lg px-4">Откликнуться</button>
-                    </div>
                     <div class="d-flex justify-content-between text-muted">
                         <div>Создана: {{ formatDate(vacancy.created_at) }}</div>
                         <div>Последний раз обновлена: {{ formatDate(vacancy.updated_at) }}</div>
+                    </div>
+                    <div class="d-flex align-items-center mb-4 buttons">
+                        <button v-if="!userStore.isEmployer" @click="sendResponse"
+                            class="btn btn-success btn-lg px-4">Откликнуться</button>
+                        <button @click="goBack" class="btn btn-success btn-lg px-4">Назад</button>
                     </div>
                 </div>
             </div>
@@ -63,11 +64,11 @@ import { useRoute, useRouter } from 'vue-router';
 import Vacancy from '../models/Vacancy';
 import paths from '../router/paths'
 import { useUserStore } from '@/store/userStore';
-import usePageRefs from '@/composibles/usePageRefs';
+import useApi from '../composibles/useApi';
 import Loader from '@/components/global/Loader.vue';
-import { GetVacancyInfo } from '@/service/vacancyService';
+import { getVacancyInfo } from '@/service/vacancyService';
 
-const { isLoading, errorMessage, successMesage } = usePageRefs();
+const { isLoading, errorMessage, successMesage } = useApi();
 const userStore = useUserStore();
 
 const route = useRoute();
@@ -81,9 +82,17 @@ function sendResponse() {
     alert("Фукнционал в разработке");
 }
 
+function goBack() {
+    if (window.history.length > 1) {
+        router.go(-1)
+    } else {
+        router.push('/')
+    }
+}
+
 onMounted(async () => {
     isLoading.value = true;
-    const result = await GetVacancyInfo(route.params.id);
+    const result = await getVacancyInfo(route.params.id);
     if (result.success) {
         vacancy.value = result.data;
         isLoading.value = false;
@@ -98,6 +107,7 @@ onMounted(async () => {
 <style lang="scss" scoped>
 @use '@/assets/styles/components.scss';
 @use '@/assets/styles/colors.scss';
+
 
 .line-big {
     width: 91%;
@@ -146,20 +156,8 @@ main {
     width: 100%;
 }
 
-.buttons {
-    width: 300px;
-    height: 40px;
-    border-radius: 5px;
-    background-color: colors.$main;
-    color: colors.$background;
-    transition: background-color 0.3s ease;
-    border: 1px solid colors.$main;
-
-
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-    }
+.buttons{
+    justify-content: space-between;
 }
 
 #message {

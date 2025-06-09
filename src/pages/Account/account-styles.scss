@@ -12,3 +12,44 @@
 .red-text {
     color: red;
 }
+
+.account-buttons {
+    display: flex;
+    flex-direction: column;
+}
+
+.account-button {
+    border-radius: 5px;
+    width: 250px;
+    height: 40px;
+    font-size: components.$fs-regular;
+    margin: 10px auto;
+    cursor: pointer;
+    border: 1px solid colors.$main;
+    background-color: colors.$background;
+    color: colors.$main;
+    transition: background-color 0.3s ease;
+}
+
+#save-button {
+    margin-top: 30px;
+
+    &:hover {
+        background-color: colors.$second;
+    }
+}
+
+#logout-button {
+    background-color: colors.$red;
+    border: none;
+
+    &:hover {
+        opacity: 0.9;
+    }
+}
+
+.messages {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

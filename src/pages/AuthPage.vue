@@ -65,7 +65,6 @@ async function onSubmit() {
         errorMessage.value = error;
         return;
     }
-
     const result = await login(form.Email, form.Password)
     if (result.success === true) {
         console.log(`Пользователь ${userStore.name} как ${userStore.isEmployer ? 'Работодатель' : 'Соискатель'} авторизован`)

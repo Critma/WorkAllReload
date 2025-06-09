@@ -13,12 +13,12 @@
 import { RouterLink } from 'vue-router';
 import paths from '@/router/paths'
 
+// TODO: Вся страница
 </script>
 
 <style lang="scss" scoped>
 @use "@/assets/styles/components.scss";
 
-// TODO:
 
 label {
     font-size: components.$fs-medium;

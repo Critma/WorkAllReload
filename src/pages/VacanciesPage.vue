@@ -35,6 +35,7 @@ onMounted(async () => {
 })
 
 watch(page, async () => {
+    //TODO: видимые
     await FetchData(vacCount, page.value * vacCount);
 })
 

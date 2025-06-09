@@ -10,7 +10,7 @@ async function login(email, password) {
     if (!result.success) {
         result = await loginEmployer(email, password);
     }
-    result.error = 'Неправильные данные для входа';
+    // result.error = 'Неправильные данные для входа';
     return result;
 }
 
@@ -21,11 +21,10 @@ async function loginCandidate(email, password) {
     userStore.isLoading = true;
     const url = `${serverStore.candidateURL}/auth`
     const userData = {
-        email: email,
-        password: password
+        Email: email,
+        Password: password
     }
     let result = {};
-
     try {
         const response = (await axios.get(url, { params: userData }))
         const data = response.data
@@ -42,7 +41,7 @@ async function loginCandidate(email, password) {
     }
     catch (error) {
         console.log(error)
-        result = new Result(false, error.response.data.Info, error);
+        result = new Result(false, error.response.data.Error, error);
     }
     finally {
         userStore.isLoading = false
@@ -53,23 +52,21 @@ async function loginCandidate(email, password) {
 async function loginEmployer(email, password) {
     const userStore = useUserStore()
     const serverStore = useServerStore()
-
     userStore.isLoading = true;
     const url = `${serverStore.empURL}/auth`
     const userData = {
-        email: email,
-        password: password
+        Email: email,
+        Password: password
     }
     let result = {
         success: false,
         error: "",
         obj: "",
     };
-
     try {
         const response = (await axios.get(url, { params: userData }))
-        console.log(response)
         const data = response.data
+        console.log(data)
         const user = {
             jwt: data.Token,
             login: data.EmployerInfo.Email,
@@ -90,7 +87,7 @@ async function loginEmployer(email, password) {
         result = {
             ...result,
             success: false,
-            error: error.response.data.Info,
+            error: error.response.data.Error,
             obj: ""
         }
     }
