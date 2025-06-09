@@ -23,7 +23,8 @@
             <button type="button" class="btn btn-primary" id="btn-details" @click="GoToVacancy">Подробнее</button>
             <button type="button" class="btn btn-warning" id="btn-details" @click="edVacancy">Редактировать</button>
             <button type="button" class="btn btn-delete" id="btn-delete" @click="delVacancy">Удалить</button>
-            <button type="button" class="btn btn-outline-dark" id="btn-delete" @click="hideVacancy">Скрыть</button>
+            <button type="button" class="btn btn-outline-dark" id="btn-delete" @click="hideVacancy">{{ vacancy.visible ?
+                'Скрыть' : 'Показать'}}</button>
         </div>
     </div>
 </template>
@@ -41,6 +42,9 @@ const { isLoading, errorMessage, successMesage, ExecuteApiCommand } = useApi();
 
 
 async function delVacancy() {
+    if (confirm("Вы действительно хотите удалить вакансию?") == false) {
+        return;
+    }
     await ExecuteApiCommand(() => deleteVacancy(props.vacancy.id), (result) => {
         alert("Вакансия успешно удалена");
         props.reload();

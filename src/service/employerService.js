@@ -11,7 +11,7 @@ async function getEmployerInfo(employerID) {
     const serverStore = useServerStore()
     try {
         const url = serverStore.employerURL;
-        const params = { ...jwtHeader(), params: { employerID: employerID } };
+        const params = { ...jwtHeader(), params: { EmployerID : employerID } };
         const response = await axios.get(url, params);
         const info = response.data.EmployerInfo;
         const candidate = new User(info.ID, info.NameOrganization, info.PhoneNumber, info.Email, null, info.Status.ID, info.CreatedAt, info.UpdatedAt, info.INN);
@@ -38,6 +38,7 @@ async function saveEmployer(user) {
         NameOrganization: user.name,
         PhoneNumber: user.phone,
         StatusID: user.statusId,
+        Password: ""
     }
     try {
         response = await axios.put(url, body, jwtHeader());

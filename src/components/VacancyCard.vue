@@ -1,5 +1,5 @@
 <template>
-    <div class="card mb-3" style="max-width: 1000px;">
+    <div :class="{ 'card mb-3': true, 'hide': !vacancy.visible }" style="max-width: 1000px;">
         <div class="card-header bg-primary text-white">
             <h5 class="card-title mb-0 vacancy">{{ vacancy.name }}</h5>
         </div>
@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { formatDate } from '@/helpers/componentHelper';
 import names from '@/router/names.js'
@@ -84,5 +84,7 @@ function pushToVacancy() {
     margin: 2px;
 }
 
-button {}
+.hide {
+    display: none;
+}
 </style>

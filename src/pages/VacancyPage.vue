@@ -43,7 +43,7 @@
                         <div>Создана: {{ formatDate(vacancy.created_at) }}</div>
                         <div>Последний раз обновлена: {{ formatDate(vacancy.updated_at) }}</div>
                     </div>
-                    <div class="d-flex justify-content-center align-items-center mb-4">
+                    <div class="d-flex align-items-center mb-4 buttons">
                         <button v-if="!userStore.isEmployer" @click="sendResponse"
                             class="btn btn-success btn-lg px-4">Откликнуться</button>
                         <button @click="goBack" class="btn btn-success btn-lg px-4">Назад</button>
@@ -108,6 +108,7 @@ onMounted(async () => {
 @use '@/assets/styles/components.scss';
 @use '@/assets/styles/colors.scss';
 
+
 .line-big {
     width: 91%;
     height: 2px;
@@ -155,20 +156,8 @@ main {
     width: 100%;
 }
 
-.buttons {
-    width: 300px;
-    height: 40px;
-    border-radius: 5px;
-    background-color: colors.$main;
-    color: colors.$background;
-    transition: background-color 0.3s ease;
-    border: 1px solid colors.$main;
-
-
-    &:hover {
-        background-color: rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-    }
+.buttons{
+    justify-content: space-between;
 }
 
 #message {

@@ -7,7 +7,7 @@
                     <div class="col">
                         <div class="mb-4">
                             <label for="name" class="form-label">{{ isUserRegister ? 'Имя' : 'Название организация'
-                                }} <span style="color: red;">*</span></label>
+                            }} <span style="color: red;">*</span></label>
                             <input id="name" type="text" v-model="form.Name" required class="form-control"
                                 placeholder="Введите имя" autocomplete="name" />
                         </div>
@@ -155,12 +155,6 @@ async function onSubmit() {
         errorMessage.value = 'Ошибка регистрации. Пожалуйста, проверьте данные и попробуйте еще раз.';
         isLoading.value = false;
     }
-}
-
-
-function RegisterHandler() {
-    // TODO: Реализовать регистрацию пользователя
-    console.log(`Register - ${isUserRegister.value} Email: ${email.value}, Password: ${password.value}`);
 }
 
 </script>

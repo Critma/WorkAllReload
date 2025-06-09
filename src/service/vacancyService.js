@@ -34,12 +34,10 @@ function toVacancy(vacansies) {
 // return vacacy[]
 async function getVacansies(limit, lastId) {
     const serverStore = useServerStore()
-
     const queryData = {
-        limit: limit,
-        last_id: lastId,
+        Limit: limit,
+        LastID: lastId,
     }
-
     let result = {};
     let response = {};
     try {
@@ -48,6 +46,7 @@ async function getVacansies(limit, lastId) {
         console.log(`Error : ${error}`)
         result = new Result(false, error.response.data.Info, "Ошибка получения вакансий")
     }
+    // console.log(response);
     const data = toVacancy(response.data.VacancyInfo)
     result = new Result(true, "", data)
     return result;
@@ -118,7 +117,7 @@ async function getVacancyInfo(id) {
     let result = {};
     let response = {};
     const queryData = {
-        vacancyID: id,
+        VacancyID: id,
     }
     try {
         response = await axios.get(`${serverStore.vacancyURL}/info`, { params: queryData });
@@ -172,7 +171,7 @@ async function deleteVacancy(id) {
     const serverStore = useServerStore()
     const url = serverStore.vacancyURL;
     const queryData = {
-        vacancyID: id,
+        VacancyID: id,
     }
     let result = {};
     try {
@@ -180,6 +179,7 @@ async function deleteVacancy(id) {
         result = new Result(true, "", "")
     }
     catch (error) {
+        console.log(error.response)
         result = new Result(false, "", error)
     }
     return result;

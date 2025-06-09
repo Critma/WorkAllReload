@@ -9,6 +9,7 @@ export const useServerStore = defineStore("serverStore", () => {
     const vacancyURL = baseURL + 'vac';
     const adminURL = baseURL + 'adm';
     const experienceURL = baseURL + 'exp';
+    const resumeURL = `${candidateURL}/resume`;
 
     return {
         empURL,
@@ -16,6 +17,7 @@ export const useServerStore = defineStore("serverStore", () => {
         vacancyURL,
         employerURL,
         adminURL,
-        experienceURL
+        experienceURL,
+        resumeURL
     }
 });

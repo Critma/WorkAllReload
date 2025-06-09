@@ -13,16 +13,15 @@
             </KeepAlive>
             <loader v-if="isLoading"></loader>
         </div>
-        <div class="message__container">
+        <!-- <div class="message__container">
             <div v-if="isSuccess" class="message">
                 <Success success="Данные успешно сохранены" />
             </div>
             <div v-if="errorMessage != ''" class="message__container">
                 <Error :errorMessage="errorMessage" />
             </div>
-        </div>
+        </div> -->
         <div class="account-buttons">
-            <button id="save-button" class="account-button fbtn" @click="handleSave">Сохранить</button>
             <button id="logout-button" class="account-button fbtn" @click="Logout()">Выйти из аккаунта</button>
         </div>
     </main>
@@ -38,42 +37,19 @@ import { useUserStore } from '@/store/userStore';
 import { logout } from '@/service/accessingService';
 import { getCandidateSelf, saveCandidate } from '../../service/candidateService';
 import { getEmployerSelf, saveEmployer } from '../../service/employerService';
-import Error from '@/components/global/Error.vue';
-import Success from '@/components/global/Success.vue';
 import useApi from '../../composibles/useApi';
+import Resume from '../../models/Resume';
 
 const userStore = useUserStore();
 const user = ref(null);
 const isSuccess = ref(false);
 const accountSection = ref("InfoView")
-const { isLoading, errorMessage, successMessage } = useApi();
+const resume = ref(new Resume());
+const { isLoading, errorMessage, successMesage, ExecuteApiCommand } = useApi();
 
 watch(accountSection, () => {
     isSuccess.value = false;
 })
-
-GetUserInfo()
-
-async function GetUserInfo() {
-    if (isLoading.value) {
-        return;
-    }
-    isLoading.value = true;
-    let result = {};
-    if (userStore.isEmployer) {
-        result = await getEmployerSelf();
-    } else {
-        result = await getCandidateSelf();
-    }
-    if (result.success) {
-        user.value = result.data;
-    }
-    else {
-        errorMessage.value = "Произошла ошибка при получении данных пользователя";
-        console.log(`Ошибка при получении данных личного кабинета${result.error}`);
-    }
-    isLoading.value = false;
-}
 
 function Logout() {
     logout();
@@ -91,35 +67,13 @@ function updateAccountSection(section) {
     accountSection.value = section;
 }
 
-async function handleSave() {
-    let result = {};
-    if (accountSection.value == 'InfoView') {
-        result = await (userStore.isEmployer ? saveEmployer(user.value) : saveCandidate(user.value));
-    } else if (accountSection.value == 'ResumeView') {
-        //TODO: 
-        alert("Данный функционал в разработке");
-        return;
-    }
-    if (result.success) {
-        isSuccess.value = true;
-        setTimeout(() => {
-            isSuccess.value = false;
-        }, 5000);
-    } else {
-        console.log("Ошибка при сохранении данных " + result.error);
-        errorMessage.value = "Произошла ошибка при сохранении, попробуйте повторить операцию позже";
-        setTimeout(() => {
-            errorMessage.value = '';
-        }, 5000);
-    }
-}
-
 </script>
 
 <style lang="scss" scoped>
 @use '@/assets/styles/colors.scss';
 @use '@/assets/styles/components.scss';
 @use '@/assets/styles/form.scss';
+@use 'account-styles.scss';
 
 .title {
     font-size: components.$fs-xxlarge;
@@ -143,38 +97,5 @@ async function handleSave() {
 .active {
     display: inline;
     border-bottom: 2px solid colors.$main;
-}
-
-.account-buttons {
-    display: flex;
-    flex-direction: column;
-}
-
-.account-button {
-    border-radius: 5px;
-    width: 250px;
-    height: 40px;
-    font-size: components.$fs-regular;
-    margin: 10px auto;
-    cursor: pointer;
-    border: 1px solid colors.$main;
-    background-color: colors.$background;
-    color: colors.$main;
-    transition: background-color 0.3s ease;
-}
-
-#save-button {
-    &:hover {
-        background-color: colors.$second;
-    }
-}
-
-#logout-button {
-    background-color: colors.$red;
-    border: none;
-
-    &:hover {
-        opacity: 0.9;
-    }
 }
 </style>
