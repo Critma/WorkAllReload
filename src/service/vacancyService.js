@@ -32,11 +32,11 @@ function toVacancy(vacansies) {
 }
 
 // return vacacy[]
-async function getVacansies(limit, lastId) {
+async function getVacansies(page, perPage) {
     const serverStore = useServerStore()
     const queryData = {
-        Limit: limit,
-        LastID: lastId,
+        Page: page,
+        PerPage: perPage,
     }
     let result = {};
     let response = {};
@@ -110,7 +110,6 @@ async function addVacancy(vacancy) {
     // console.log(response);
     return new Result(true, "", data);
 }
-
 
 async function getVacancyInfo(id) {
     const serverStore = useServerStore()
@@ -212,4 +211,17 @@ async function toggleVisibilityVacancy(vacancy) {
     return new Result(true, "", data);
 }
 
-export { getVacansies, getVacansiesFromSelfEmployer, addVacancy, getVacancyInfo, updateVacancy, deleteVacancy, toggleVisibilityVacancy };
+async function getVacansiesCount() {
+    const serverStore = useServerStore()
+    const url = `${serverStore.vacancyURL}/num`;
+    try {
+        const result = await axios.get(url)
+        return new Result(true, "", result.data.Quantity)
+    }
+    catch (error) {
+        console.log(error);
+        return new Result(false, error.response.data.Error, error);
+    }
+}
+
+export { getVacansies, getVacansiesFromSelfEmployer, addVacancy, getVacancyInfo, updateVacancy, deleteVacancy, toggleVisibilityVacancy, getVacansiesCount };

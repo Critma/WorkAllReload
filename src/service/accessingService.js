@@ -2,6 +2,8 @@ import { useUserStore } from "@/store/userStore";
 import { useServerStore } from "@/store/serverStore";
 import axios from "axios";
 import Result from "../models/Result";
+import { isValidJwt } from "./adminService";
+import router from "../router/router";
 
 
 async function login(email, password) {
@@ -66,7 +68,6 @@ async function loginEmployer(email, password) {
     try {
         const response = (await axios.get(url, { params: userData }))
         const data = response.data
-        console.log(data)
         const user = {
             jwt: data.Token,
             login: data.EmployerInfo.Email,
@@ -99,24 +100,36 @@ async function loginEmployer(email, password) {
 
 async function logout() {
     const userStore = useUserStore()
-
     localStorage.removeItem('user');
     localStorage.removeItem('accountSection');
     userStore.clearUser();
+
+    router.push('/');
 }
 
 async function checkJWT() {
-    const userStore = useUserStore()
-    //TODO: add JWT checking from server
+    const userStore = useUserStore();
+    userStore.jwtLastCheck = new Date().getTime();
+    userStore.isLoading = true;
     const retrievedUser = localStorage.getItem('user');
     if (retrievedUser) {
+        console.log('Saved session found');
         const user = JSON.parse(retrievedUser);
-        userStore.asignUser(user);
-        console.log('JWT is valid');
+        console.log('Checking JWT');
+        const result = await isValidJwt(user.jwt);
+        if (!result.success) {
+            await logout();
+            console.log('JWT expired')
+            alert('Срок действия вашей сессии истек')
+        }
+        else {
+            userStore.asignUser(user);
+        }
     } else {
-        console.log('JWT is invalid');
+        console.log('Saved session not found');
+        await logout();
     }
-
+    userStore.isLoading = false;
 }
 
 export { login, logout, checkJWT }

@@ -1,13 +1,14 @@
 <template>
     <div class="card mb-3" style="max-width: 400px;">
         <div class="card-header bg-primary text-white">
-            <h5 class="card-title mb-0">Вакансия : {{ response.status.name }}</h5>
+            <h3 class="card-title mb-0">{{ response.vacancy.name }}</h3>
             <div :class="background">
-                <small> Статус : <span>{{ response.status.name }}</span></small>
+                <text class="card-text"><span>{{ response.status.name }}</span></text>
             </div>
         </div>
         <div class="card-body">
             <p class="card-text"><strong>Вакансия:</strong> {{ response.vacancy.name }}</p>
+            <p class="card-text"><strong>Статус:</strong> {{ response.status.name }}</p>
             <p class="card-text"><strong>Зарплата:</strong> {{ response.vacancy.salary }} ₽</p>
             <p class="card-text"><strong>Email:</strong> {{ response.vacancy.email }}</p>
             <p class="card-text"><strong>Телефон:</strong> {{ response.vacancy.phoneNumber }}</p>
@@ -81,6 +82,10 @@ function formatDate(dateStr) {
     margin: 0px 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     border-radius: 0.5rem;
+}
+
+.card-text {
+    margin-bottom: 5px;
 }
 
 .card-header {

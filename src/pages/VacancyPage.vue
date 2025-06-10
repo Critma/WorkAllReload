@@ -44,7 +44,7 @@
                         <div>Последний раз обновлена: {{ formatDate(vacancy.updated_at) }}</div>
                     </div>
                     <div class="d-flex align-items-center mb-4 mt-4 buttons">
-                        <template v-if="!userStore.isEmployer && !isError">
+                        <template v-if="userStore.isAuthenticated && !userStore.isEmployer && !isError">
                             <button v-if="!isSetResponse" @click="sendRes" class="btn btn-success btn-lg px-4"
                                 :disabled="isLoading">Откликнуться</button>
                             <button v-else @click="delRes" class="btn btn-danger btn-lg px-4"
@@ -83,7 +83,9 @@ const isError = ref(false);
 
 onMounted(async () => {
     await getVacInfo();
-    await checkResponseOnVacancy();
+    if (userStore.isAuthenticated && !userStore.isEmployer) {
+        await checkResponseOnVacancy();
+    }
 })
 
 async function getVacInfo() {

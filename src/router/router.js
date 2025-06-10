@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import paths from "./paths";
 import names from "./names";
 import { useUserStore } from "@/store/userStore.js";
+import { checkJWT } from '@/service/accessingService';
 // pages
 import Vacancies from "@/pages/VacanciesPage.vue";
 import AuthPage from "@/pages/AuthPage.vue";
@@ -13,6 +14,7 @@ import Responses from "@/pages/ResponsesPage.vue";
 import NotFound from "@/pages/NotFoundPage.vue";
 import CompanyVacancies from "@/pages/CompanyVacancies.vue";
 import CreateVacancy from "../pages/CreateVacancy.vue";
+import VacancyResponses from "../pages/VacancyResponses.vue";
 
 const routes = [
     { path: paths.Home, component: Vacancies },
@@ -20,6 +22,7 @@ const routes = [
     { path: paths.Vacancy, component: VacancyPage, name: names.Vacancy, props: true },
     { path: paths.CompanyVacancies, component: CompanyVacancies },
     { path: paths.CreateVacancy, component: CreateVacancy }, { path: paths.EditVacancy, component: CreateVacancy, name: names.EditVacancy },
+    { path: paths.VacancyResponses, component: VacancyResponses },
 
     { path: paths.Auth, component: AuthPage, meta: { authExit: true } },
     { path: paths.Reg, component: Reg, meta: { authExit: true } },
@@ -39,6 +42,9 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
     const userStore = useUserStore();
+    if (userStore.jwtLastCheck == null) {
+        await checkJWT();
+    }
     if (to.meta.requiresAuth) {
         if (!userStore.isAuthenticated) {
             return { path: paths.Auth }
@@ -46,8 +52,8 @@ router.beforeEach(async (to) => {
             return;
         }
     } else if (userStore.isAuthenticated && to.meta.authExit) {
-        console.log("authExit", userStore.ID)
-        return { name: names.Account, params: { id: userStore.ID } }
+        console.log("authExit")
+        return { name: names.Account }
     }
     return
 })

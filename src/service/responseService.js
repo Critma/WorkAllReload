@@ -7,6 +7,8 @@ import CandidateResponse from "../models/CandidateResponse";
 import Status from "../models/Status";
 import { jwtHeader } from "@/helpers/serviceHelper.js";
 import Experience from "../models/Experience";
+import VacancyResponse from "../models/VacancyResponse";
+import User from "../models/User";
 
 async function sendResponse(vacansId) {
     const serverStore = useServerStore();
@@ -82,4 +84,54 @@ async function isResponseOnVacancy(vacansId) {
     return new Result(true, "", false);
 }
 
-export { getCandidateResponses, sendResponse, deleteResponse, isResponseOnVacancy };
+// return VacancyResponse[]
+async function getResponsesOnVacancy(vacancyId) {
+    const serverStore = useServerStore();
+    const url = `${serverStore.vacancyURL}/response`;
+    const queryData = {
+        VacancyID: vacancyId,
+    }
+    try {
+        const response = await axios.get(url, { params: queryData, ...jwtHeader() });
+        const data = response.data;
+        const responses = data.Responses;
+        const vacancy = data.VacancyInfo;
+        if (responses === null) return new Result(true, "", []);
+        const vacancyResponses = responses.map(response => {
+            return new VacancyResponse(
+                response.ID,
+                response.CreatedAt,
+                new Status(response.Status.ID, response.Status.Name, response.Status.CreatedAt),
+                new User(response.CandidateInfo.ID, response.CandidateInfo.Name, response.CandidateInfo.PhoneNumber, response.CandidateInfo.Email),
+                new Vacancy(vacancy.ID, vacancy.Name, vacancy.Price, vacancy.Email,
+                    vacancy.PhoneNumber, vacancy.Location,
+                    vacancy.Experience.ID, vacancy.AboutWork,
+                    vacancy.IsVisible, null, vacancy.CreatedAt, vacancy.UpdatedAt, new Experience(vacancy.Experience.ID, vacancy.Experience.Name, vacancy.Experience.CreatedAt), null, null)
+            );
+        });
+        return new Result(true, "", vacancyResponses);
+    }
+    catch (error) {
+        console.log(error)
+        return new Result(false, error.response.data.Info, error);
+    }
+}
+
+async function changeResponseStatus(responseId, statusId) {
+    const serverStore = useServerStore();
+    const url = `${serverStore.vacancyURL}/response`;
+    const body = {
+        ResponseID: responseId,
+        StatusID: statusId
+    }
+    try {
+        const result = await axios.patch(url, body, jwtHeader());
+        return new Result(true, "", null);
+    }
+    catch (error) {
+        console.log(error)
+        return new Result(false, error.response.data.Info, error);
+    }
+}
+
+export { getCandidateResponses, sendResponse, deleteResponse, isResponseOnVacancy, getResponsesOnVacancy, changeResponseStatus };

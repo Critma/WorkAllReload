@@ -32,7 +32,6 @@ import { ref, computed, watch } from 'vue';
 import InfoView from './InfoView.vue';
 import ResumeView from './ResumeView.vue';
 import paths from '@/router/paths.js';
-import router from '@/router/router';
 import { useUserStore } from '@/store/userStore';
 import { logout } from '@/service/accessingService';
 import { getCandidateSelf, saveCandidate } from '../../service/candidateService';
@@ -53,7 +52,6 @@ watch(accountSection, () => {
 
 function Logout() {
     logout();
-    router.push({ path: paths.Home });
 }
 
 const section = computed(() => {

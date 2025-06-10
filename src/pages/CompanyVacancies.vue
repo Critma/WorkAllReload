@@ -46,7 +46,7 @@ function GoToCreateVacancy() {
 }
 
 function GoToAllResponses() {
-    alert("Данный фукнционал в разработке");
+    router.push(paths.VacancyResponses)
 }
 
 </script>

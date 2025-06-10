@@ -13,10 +13,15 @@ import Success from '@/components/global/Success.vue';
 const app = createApp(App)
 const pinia = createPinia()
 
-app.component('Loader', Loader)
-app.component('Error', Error)
-app.component('Success', Success)
+installGlobalComponents(app);
 app.use(pinia)
 app.use(router)
+
+function installGlobalComponents(app) {
+    app.component('Loader', Loader)
+    app.component('Error', Error)
+    app.component('Success', Success)
+}
+
 
 app.mount('#app')

@@ -1,7 +1,7 @@
 export default function useTheming() {
     const UpdateTheme = () => {
         let theme = localStorage.getItem("theme");
-        console.log(theme)
+        console.log(`Theme: ${theme}`);
         if (theme == null || theme == "null") {
             theme = 'blue';
         }

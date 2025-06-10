@@ -47,10 +47,12 @@ import useApi from '../../composibles/useApi';
 import { GetExperiences } from '../../service/experienceService.js';
 import { GetResume, AddOrUpdateResume } from '../../service/resumeService';
 import Resume from '../../models/Resume.js';
+import { useUserStore } from '../../store/userStore.js';
 
 const { isLoading, errorMessage, successMesage, ExecuteApiCommand } = useApi();
 const resume = ref(new Resume())
 const experiences = ref([]);
+const userStore = useUserStore();
 
 onMounted(async () => {
     Getexps();
@@ -58,7 +60,7 @@ onMounted(async () => {
 });
 
 async function GetRes() {
-    await ExecuteApiCommand(() => GetResume(), (result) => { resume.value = result.data; }, (_) => { console.log('resume loading error'); });
+    await ExecuteApiCommand(() => GetResume(userStore.ID), (result) => { resume.value = result.data; }, (_) => { console.log('resume loading error'); });
 }
 
 async function Getexps() {

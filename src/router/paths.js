@@ -10,7 +10,8 @@ const paths = {
     Responses: "/Responses",
     CompanyVacancies: "/CompanyVacancies",
     CreateVacancy: "/CreateVacancy", EditVacancy: "/EditVacancy/:id",
-    NotFound: "/NotFound"
+    NotFound: "/NotFound",
+    VacancyResponses: '/VacancyResponses'
 }
 
 export default paths;

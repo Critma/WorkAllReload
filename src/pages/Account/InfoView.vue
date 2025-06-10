@@ -10,6 +10,11 @@
             <label class="form-label" for="email">Почта</label>
             <input id="email" class="input form-control" type="email" name="email" v-model="user.email" required
                 readonly>
+            <!-- <template v-if="userStore.isEmployer">
+                <label class="form-label" for="inn">INN</label>
+                <input id="inn" class="input form-control" type="inn" name="inn" v-model="user.inn" required
+                    readonly>
+            </template> -->
             <button id="save-button" class="account-button fbtn" type="submit">Сохранить</button>
             <div class="messages">
                 <Error v-if="errorMessage" :errorMessage="errorMessage"></Error>

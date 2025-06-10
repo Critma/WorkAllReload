@@ -4,13 +4,13 @@ import axios from "axios";
 import Result from "../models/Result";
 import Resume from "../models/Resume";
 import { jwtHeader } from "../helpers/serviceHelper";
+import Experience from "../models/Experience";
 
-async function GetResume() {
+async function GetResume(candidateId) {
     const serverStore = useServerStore()
-    const user = useUserStore();
     const url = serverStore.resumeURL;
     const queryParams = {
-        CandidateID: user.ID,
+        CandidateID: candidateId,
     }
     // console.log(body)
     let response = {};
@@ -21,17 +21,17 @@ async function GetResume() {
         console.log(error.response.data)
         return new Result(false, error.response.data.Error, error);
     }
-    // console.log(response)
     const data = response.data;
     let resume = new Resume();
-    if (data.length != 0) {
+    if (data.ResumesInfo != null && data.ResumesInfo.length > 0) {
         const first = data.ResumesInfo[0]
         resume = new Resume(first.ID,
             data.CandidateInfo.ID,
             first.ExperienceInfo.ID,
             first.Description,
             first.CreatedAt,
-            first.UpdatedAt
+            first.UpdatedAt,
+            new Experience(first.ExperienceInfo.ID, first.ExperienceInfo.Name, first.ExperienceInfo.CreatedAt)
         )
     }
     return new Result(true, "", resume);

@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { ref, computed } from 'vue'
 
 export const useServerStore = defineStore("serverStore", () => {
     const baseURL = "https://isp-workall.online/api/v1/"
@@ -10,6 +9,7 @@ export const useServerStore = defineStore("serverStore", () => {
     const adminURL = baseURL + 'adm';
     const experienceURL = baseURL + 'exp';
     const resumeURL = `${candidateURL}/resume`;
+    const statusURL = baseURL + 'status';
 
     return {
         empURL,
@@ -18,6 +18,7 @@ export const useServerStore = defineStore("serverStore", () => {
         employerURL,
         adminURL,
         experienceURL,
-        resumeURL
+        resumeURL,
+        statusURL
     }
 });

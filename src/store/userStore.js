@@ -6,6 +6,7 @@ export const useUserStore = defineStore("userStore", () => {
     const login = ref("");
     const name = ref("");
     const jwt = ref("");
+    const jwtLastCheck = ref(null);
     const isAuthenticated = ref(false);
     const isLoading = ref(false);
     const isEmployer = ref(false);
@@ -36,6 +37,7 @@ export const useUserStore = defineStore("userStore", () => {
         isLoading,
         name,
         isEmployer,
+        jwtLastCheck,
 
         asignUser,
         clearUser
