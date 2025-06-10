@@ -14,7 +14,7 @@ async function getCandidateInfo(candidateID) {
     const serverStore = useServerStore()
     try {
         const url = serverStore.candidateURL;
-        const params = { ...jwtHeader(), params: { СandidateID : candidateID } };
+        const params = { ...jwtHeader(), params: { CandidateID : candidateID } };
         const response = await axios.get(url, params);
         const info = response.data.CandidateInfo;
         const candidate = new User(info.ID, info.Name, info.PhoneNumber, info.Email, null, info.StatusInfo.ID, info.CreatedAt, info.UpdatedAt);
@@ -53,32 +53,6 @@ async function saveCandidate(user) {
     return new Result(true, "", data);
 };
 
-async function getCandidateResponses() {
-    const serverStore = useServerStore()
-    const url = `${serverStore.candidateURL}/response`;
-    let response = {};
-
-    try {
-        response = await axios.get(url, jwtHeader());
-    }
-    catch (error) {
-        console.log(error)
-        return new Result(false, error.response.data.Info, error);
-    }
-    const data = response.data.Responses;
-    const responses = [];
-    if (data === null) return responses;
-    data.forEach(response => {
-        const vacan = response.VacancyInfo;
-        responses.push(new CandidateResponse(response.ID,
-            new Vacancy(vacan.ID, vacan.Name, vacan.Price, vacan.Email, vacan.PhoneNumber, vacan.Location, vacan.ExperienceInfo.ID, vacan.AboutWork, vacan.IsVisible, null, vacan.CreatedAt, vacan.UpdatedAt, new Experience(vacan.ExperienceInfo.ID, vacan.ExperienceInfo.Name, vacan.ExperienceInfo.CreatedAt), vacan.EmployerName),
-            new Status(response.StatusInfo.ID, response.StatusInfo.Name, response.StatusInfo.CreatedAt),
-            vacan.ID,
-            response.StatusInfo.ID))
-    });
-    return new Result(true, "", responses);
-}
-
 async function registerCandidate(user) {
     const serverStore = useServerStore()
     const url = serverStore.candidateURL;
@@ -101,4 +75,4 @@ async function registerCandidate(user) {
     return new Result(true, "", data);
 }
 
-export { getCandidateInfo, getCandidateSelf, saveCandidate, getCandidateResponses, registerCandidate }
+export { getCandidateInfo, getCandidateSelf, saveCandidate, registerCandidate }

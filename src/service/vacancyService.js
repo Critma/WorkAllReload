@@ -100,7 +100,7 @@ async function addVacancy(vacancy) {
     // console.log(body)
     let response = {};
     try {
-        response = await axios.post(url, body, jwtHeader());
+        response = await axios.post(url, body, ...jwtHeader());
     }
     catch (error) {
         console.log('add vacancy error ' + error)
@@ -122,18 +122,18 @@ async function getVacancyInfo(id) {
     try {
         response = await axios.get(`${serverStore.vacancyURL}/info`, { params: queryData });
     } catch (error) {
-        console.log(`Error : ${error}`)
+        console.log(error)
         return result = new Result(false, error.response.data.Info, "Ошибка получения информации о вакансии")
     }
     const data = response.data.VacancyInfo;
     try {
-
         const vacancy = new Vacancy(data.ID, data.Name, data.Price, data.Email, data.PhoneNumber,
             data.Location, data.ExperienceInfo.ID, data.AboutWork, data.IsVisible, data.EmployerInfo.ID, data.CreatedAt,
             data.UpdatedAt, data.ExperienceInfo, data.EmployerInfo.NameOrganization, data.EmployerInfo);
         result = new Result(true, "", vacancy)
     }
     catch (error) {
+        console.log(`Error : ${error}`)
         result = new Result(false, error, "Ошибка парсинга полученных данных")
     }
 

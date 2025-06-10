@@ -15,13 +15,13 @@
             <p class="card-text"><strong>Опыт:</strong> {{ response.vacancy.experience.name }}</p>
             <p class="card-text"><strong>Описание работы:</strong> {{ response.vacancy.aboutWork }}</p>
             <p class="card-text"><small class="text-muted">Вакансия создана: {{ formatDate(response.vacancy.created_at)
-            }}</small></p>
+                    }}</small></p>
             <p class="card-text"><small class="text-muted">Вакансия обновлена: {{
                 formatDate(response.vacancy.updated_at) }}</small></p>
         </div>
         <div class="card-footer d-flex justify-content-between">
             <button class="btn btn-outline-primary" @click="pushToVacancy(response.vacancy.id)">Подробнее</button>
-            <button class="btn btn-outline-danger" @click="deleteResponse()">Удалить</button>
+            <button class="btn btn-outline-danger" @click="delReponse(response.vacancy.id)">Удалить</button>
         </div>
     </div>
 </template>
@@ -29,9 +29,12 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { ref, computed } from 'vue';
+import useApi from '../composibles/useApi';
+import { deleteResponse } from '../service/responseService';
 
-const props = defineProps(['response'])
+const props = defineProps(['response', 'reload'])
 const router = useRouter();
+const { ExecuteApiCommand } = useApi()
 
 const background = computed(() => {
     switch (props.response.status.name.toLowerCase()) {
@@ -52,9 +55,14 @@ function pushToVacancy(id) {
     router.push({ name: 'Vacancy', params: { id: id } });
 }
 
-function deleteResponse(id) {
-    //TODO: delete respones from server
-    alert("Функционал в разработке")
+function delReponse(id) {
+    if (confirm('Вы действительно хотите удалить отклик?') == false) { return }
+    ExecuteApiCommand(
+        () => deleteResponse(id),
+        () => {
+            props.reload();
+        },
+        () => { alert('Не удалось удалить отклик') })
 }
 
 function formatDate(dateStr) {

@@ -11,7 +11,7 @@
                     <h5 id="company" class="text fw-bold display-6 mb-4"><span class="text-muted">Компания:</span> {{
                         vacancy.employerName }}</h5>
                     <div class="mb-4">
-                        <span class="badge bg-danger fs-4">{{ vacancy.experience.Name }}</span>
+                        <span class="badge bg-secondary fs-4">{{ vacancy.experience.Name }}</span>
                         <span class="badge bg-success ms-2 fs-4">{{ vacancy.location }}</span>
                     </div>
                     <p class="text-dark fs-4 mb-4" style="white-space: pre-line;"><span class="text-muted">Информация о
@@ -43,9 +43,13 @@
                         <div>Создана: {{ formatDate(vacancy.created_at) }}</div>
                         <div>Последний раз обновлена: {{ formatDate(vacancy.updated_at) }}</div>
                     </div>
-                    <div class="d-flex align-items-center mb-4 buttons">
-                        <button v-if="!userStore.isEmployer" @click="sendResponse"
-                            class="btn btn-success btn-lg px-4">Откликнуться</button>
+                    <div class="d-flex align-items-center mb-4 mt-4 buttons">
+                        <template v-if="!userStore.isEmployer && !isError">
+                            <button v-if="!isSetResponse" @click="sendRes" class="btn btn-success btn-lg px-4"
+                                :disabled="isLoading">Откликнуться</button>
+                            <button v-else @click="delRes" class="btn btn-danger btn-lg px-4"
+                                :disabled="isLoading">Удалить отклик</button>
+                        </template>
                         <button @click="goBack" class="btn btn-success btn-lg px-4">Назад</button>
                     </div>
                 </div>
@@ -67,19 +71,54 @@ import { useUserStore } from '@/store/userStore';
 import useApi from '../composibles/useApi';
 import Loader from '@/components/global/Loader.vue';
 import { getVacancyInfo } from '@/service/vacancyService';
+import { sendResponse, deleteResponse, isResponseOnVacancy } from '../service/responseService';
 
-const { isLoading, errorMessage, successMesage } = useApi();
+const { isLoading, errorMessage, successMesage, ExecuteApiCommand } = useApi();
 const userStore = useUserStore();
-
 const route = useRoute();
 const router = useRouter();
 const vacancy = ref(null);
-// const userStore = useUserStore;
-// let currency = 'рублей'
+const isSetResponse = ref(false);
+const isError = ref(false);
 
-function sendResponse() {
-    // TODO: Функционал добавления отклика
-    alert("Фукнционал в разработке");
+onMounted(async () => {
+    await getVacInfo();
+    await checkResponseOnVacancy();
+})
+
+async function getVacInfo() {
+    ExecuteApiCommand(
+        () => getVacancyInfo(route.params.id),
+        (result) => { vacancy.value = result.data; },
+        () => { router.push(paths.NotFound); }
+    )
+}
+
+async function checkResponseOnVacancy() {
+    ExecuteApiCommand(
+        () => isResponseOnVacancy(route.params.id),
+        (result) => { isSetResponse.value = result.data; },
+        () => { isError.value = true }
+    )
+}
+
+async function sendRes() {
+    ExecuteApiCommand(
+        () => sendResponse(route.params.id),
+        () => {
+            isSetResponse.value = true;
+        },
+        () => { alert('Не удалось оставить отклик') })
+}
+
+async function delRes() {
+    if (confirm('Вы действительно хотите удалить отклик?') == false) { return }
+    ExecuteApiCommand(
+        () => deleteResponse(route.params.id),
+        () => {
+            isSetResponse.value = false;
+        },
+        () => { alert('Не удалось удалить отклик') })
 }
 
 function goBack() {
@@ -90,16 +129,7 @@ function goBack() {
     }
 }
 
-onMounted(async () => {
-    isLoading.value = true;
-    const result = await getVacancyInfo(route.params.id);
-    if (result.success) {
-        vacancy.value = result.data;
-        isLoading.value = false;
-    } else {
-        router.push(paths.NotFound);
-    }
-})
+
 
 
 </script>
@@ -156,7 +186,7 @@ main {
     width: 100%;
 }
 
-.buttons{
+.buttons {
     justify-content: space-between;
 }
 

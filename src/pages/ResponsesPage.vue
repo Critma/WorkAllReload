@@ -9,7 +9,7 @@
         </div>
         <div class="responses__container" v-if="responses.length > 0">
             <template v-for="response in responses" :key="response.id">
-                <ResponseCard :response="response" />
+                <ResponseCard :response="response" :reload="Reload" />
             </template>
         </div>
         <div v-if="!isLoading && responses.length <= 0" class="no-responses__container">
@@ -20,7 +20,7 @@
 
 <script setup>
 import CandidateResponse from '@/models/CandidateResponse';
-import { getCandidateResponses } from '@/service/candidateService.js'
+import { getCandidateResponses } from '../service/responseService';
 import Vacancy from '@/models/Vacancy';
 import ResponseCard from '../components/ResponseCard.vue';
 import { ref, onMounted } from 'vue';
@@ -29,6 +29,11 @@ const responses = ref([]);
 const isLoading = ref(false);
 
 onMounted(async () => {
+    await Reload();
+})
+
+
+async function Reload() {
     isLoading.value = true;
     var result = await getCandidateResponses();
     if (result.success) {
@@ -38,8 +43,7 @@ onMounted(async () => {
         console.log(`get responses error: ${result.error}`);
     }
     isLoading.value = false;
-})
-
+}
 </script>
 
 <style lang="scss" scoped>
