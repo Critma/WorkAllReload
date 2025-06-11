@@ -9,10 +9,13 @@
 import MenuPanel from './components/MenuPanel.vue'
 import { ref, onMounted, onBeforeMount } from 'vue'
 import useTheming from '@/composibles/useTheming.js'
-import { checkJWT } from './service/accessingService';
+import { isJwtValid } from './service/accessingService';
+import { useUserStore } from './store/userStore';
+import { logout } from './service/accessingService';
 
 // auto adjust height of menu panel
 const menuPanelHeight = ref(0);
+const userStore = useUserStore();
 
 onBeforeMount(async () => {
   await useTheming().UpdateTheme();
@@ -22,7 +25,12 @@ onMounted(() => {
   const menu = document.getElementById('menu');
   menuPanelHeight.value = menu.clientHeight * 1.2;
 
-  setInterval(checkJWT, 300000);
+  setInterval(async () => {
+    if (!await isJwtValid(userStore.jwt)) {
+      await logout();
+    }
+  }
+    , 300000);
 });
 
 

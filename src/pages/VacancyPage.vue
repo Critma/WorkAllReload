@@ -43,7 +43,7 @@
                         <div>Создана: {{ formatDate(vacancy.created_at) }}</div>
                         <div>Последний раз обновлена: {{ formatDate(vacancy.updated_at) }}</div>
                     </div>
-                    <div class="d-flex align-items-center mb-4 mt-4 buttons">
+                    <div class="d-flex align-items-center mb-4 mt-4 buttons"> //TODO: align center
                         <template v-if="userStore.isAuthenticated && !userStore.isEmployer && !isError">
                             <button v-if="!isSetResponse" @click="sendRes" class="btn btn-success btn-lg px-4"
                                 :disabled="isLoading">Откликнуться</button>

@@ -115,15 +115,10 @@ async function checkJWT() {
     if (retrievedUser) {
         console.log('Saved session found');
         const user = JSON.parse(retrievedUser);
-        console.log('Checking JWT');
-        const result = await isValidJwt(user.jwt);
-        if (!result.success) {
-            await logout();
-            console.log('JWT expired')
-            alert('Срок действия вашей сессии истек')
-        }
-        else {
+        if (await isJwtValid(user.jwt)) {
             userStore.asignUser(user);
+        } else {
+            await logout();
         }
     } else {
         console.log('Saved session not found');
@@ -132,4 +127,15 @@ async function checkJWT() {
     userStore.isLoading = false;
 }
 
-export { login, logout, checkJWT }
+async function isJwtValid(jwt) {
+    console.log('Checking JWT');
+    const result = await isValidJwt(jwt);
+    if (!result.success) {
+        console.log('JWT expired')
+        alert('Срок действия вашей сессии истек')
+        return false
+    }
+    return true
+}
+
+export { login, logout, checkJWT, isJwtValid }

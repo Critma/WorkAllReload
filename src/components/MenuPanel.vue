@@ -1,17 +1,8 @@
 <template>
-    <div class="menu">
-        <!-- <div class="style-change" v-if="showStyleChange">
-            <div class="buttons">
-                <button id="light" class="style-change__button" @click="SwitchTheme('light')">Светлая</button>
-                <button id="blue" class="style-change__button" @click="SwitchTheme('blue')"
-                    style="background-color: aqua;">Голубая</button>
-            </div>
-            <div class="line"></div>
-        </div> -->
+    <div class="container menu">
         <div class="menu__container">
             <div class="logo">
                 <div class="logo__text">
-                    <!-- <h1>PRO</h1> -->
                     <RouterLink :to="paths.Home" id="logo-title">
                         <h1>WorkAll</h1>
                     </RouterLink>
@@ -50,7 +41,6 @@
                         </RouterLink>
                     </template>
                 </template>
-
             </div>
             <div hidden class="toggle__holder">
                 <img :src="imgComp" @click="SwitchShowStyle" alt="Изменить стиль сайта" id="eye"
@@ -92,19 +82,23 @@ function SwitchShowStyle() {
     color: colors.$main;
     background-color: colors.$background;
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    max-width: 100%;
+    // top: 0;
+    // left: 0;
+    // right: 0;
+    // bottom: 0;
     z-index: 1000;
     height: 100px;
-    width: 100%;
+    // width: 100%;
     font-size: components.$fs-large;
     margin: 0px;
+    padding: 0px;
     // margin-bottom: 50px;
 }
 
 .menu__container {
+    // padding: 0px;
+    // margin: 0px;
     display: flex;
     align-items: center;
 }
@@ -133,28 +127,7 @@ h1 {
 }
 
 h3 {
-    // margin: 10px 0px;
     font-size: components.$fs-large;
-}
-
-.style-change {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.style-change__button {
-    padding: 10px 40px;
-    margin: 0 10px;
-    background-color: white;
-    border: 1px 1px 1px 1px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-
-    &:hover {
-        transform: scale(1.1);
-    }
 }
 
 .router__navbar {
@@ -164,6 +137,7 @@ h3 {
     margin-right: 1%;
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .router__navbar a {
