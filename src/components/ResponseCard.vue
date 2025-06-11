@@ -1,7 +1,9 @@
 <template>
     <div class="card mb-3" style="max-width: 400px;">
-        <div class="card-header bg-primary text-white">
-            <h3 class="card-title mb-0">{{ response.vacancy.name }}</h3>
+        <div class="card-header text-white" :class="[response.vacancy.visible ? 'bg-primary' : 'bg-secondary']">
+            <h3 class="card-title mb-1"><span style="background-color: grey;"
+                    v-if="!response.vacancy.visible">[Скрыто]</span> {{ response.vacancy.name
+                    }}</h3>
             <div :class="background">
                 <text class="card-text"><span>{{ response.status.name }}</span></text>
             </div>
@@ -14,9 +16,9 @@
             <p class="card-text"><strong>Телефон:</strong> {{ response.vacancy.phoneNumber }}</p>
             <p class="card-text"><strong>Локация:</strong> {{ response.vacancy.location }}</p>
             <p class="card-text"><strong>Опыт:</strong> {{ response.vacancy.experience.name }}</p>
-            <p class="card-text"><strong>Описание работы:</strong> {{ response.vacancy.aboutWork }}</p>
+            <!-- <p class="card-text"><strong>Описание работы:</strong> {{ response.vacancy.aboutWork }}</p> -->
             <p class="card-text"><small class="text-muted">Вакансия создана: {{ formatDate(response.vacancy.created_at)
-                    }}</small></p>
+            }}</small></p>
             <p class="card-text"><small class="text-muted">Вакансия обновлена: {{
                 formatDate(response.vacancy.updated_at) }}</small></p>
         </div>

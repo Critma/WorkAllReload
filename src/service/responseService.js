@@ -61,7 +61,7 @@ async function getCandidateResponses() {
     }
     const data = response.data.Responses;
     const responses = [];
-    if (data === null) return responses;
+    if (data === null) return new Result(true, '', responses);
     data.forEach(response => {
         const vacan = response.VacancyInfo;
         responses.push(new CandidateResponse(response.ID,

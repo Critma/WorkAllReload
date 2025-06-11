@@ -63,6 +63,9 @@ async function getVacansiesFromSelfEmployer() {
         console.log(`Error : ${error}`)
         result = new Result(false, error.response.data.Info, "Ошибка получения вакансий")
     }
+    if (response.data.VacanciesInfo == null || response.data.VacanciesInfo.length == 0) {
+        return new Result(true, "", []);
+    }
     const data = response.data.VacanciesInfo.map(vacancy => {
         return new Vacancy(
             vacancy.ID,

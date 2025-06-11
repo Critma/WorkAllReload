@@ -1,28 +1,39 @@
 <template>
     <div class="title">
         Все отклики
-        <div class="title__line"></div>
     </div>
-    <Loader v-if="isLoading" />
     <div class="container">
-        <VacancyResponseCard v-for="response in responses" :key="response.id" :vacancyResponse="response"
-            :statusList="statuses" />
+        <div class="title__line"></div>
+        <button @click="router.push(paths.CompanyVacancies)" class="btn btn-success px-4">Назад</button>
+        <Loader v-if="isLoading" />
+        <div v-if="responses.length > 0" class="container">
+            <VacancyResponseCard v-for="response in responses" :key="response.id" :vacancyResponse="response"
+                :statusList="statuses" />
+        </div>
+        <div v-if="responses.length === 0">
+            <div class="info-block">
+                <h3>Ваши вакансии пока не имеют откликов</h3>
+            </div>
+        </div>
+        <div class="spacer"></div>
     </div>
-    <div class="spacer"></div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { getResponsesOnVacancy } from '@/service/responseService.js'
 import { getVacansiesFromSelfEmployer } from "../service/vacancyService";
 import useApi from '../composibles/useApi';
 import VacancyResponseCard from '../components/VacancyResponseCard.vue';
 import { getStatuses } from '../service/adminService';
+import paths from '../router/paths';
 
 
 const vacancies = ref([]);
 const responses = ref([]);
 const statuses = ref([]);
+const router = useRouter();
 const { isLoading, errorMessage, successMesage, ExecuteApiCommand } = useApi();
 
 onMounted(async () => {
@@ -61,6 +72,8 @@ async function LoadResponses() {
 
 <style lang="scss" scoped>
 @use "../assets/styles/components.scss";
+@use '../assets/styles/form.scss';
+
 
 .container {
     display: flex;

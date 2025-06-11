@@ -1,19 +1,20 @@
 <template>
     <div class="card">
         <div :class="{ 'card-header': true, 'bg-secondary': !vacancy.visible }">
-            <span id="vacancy-name">{{ vacancy.name }}</span>
+            <h3 class="card-title mb-0" id="vacancy-name">{{ vacancy.name }}</h3>
         </div>
         <div class="card-body">
             <p class="card-title mb-3"><strong>Зарплата:</strong> <span id="vacancy-salary">{{ vacancy.salary
-            }} ₽</span></p>
+                    }} ₽</span></p>
             <p><strong>Email:</strong> <a href="mailto:example@company.com" id="vacancy-email">{{ vacancy.email
-            }}</a></p>
+                    }}</a></p>
             <p><strong>Телефон:</strong> <a href="tel:+79991234567" id="vacancy-phone">{{ vacancy.phoneNumber
-            }}</a>
+                    }}</a>
             </p>
             <p><strong>Локация:</strong> <span id="vacancy-location">{{ vacancy.location }}</span></p>
-            <p><strong>Описание работы:</strong> <br /><span id="vacancy-aboutWork">{{ vacancy.aboutWork
-            }}</span></p>
+            <p><strong>Описание работы:</strong></p>
+            <textarea class="form-control" id="vacancy-aboutWork" rows="2" :value="vacancy.aboutWork"
+                readonly></textarea>
             <p><small>Создано: <span id="vacancy-created_at">{{ formatDate(vacancy.created_at) }}</span> |
                     Обновлено: <span id="vacancy-updated_at">{{ formatDate(vacancy.updated_at) }}</span></small>
             </p>
@@ -74,6 +75,8 @@ function GoToVacancy() {
 
 <style lang="scss" scoped>
 @use '@/assets/styles/form.scss';
+@use '@/assets/styles/colors.scss';
+@use '@/assets/styles/components.scss';
 
 .card {
     max-width: 600px;
@@ -106,6 +109,10 @@ function GoToVacancy() {
 .card-footer {
     display: flex;
     justify-content: space-between;
+}
+
+#vacancy-aboutWork {
+    border: 1px solid colors.$black;
 }
 
 @media (max-width: 768px) {

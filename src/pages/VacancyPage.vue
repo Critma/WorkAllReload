@@ -98,7 +98,7 @@ async function getVacInfo() {
 }
 
 async function checkResponseOnVacancy() {
-    ExecuteApiCommand(
+    return ExecuteApiCommand(
         () => isResponseOnVacancy(route.params.id),
         (result) => { isSetResponse.value = result.data; },
         () => { isError.value = true }
@@ -226,14 +226,14 @@ main {
         flex-direction: column;
     }
 
-    .bages{
+    .bages {
         flex-direction: column;
         gap: 20px;
     }
 }
 
 @media (max-width: 400px) {
-    .buttons{
+    .buttons {
         flex-direction: column;
         gap: 10px;
     }

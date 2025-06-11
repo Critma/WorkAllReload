@@ -4,7 +4,6 @@
             Ваши вакансии
         </div>
         <hr class="title__line" />
-        <Loader v-if="isLoading" />
         <Error v-if="errorMessage" :errorMessage="errorMessage" />
         <Success v-if="successMesage" :success="successMesage" />
         <div class="container cv__buttons">
@@ -12,9 +11,13 @@
                 вакансию</button>
             <button type="button" class="btn btn-warning nav_btn" @click="GoToAllResponses">Все отклики</button>
         </div>
-        <div class="container vacancy__list">
+        <Loader v-if="isLoading" />
+        <div v-if="vacancies.length > 0" class="container vacancy__list">
             <EmployerVacancyCard v-for="vacancy in vacancies" :key="vacancy.id" :vacancy="vacancy"
                 :reload="LoadVacancies" />
+        </div>
+        <div v-else class="info-block">
+            <h3>Вы пока не создали не одной вакансии</h3>
         </div>
     </div>
 </template>
@@ -34,11 +37,11 @@ const vacancies = ref([]);
 const { isLoading, errorMessage, successMesage, ExecuteApiCommand } = useApi();
 
 onMounted(async () => {
-    LoadVacancies();
+    await LoadVacancies();
 })
 
 async function LoadVacancies() {
-    await ExecuteApiCommand(getVacansiesFromSelfEmployer, (result) => { vacancies.value = result.data }, (result) => { errorMessage.value = error }, isLoading);
+    return ExecuteApiCommand(getVacansiesFromSelfEmployer, (result) => { vacancies.value = result.data }, (result) => { errorMessage.value = error }, isLoading);
 }
 
 function GoToCreateVacancy() {
