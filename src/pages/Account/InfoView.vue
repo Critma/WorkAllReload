@@ -5,16 +5,14 @@
             <label class="form-label" for="name">Имя <span class="red-text">*</span></label>
             <input id="name" class="input form-control" type="text" name="name" v-model="user.name" required>
             <label class="form-label" for="phone">Номер телефона <span class="red-text">*</span></label>
-            <!-- TODO: добавить маску номера телефона -->
             <input id="phone" class="input form-control" type="tel" name="phone" v-model="user.phone" required>
             <label class="form-label" for="email">Почта</label>
             <input id="email" class="input form-control" type="email" name="email" v-model="user.email" required
                 readonly>
-            <!-- <template v-if="userStore.isEmployer">
+            <template v-if="userStore.isEmployer">
                 <label class="form-label" for="inn">INN</label>
-                <input id="inn" class="input form-control" type="inn" name="inn" v-model="user.inn" required
-                    readonly>
-            </template> -->
+                <input id="inn" class="input form-control" type="inn" name="inn" v-model="user.INN" required readonly>
+            </template>
             <button id="save-button" class="account-button fbtn" type="submit">Сохранить</button>
             <div class="messages">
                 <Error v-if="errorMessage" :errorMessage="errorMessage"></Error>

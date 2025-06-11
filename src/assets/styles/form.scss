@@ -66,6 +66,10 @@
     pointer-events: none;
 }
 
+.btn {
+    font-size: components.$fs-regular;
+}
+
 /* Submit button */
 .btn-outline-success,
 .btn-outline-primary {
@@ -106,8 +110,7 @@
     opacity: 0.8;
 }
 
-/* Responsive for smaller screens */
-@media (max-width: 480px) {
+@media (max-width: 760px) {
     .form-card {
         padding: 2rem 1.5rem;
     }
@@ -115,16 +118,24 @@
     .form-title {
         font-size: components.$fs-large;
     }
+
+    .form-control {
+        font-size: components.$fs-xsmall;
+    }
+
+    .form-label {
+        font-size: components.$fs-xsmall;
+    }
+
+    .btn {
+        font-size: components.$fs-xsmall;
+    }
 }
 
 .reg__alert {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.btn {
-    font-size: components.$fs-regular;
 }
 
 .router__link {

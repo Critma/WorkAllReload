@@ -19,6 +19,7 @@ const displayMessage = computed(() =>
 
 <style lang="scss" scoped>
 @use '@/assets/styles/colors.scss' as colors;
+@use '@/assets/styles/components.scss';
 
 .success-message {
   background-color: colors.$success-bg;
@@ -49,16 +50,15 @@ const displayMessage = computed(() =>
   }
 }
 
-.success-icon {
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  fill: colors.$success-color;
-}
-
 .success-text {
   flex-grow: 1;
   font-size: 1.1rem;
   line-height: 1.4;
+}
+
+@media (max-width: 760px) {
+  .success-message {
+    font-size: components.$fs-small;
+  }
 }
 </style>

@@ -76,29 +76,19 @@ function SwitchShowStyle() {
 <style lang="scss" scoped>
 @use "@/assets/styles/colors.scss";
 @use "@/assets/styles/components.scss";
-// @use 'bootstrap/dist/css/bootstrap.css';
 
 .menu {
     color: colors.$main;
     background-color: colors.$background;
     position: fixed;
     max-width: 100%;
-    // top: 0;
-    // left: 0;
-    // right: 0;
-    // bottom: 0;
     z-index: 1000;
-    height: 100px;
-    // width: 100%;
-    font-size: components.$fs-large;
+    min-height: 100px;
     margin: 0px;
     padding: 0px;
-    // margin-bottom: 50px;
 }
 
 .menu__container {
-    // padding: 0px;
-    // margin: 0px;
     display: flex;
     align-items: center;
 }
@@ -154,18 +144,6 @@ h3 {
     }
 }
 
-#eye {
-    margin: 0px 15px;
-    transition: transform 0.3s ease;
-    width: 50px;
-    height: 50px;
-
-    &:hover {
-        transform: scale(1.05);
-        cursor: pointer;
-    }
-}
-
 .menu__line {
     border: none;
     height: 2px;
@@ -177,5 +155,25 @@ h3 {
 .role {
     color: colors.$second;
     font-weight: bolder;
+}
+
+@media (max-width: 760px) {
+    .router__navbar {
+        font-size: components.$fs-regular;
+        align-items: center;
+        justify-content: center;
+    }
+
+    h3,
+    h1 {
+        font-size: components.$fs-medium;
+    }
+}
+
+@media(max-width: 350px) {
+    .menu__container {
+        display: flex;
+        flex-direction: column;
+    }
 }
 </style>

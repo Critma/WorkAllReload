@@ -73,9 +73,6 @@ function updateAccountSection(section) {
 @use '@/assets/styles/form.scss';
 @use 'account-styles.scss';
 
-.title {
-    font-size: components.$fs-xxlarge;
-}
 
 .hrefs {
     margin: 40px auto;
@@ -95,5 +92,11 @@ function updateAccountSection(section) {
 .active {
     display: inline;
     border-bottom: 2px solid colors.$main;
+}
+
+@media(max-width: 760px) {
+    .nav-link {
+        font-size: components.$fs-regular;
+    }
 }
 </style>

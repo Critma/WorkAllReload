@@ -1,5 +1,5 @@
 <template>
-    <div class="create__page">
+    <div class="container create__page">
         <div class="title">
             Создать вакансию
         </div>
@@ -116,7 +116,6 @@ async function onSubmit() {
     }
     isLoading.value = true;
     if (isEdit.value) {
-        console.log(vacancy.value);
         await ExecuteApiCommand(() => updateVacancy(vacancy.value),
             () => {
                 successMesage.value = "Вакансия успешно обновлена! Переход обратно через 3 секунды...";

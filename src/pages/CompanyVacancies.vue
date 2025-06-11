@@ -1,5 +1,5 @@
 <template>
-    <div class="cv__page">
+    <div class="container cv__page">
         <div class="title">
             Ваши вакансии
         </div>
@@ -8,9 +8,9 @@
         <Error v-if="errorMessage" :errorMessage="errorMessage" />
         <Success v-if="successMesage" :success="successMesage" />
         <div class="container cv__buttons">
-            <button type="button" class="btn btn-success btn-lg nav_btn" @click="GoToCreateVacancy">Создать
+            <button type="button" class="btn btn-success nav_btn" @click="GoToCreateVacancy">Создать
                 вакансию</button>
-            <button type="button" class="btn btn-warning btn-lg nav_btn" @click="GoToAllResponses">Все отклики</button>
+            <button type="button" class="btn btn-warning nav_btn" @click="GoToAllResponses">Все отклики</button>
         </div>
         <div class="container vacancy__list">
             <EmployerVacancyCard v-for="vacancy in vacancies" :key="vacancy.id" :vacancy="vacancy"
@@ -53,6 +53,7 @@ function GoToAllResponses() {
 
 <style lang="scss" scoped>
 @use "../assets/styles/components.scss";
+@use '@/assets/styles/form.scss';
 
 .cv__page {
     font-size: components.$fs-regular;
@@ -71,13 +72,24 @@ function GoToAllResponses() {
 
 .nav_btn {
     max-width: 400px;
-    min-width: 100px;
-    width: 300px;
+    min-width: 50px;
+    // width: 100%;
+}
+
+.btn {
+    font-size: components.$button-fs;
+
 }
 
 @media (min-width: 1200px) {
     .vacancy__list {
         grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 760px) {
+    .btn {
+        font-size: components.$fs-small;
     }
 }
 </style>

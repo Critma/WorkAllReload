@@ -10,7 +10,7 @@
                     <h1 class="fw-bold display-4 mb-3 text-primary">{{ vacancy.name }}</h1>
                     <h5 id="company" class="text fw-bold display-6 mb-4"><span class="text-muted">Компания:</span> {{
                         vacancy.employerName }}</h5>
-                    <div class="mb-4">
+                    <div class="mb-4 bages">
                         <span class="badge bg-secondary fs-4">{{ vacancy.experience.Name }}</span>
                         <span class="badge bg-success ms-2 fs-4">{{ vacancy.location }}</span>
                     </div>
@@ -39,11 +39,12 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="d-flex justify-content-between text-muted">
+                    <div class="dates text-muted">
                         <div>Создана: {{ formatDate(vacancy.created_at) }}</div>
                         <div>Последний раз обновлена: {{ formatDate(vacancy.updated_at) }}</div>
                     </div>
-                    <div class="d-flex align-items-center mb-4 mt-4 buttons"> //TODO: align center
+                    <div class="d-flex align-items-center mb-4 mt-4 buttons"
+                        :class="{ 'single-button': !(userStore.isAuthenticated && !userStore.isEmployer && !isError) }">
                         <template v-if="userStore.isAuthenticated && !userStore.isEmployer && !isError">
                             <button v-if="!isSetResponse" @click="sendRes" class="btn btn-success btn-lg px-4"
                                 :disabled="isLoading">Откликнуться</button>
@@ -174,6 +175,14 @@ main {
     margin-bottom: 20px;
 }
 
+.bages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 0 auto;
+}
+
 #contacts-title {
     margin-bottom: 10px;
 }
@@ -182,60 +191,51 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    gap: 10px;
     margin-top: 15px;
     align-items: center;
     width: 100%;
 }
 
+.btn {
+    font-size: components.$button-fs;
+}
+
 .buttons {
     justify-content: space-between;
-}
 
-#message {
-    background-color: colors.$main;
-
-    &:hover {
-        opacity: 0.9;
-        background-color: colors.$background;
-        color: colors.$main;
-    }
-}
-
-#delete-response {
-    background-color: colors.$main;
-
-    &:hover {
-        opacity: 0.9;
-        background-color: colors.$background;
-        color: colors.$main;
-    }
-}
-
-#add-response {
-    background-color: colors.$background;
-    border: 1px solid colors.$main;
-    color: colors.$main;
-
-    &:hover {
-        background-color: colors.$main;
-        color: colors.$background;
-    }
-}
-
-#back {
-    background-color: colors.$background;
-    border: 1px solid colors.$main;
-    color: colors.$main;
-
-    &:hover {
-        background-color: colors.$main;
-        color: colors.$background;
-        opacity: 0.9;
+    &.single-button {
+        justify-content: center;
     }
 }
 
 #company {
     color: colors.$black;
+}
+
+.dates {
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width: 600px) {
+    .btn {
+        font-size: components.$fs-small * 1.1;
+    }
+
+    .dates {
+        flex-direction: column;
+    }
+
+    .bages{
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 400px) {
+    .buttons{
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 </style>

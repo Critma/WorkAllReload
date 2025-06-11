@@ -5,26 +5,25 @@
         </div>
         <div class="card-body">
             <p class="card-title mb-3"><strong>Зарплата:</strong> <span id="vacancy-salary">{{ vacancy.salary
-                    }} ₽</span></p>
+            }} ₽</span></p>
             <p><strong>Email:</strong> <a href="mailto:example@company.com" id="vacancy-email">{{ vacancy.email
-                    }}</a></p>
+            }}</a></p>
             <p><strong>Телефон:</strong> <a href="tel:+79991234567" id="vacancy-phone">{{ vacancy.phoneNumber
-                    }}</a>
+            }}</a>
             </p>
             <p><strong>Локация:</strong> <span id="vacancy-location">{{ vacancy.location }}</span></p>
-            <!-- <p><strong>Опыт (ID):</strong> <span id="vacancy-experience_id">{{ vacancy.experience_id }}</span></p> -->
             <p><strong>Описание работы:</strong> <br /><span id="vacancy-aboutWork">{{ vacancy.aboutWork
-                    }}</span></p>
+            }}</span></p>
             <p><small>Создано: <span id="vacancy-created_at">{{ formatDate(vacancy.created_at) }}</span> |
                     Обновлено: <span id="vacancy-updated_at">{{ formatDate(vacancy.updated_at) }}</span></small>
             </p>
         </div>
-        <div class="card-footer d-flex justify-content-between">
+        <div class="card-footer">
             <button type="button" class="btn btn-primary" id="btn-details" @click="GoToVacancy">Подробнее</button>
             <button type="button" class="btn btn-warning" id="btn-details" @click="edVacancy">Редактировать</button>
             <button type="button" class="btn btn-delete" id="btn-delete" @click="delVacancy">Удалить</button>
             <button type="button" class="btn btn-outline-dark" id="btn-delete" @click="hideVacancy">{{ vacancy.visible ?
-                'Скрыть' : 'Показать'}}</button>
+                'Скрыть' : 'Показать' }}</button>
         </div>
     </div>
 </template>
@@ -74,6 +73,8 @@ function GoToVacancy() {
 </script>
 
 <style lang="scss" scoped>
+@use '@/assets/styles/form.scss';
+
 .card {
     max-width: 600px;
     min-width: 200px;
@@ -100,5 +101,16 @@ function GoToVacancy() {
 .btn-delete:hover {
     background-color: #b02a37;
     color: white;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+    .card-footer {
+        flex-direction: column;
+    }
 }
 </style>

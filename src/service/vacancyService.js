@@ -100,14 +100,13 @@ async function addVacancy(vacancy) {
     // console.log(body)
     let response = {};
     try {
-        response = await axios.post(url, body, ...jwtHeader());
+        response = await axios.post(url, body, jwtHeader());
     }
     catch (error) {
         console.log('add vacancy error ' + error)
         return new Result(false, error.response.data.Error, error);
     }
     const data = response.data.EmployerInfo;
-    // console.log(response);
     return new Result(true, "", data);
 }
 

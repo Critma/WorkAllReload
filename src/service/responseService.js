@@ -21,7 +21,6 @@ async function sendResponse(vacansId) {
     }
     try {
         const result = await axios.post(url, null, config);
-        console.log(result)
         return new Result(true, "", null);
     }
     catch (error) {

@@ -1,78 +1,82 @@
 <template>
-    <main class="registration-page">
-        <h1 class="form-title">Регистрация <span>{{ isUserRegister ? 'соискателя' : 'работодателя' }}</span></h1>
-        <section class="form-card">
-            <form @submit.prevent="onSubmit" novalidate>
-                <div class="row">
-                    <div class="col">
-                        <div class="mb-4">
-                            <label for="name" class="form-label">{{ isUserRegister ? 'Имя' : 'Название организация'
-                            }} <span style="color: red;">*</span></label>
-                            <input id="name" type="text" v-model="form.Name" required class="form-control"
-                                placeholder="Введите имя" autocomplete="name" />
+    <div class="container">
+        <div class="title">Регистрация <span>{{ isUserRegister ? 'соискателя' : 'работодателя' }}</span></div>
+        <div class="title__line"></div>
+        <main class="registration-page">
+            <section class="form-card">
+                <form @submit.prevent="onSubmit" novalidate>
+                    <div class="row">
+                        <div class="col">
+                            <div class="mb-4">
+                                <label for="name" class="form-label">{{ isUserRegister ? 'Имя' : 'Название организация'
+                                }} <span style="color: red;">*</span></label>
+                                <input id="name" type="text" v-model="form.Name" required class="form-control"
+                                    placeholder="Введите имя" autocomplete="name" />
+                            </div>
+                            <div class="mb-4">
+                                <label for="email" class="form-label">Email <span style="color: red;">*</span></label>
+                                <input id="email" type="email" v-model="form.Email" required class="form-control"
+                                    placeholder="Введите email" autocomplete="email" />
+                            </div>
+                            <div v-if="!isUserRegister" class="mb-4">
+                                <label for="inn" class="form-label">INN <span style="color: red;">*</span></label>
+                                <input id="inn" type="inn" v-model="form.INN" required class="form-control"
+                                    placeholder="Введите INN" autocomplete="inn" />
+                            </div>
                         </div>
-                        <div class="mb-4">
-                            <label for="email" class="form-label">Email <span style="color: red;">*</span></label>
-                            <input id="email" type="email" v-model="form.Email" required class="form-control"
-                                placeholder="Введите email" autocomplete="email" />
-                        </div>
-                        <div v-if="!isUserRegister" class="mb-4">
-                            <label for="inn" class="form-label">INN <span style="color: red;">*</span></label>
-                            <input id="inn" type="inn" v-model="form.INN" required class="form-control"
-                                placeholder="Введите INN" autocomplete="inn" />
+                        <div class="col">
+                            <div class="mb-4">
+                                <label for="phone" class="form-label">Телефон <span style="color: red;">*</span></label>
+                                <input id="phone" type="tel" v-model="form.PhoneNumber" placeholder="+7 (999) 999-99-99"
+                                    class="form-control" autocomplete="tel" pattern="^\\+?\\d{6,15}$" />
+                            </div>
+                            <div class="mb-4 position-relative">
+                                <label for="password" class="form-label">Пароль <span
+                                        style="color: red;">*</span></label>
+                                <input :type="showPassword ? 'text' : 'password'" id="password" v-model="form.Password"
+                                    required class="form-control pe-5" placeholder="Введите пароль"
+                                    autocomplete="new-password" minlength="6" />
+                                <button type="button" class="password-toggle" @click="togglePasswordVisibility"
+                                    :aria-label="showPassword ? 'Скрыть пароль' : 'Показать пароль'">
+                                    <img :src="showPassword ? Eye : EyeOff" alt="" />
+                                </button>
+                            </div>
+                            <div class="mb-4 position-relative">
+                                <label for="passwordConfirm" class="form-label">Подтверждение пароля <span
+                                        style="color: red;">*</span></label>
+                                <input :type="showConfirmPassword ? 'text' : 'password'" id="passwordConfirm"
+                                    v-model="form.PasswordConfirm" required class="form-control pe-5"
+                                    placeholder="Подтвердите пароль" autocomplete="new-password" minlength="6" />
+                                <button type="button" class="password-toggle" @click="toggleConfirmPasswordVisibility"
+                                    :aria-label="showConfirmPassword ? 'Скрыть подтверждение пароля' : 'Показать подтверждение пароля'">
+                                    <img :src="showConfirmPassword ? Eye : EyeOff" alt="" />
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div class="col">
-                        <div class="mb-4">
-                            <label for="phone" class="form-label">Телефон <span style="color: red;">*</span></label>
-                            <input id="phone" type="tel" v-model="form.PhoneNumber" placeholder="+7 (999) 999-99-99"
-                                class="form-control" autocomplete="tel" pattern="^\\+?\\d{6,15}$" />
-                        </div>
-                        <div class="mb-4 position-relative">
-                            <label for="password" class="form-label">Пароль <span style="color: red;">*</span></label>
-                            <input :type="showPassword ? 'text' : 'password'" id="password" v-model="form.Password"
-                                required class="form-control pe-5" placeholder="Введите пароль"
-                                autocomplete="new-password" minlength="6" />
-                            <button type="button" class="password-toggle" @click="togglePasswordVisibility"
-                                :aria-label="showPassword ? 'Скрыть пароль' : 'Показать пароль'">
-                                <img :src="showPassword ? Eye : EyeOff" alt="" />
-                            </button>
-                        </div>
-                        <div class="mb-4 position-relative">
-                            <label for="passwordConfirm" class="form-label">Подтверждение пароля <span
-                                    style="color: red;">*</span></label>
-                            <input :type="showConfirmPassword ? 'text' : 'password'" id="passwordConfirm"
-                                v-model="form.PasswordConfirm" required class="form-control pe-5"
-                                placeholder="Подтвердите пароль" autocomplete="new-password" minlength="6" />
-                            <button type="button" class="password-toggle" @click="toggleConfirmPasswordVisibility"
-                                :aria-label="showConfirmPassword ? 'Скрыть подтверждение пароля' : 'Показать подтверждение пароля'">
-                                <img :src="showConfirmPassword ? Eye : EyeOff" alt="" />
-                            </button>
-                        </div>
+                    <div class="reg__alert" role="alert">
+                        <Error v-if="errorMessage != ''" :errorMessage="errorMessage" />
+                        <Success v-if="success != ''" :success="success" />
                     </div>
-                </div>
-                <div class="reg__alert" role="alert">
-                    <Error v-if="errorMessage != ''" :errorMessage="errorMessage" />
-                    <Success v-if="success != ''" :success="success" />
-                </div>
-                <button v-if="isUserRegister" type="submit" class="btn btn__contrast__primary w-100 py-3 fw-semibold"
-                    :disabled="isLoading">
-                    {{ isLoading ? 'Регистрируем...' : 'Зарегистрироваться' }}
-                </button>
-                <button v-else type="submit" class="btn btn__contrast__success w-100 py-3 fw-semibold"
-                    :disabled="isLoading">
-                    {{ isLoading ? 'Загрузка...' : 'Зарегистрироваться' }}
-                </button>
-            </form>
-        </section>
-        <div class="register__links">
-            <RouterLink :to="paths.Auth" class="router__link">Уже есть аккаунт? Войдите!</RouterLink>
-            <RouterLink v-if="isUserRegister" :to="paths.RegOrg" class="router__link">Создать аккаунт организации
-            </RouterLink>
-            <RouterLink v-if="!isUserRegister" :to="paths.Reg" class="router__link">Создать аккаунт соискателя
-            </RouterLink>
-        </div>
-    </main>
+                    <button v-if="isUserRegister" type="submit"
+                        class="btn btn__contrast__primary w-100 py-3 fw-semibold" :disabled="isLoading">
+                        {{ isLoading ? 'Регистрируем...' : 'Зарегистрироваться' }}
+                    </button>
+                    <button v-else type="submit" class="btn btn__contrast__success w-100 py-3 fw-semibold"
+                        :disabled="isLoading">
+                        {{ isLoading ? 'Загрузка...' : 'Зарегистрироваться' }}
+                    </button>
+                </form>
+            </section>
+            <div class="register__links">
+                <RouterLink :to="paths.Auth" class="router__link">Уже есть аккаунт? Войдите!</RouterLink>
+                <RouterLink v-if="isUserRegister" :to="paths.RegOrg" class="router__link">Создать аккаунт организации
+                </RouterLink>
+                <RouterLink v-if="!isUserRegister" :to="paths.Reg" class="router__link">Создать аккаунт соискателя
+                </RouterLink>
+            </div>
+        </main>
+    </div>
 </template>
 
 

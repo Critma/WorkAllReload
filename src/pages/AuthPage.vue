@@ -1,37 +1,40 @@
 <template>
-    <main class="auth-page">
-        <h1 class="form-title">Войти в аккаунт</h1>
-        <section class="form-card">
-            <form @submit.prevent="onSubmit" novalidate>
-                <div class="mb-4">
-                    <label for="email" class="form-label">Email</label>
-                    <input id="email" type="email" v-model="form.Email" required class="form-control"
-                        placeholder="Введите email" autocomplete="email" />
-                </div>
-                <div class="mb-4 position-relative">
-                    <label for="password" class="form-label">Пароль</label>
-                    <input :type="showPassword ? 'text' : 'password'" id="password" v-model="form.Password" required
-                        class="form-control pe-5" placeholder="Введите пароль" autocomplete="new-password"
-                        minlength="6" />
-                    <button type="button" class="password-toggle" @click="togglePasswordVisibility"
-                        :aria-label="showPassword ? 'Скрыть пароль' : 'Показать пароль'">
-                        <img :src="showPassword ? Eye : EyeOff" alt="" />
+    <div class="container">
+        <div class="title">Войти в аккаунт</div>
+        <div class="title__line"></div>
+        <main class="auth-page">
+            <section class="form-card">
+                <form @submit.prevent="onSubmit" novalidate>
+                    <div class="mb-4">
+                        <label for="email" class="form-label">Email</label>
+                        <input id="email" type="email" v-model="form.Email" required class="form-control"
+                            placeholder="Введите email" autocomplete="email" />
+                    </div>
+                    <div class="mb-4 position-relative">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input :type="showPassword ? 'text' : 'password'" id="password" v-model="form.Password" required
+                            class="form-control pe-5" placeholder="Введите пароль" autocomplete="new-password"
+                            minlength="6" />
+                        <button type="button" class="password-toggle" @click="togglePasswordVisibility"
+                            :aria-label="showPassword ? 'Скрыть пароль' : 'Показать пароль'">
+                            <img :src="showPassword ? Eye : EyeOff" alt="" />
+                        </button>
+                    </div>
+                    <div v-if="errorMessage" class="reg__alert" role="alert">
+                        <Error :errorMessage="errorMessage" />
+                    </div>
+                    <button type="submit" class="btn btn__contrast__primary w-100 py-3 fw-semibold"
+                        :disabled="isLoading">
+                        {{ isLoading ? 'Загрузка...' : 'Вход' }}
                     </button>
-                </div>
-                <div v-if="errorMessage" class="reg__alert" role="alert">
-                    <Error :errorMessage="errorMessage" />
-                </div>
-                <button type="submit" class="btn btn__contrast__primary w-100 py-3 fw-semibold" :disabled="isLoading">
-                    {{ isLoading ? 'Загрузка...' : 'Вход' }}
-                </button>
-            </form>
-        </section>
-        <div class="register__links">
-            <RouterLink :to="paths.Reg" class="router__link">Нету аккаунта? Создайте!</RouterLink>
-            <!-- TODO: <RouterLink :to="paths.ForgetPassword" class="router__link">Забыли пароль?</RouterLink> -->
-        </div>
-    </main>
-
+                </form>
+            </section>
+            <div class="register__links">
+                <RouterLink :to="paths.Reg" class="router__link">Нету аккаунта? Создайте!</RouterLink>
+                <!-- TODO: <RouterLink :to="paths.ForgetPassword" class="router__link">Забыли пароль?</RouterLink> -->
+            </div>
+        </main>
+    </div>
 </template>
 
 <script setup>

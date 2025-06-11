@@ -1,21 +1,12 @@
 <template>
-    <div class="resume-container container">
+    <div class="container resume-container">
         <form class="form-card" @submit.prevent="handleSave()">
             <label for="resume" class="form-title mb-2">Резюме</label>
             <Loader v-if="isLoading" />
             <section class="resume-card">
                 <div class="resume-title">Расскажите о себе:</div>
                 <div class="info-block">
-                    <h2 class="info-label" id="profession-label">Профессия/Специальность</h2>
-                </div>
-                <div class="info-block">
                     <h3 class="info-label" id="education-label">Образование</h3>
-                </div>
-                <div class="info-block">
-                    <h3 class="info-label" id="projects-label">Проекты</h3>
-                </div>
-                <div class="info-block">
-                    <h3 class="info-label" id="project-description-label">Описание проекта, занимаемой должности</h3>
                 </div>
                 <div class="info-block">
                     <h3 class="info-label" id="work-experience-label">Опыт работы</h3>
@@ -27,7 +18,10 @@
                     <h3 class="info-label" id="languages-label">Языки</h3>
                 </div>
                 <div class="info-block">
-                    <h3 class="info-label" id="additional-info-label">О ваших soft-скиллах</h3>
+                    <h3 class="info-label" id="additional-info-label">О ваших личностных достоинствах</h3>
+                </div>
+                <div class="info-block">
+                    <h3 class="info-label" id="additional-info-label">Дополнительные контакты</h3>
                 </div>
             </section>
             <textarea id="resume" class="form-control" rows="8" v-model="resume.description"
@@ -88,7 +82,7 @@ async function handleSave() {
 
 .resume-container {
     display: flex;
-    width: 1000px;
+    max-width: 1000px;
     margin: 0 auto;
     flex-direction: column;
 }

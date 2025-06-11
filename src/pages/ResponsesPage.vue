@@ -1,5 +1,5 @@
 <template>
-    <div class="page__container">
+    <div class="container page__container">
         <div class="title">
             Ваши отклики
         </div>
@@ -51,8 +51,9 @@ async function Reload() {
 
 .responses__container {
     // margin: 0 40px;
-    margin: 40px;
+    // margin: 40px;
     display: grid;
+    gap: 10px;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
