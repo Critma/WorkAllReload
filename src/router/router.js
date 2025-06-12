@@ -40,6 +40,8 @@ const router = createRouter({
     routes
 })
 
+
+// TODO: guard
 router.beforeEach(async (to) => {
     const userStore = useUserStore();
     if (userStore.jwtLastCheck == null) {

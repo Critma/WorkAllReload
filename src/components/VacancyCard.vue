@@ -6,11 +6,12 @@
         <div class="row g-0">
             <div class="card-body text-start col-md-8">
                 <p class="card-text"><strong>Вакансия:</strong> {{ vacancy.name }}</p>
+                <p class="card-text"><strong>Работодатель:</strong> {{ vacancy.employerName }}</p>
                 <p class="card-text"><strong>Зарплата:</strong> {{ vacancy.salary }} ₽</p>
                 <p class="card-text"><strong>Email:</strong> {{ vacancy.email }}</p>
                 <p class="card-text"><strong>Телефон:</strong> {{ vacancy.phoneNumber }}</p>
                 <p class="card-text"><strong>Город:</strong> {{ vacancy.location }}</p>
-                <!-- <p class="card-text"><strong>Опыт:</strong> {{ vacancy.experience.name }}</p> -->
+                <p class="card-text"><strong>Опыт:</strong> {{ vacancy.experience.name }}</p>
                 <p class="card-text"><small class="text-muted">Вакансия создана: {{ formatDate(vacancy.created_at)
                         }}</small></p>
                 <p class="card-text"><small class="text-muted">Вакансия обновлена: {{

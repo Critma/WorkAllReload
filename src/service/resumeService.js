@@ -41,7 +41,6 @@ async function AddOrUpdateResume(resume) {
     const serverStore = useServerStore()
     const url = serverStore.resumeURL;
     let response = {};
-    console.log(resume);
     try {
         const body = {
             Description: resume.description,
@@ -59,7 +58,6 @@ async function AddOrUpdateResume(resume) {
         console.log(error.response.data)
         return new Result(false, error.response.data.Error, error);
     }
-    // console.log(response);
     return new Result(true, "", response.data);
 }
 

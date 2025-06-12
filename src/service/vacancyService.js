@@ -4,6 +4,7 @@ import axios from "axios";
 import Result from "../models/Result";
 import Vacancy from "../models/Vacancy";
 import { jwtHeader } from "../helpers/serviceHelper";
+import Experience from "../models/Experience";
 
 // const userStore = useUserStore()
 
@@ -26,7 +27,10 @@ function toVacancy(vacansies) {
             vacancy.IsVisible,
             vacancy.EmployerInfo.ID,
             vacancy.CreatedAt,
-            vacancy.UpdatedAt
+            vacancy.UpdatedAt,
+            new Experience(vacancy.ExperienceInfo.ID, vacancy.ExperienceInfo.Name, vacancy.ExperienceInfo.CreatedAt),
+            vacancy.EmployerInfo.NameOrganization,
+            vacancy.EmployerInfo,
         );
     });
 }
@@ -226,4 +230,45 @@ async function getVacansiesCount() {
     }
 }
 
-export { getVacansies, getVacansiesFromSelfEmployer, addVacancy, getVacancyInfo, updateVacancy, deleteVacancy, toggleVisibilityVacancy, getVacansiesCount };
+// return Vacancy[] or []
+async function searchVacancies(text) {
+    const serverStore = useServerStore()
+    const url = `${serverStore.vacancyURL}/search`;
+    const queryData = {
+        Text: text,
+    }
+    try {
+        const result = await axios.get(url, { params: queryData });
+        console.log(12312312)
+        console.log(result.data.VacancyInfo)
+        return new Result(true, "", toVacancy(result.data.VacancyInfo))
+    }
+    catch (error) {
+        console.log(error);
+        return new Result(false, error.response.data.Error, []);
+    }
+}
+
+async function filterVacancies(filterObj) {
+    const serverStore = useServerStore()
+    const url = `${serverStore.vacancyURL}/filter`;
+    const queryData = {
+        Min: filterObj.minSalary == '' ? 0 : filterObj.minSalary,
+    }
+    if (filterObj.experienceId != '' || filterObj.experienceId != 0) {
+        queryData.ExpID = filterObj.experienceId;
+    }
+    if (filterObj.maxSalary != '') {
+        queryData.Max = filterObj.maxSalary;
+    }
+    try {
+        const result = await axios.get(url, { params: queryData });
+        return new Result(true, "", toVacancy(result.data.VacancyInfo))
+    }
+    catch (error) {
+        console.log(error);
+        return new Result(false, error.response.data.Error, []);
+    }
+}
+
+export { getVacansies, getVacansiesFromSelfEmployer, addVacancy, getVacancyInfo, updateVacancy, deleteVacancy, toggleVisibilityVacancy, getVacansiesCount, searchVacancies, filterVacancies };
