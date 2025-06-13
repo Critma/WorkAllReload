@@ -10,6 +10,9 @@ export const useUserStore = defineStore("userStore", () => {
     const isAuthenticated = ref(false);
     const isLoading = ref(false);
     const isEmployer = ref(false);
+    const isAdmin = ref(false);
+    const status = ref("");
+    const isFirst = ref(false);
 
     const asignUser = (user) => {
         ID.value = user.id;
@@ -25,11 +28,15 @@ export const useUserStore = defineStore("userStore", () => {
         login.value = "";
         name.value = "";
         jwt.value = "";
+        jwtLastCheck.value = null;
         isAuthenticated.value = false
         isLoading.value = false;
+        isEmployer.value = false;
+        isAdmin.value = false;
+        status.value = "";
     }
 
-    return{
+    return {
         ID,
         login,
         isAuthenticated,
@@ -38,6 +45,9 @@ export const useUserStore = defineStore("userStore", () => {
         name,
         isEmployer,
         jwtLastCheck,
+        isAdmin,
+        status,
+        isFirst,
 
         asignUser,
         clearUser

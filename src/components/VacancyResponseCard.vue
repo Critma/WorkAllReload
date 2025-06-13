@@ -79,7 +79,6 @@ async function checkResume() {
     }
 }
 
-
 async function onChange() {
     errorMessage.value = '';
     successMesage.value = '';
@@ -98,8 +97,6 @@ async function onChange() {
             }, 3000);
         });
 }
-
-
 
 </script>
 
@@ -177,7 +174,8 @@ async function onChange() {
         width: 100%;
         margin-bottom: 10px;
     }
-    .messages{
+
+    .messages {
         height: 0px;
     }
 }

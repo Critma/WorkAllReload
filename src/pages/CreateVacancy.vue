@@ -90,7 +90,7 @@ function GoBack() {
 
 onMounted(async () => {
     Getexps();
-    if (route.path.includes(names.EditVacancy)) {
+    if (route.path.toLowerCase().includes(names.EditVacancy.toLowerCase().trim())) {
         isEdit.value = true;
         await ExecuteApiCommand(() => getVacancyInfo(route.params.id), (result) => { vacancy.value = result.data; }, () => { router.push(paths.NotFound); })
     }
@@ -139,6 +139,9 @@ async function onSubmit() {
                 errorMessage.value = result.error;
             })
     }
+    setTimeout(() => {
+        errorMessage.value = "";
+    }, 3000);
 }
 
 function isCorrect(vacancy) {

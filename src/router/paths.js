@@ -1,17 +1,20 @@
 const paths = {
     Home: "/",
-    Vacancies: "/Vacancies",
-    Auth: "/Auth",
-    Reg: "/Reg",
-    RegOrg: "/RegOrg",
-    ForgetPassword: "/FPassword",
-    Vacancy: "/Vacancy/:id",
-    Account: "/Account",
-    Responses: "/Responses",
-    CompanyVacancies: "/CompanyVacancies",
-    CreateVacancy: "/CreateVacancy", EditVacancy: "/EditVacancy/:id",
-    NotFound: "/NotFound",
-    VacancyResponses: '/VacancyResponses'
+    Vacancies: "/vacancies",
+    Auth: "/auth",
+    Reg: "/reg",
+    RegOrg: "/regOrg",
+    ForgetPassword: "/fPassword",
+    Vacancy: "/vacancy/:id",
+    Account: "/account",
+    Responses: "/responses",
+    CompanyVacancies: "/companyVacancies",
+    CreateVacancy: "/createVacancy",
+    EditVacancy: "/editVacancy/:id",
+    NotFound: "/notFound",
+    VacancyResponses: '/vacancyResponses',
+    Admin: "/admin",
+    Forbidden: "/forbidden/:status"
 }
 
 export default paths;

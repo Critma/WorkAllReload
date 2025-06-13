@@ -5,16 +5,17 @@ import Result from "../models/Result";
 import Vacancy from "../models/Vacancy";
 import User from "../models/User";
 import { jwtHeader } from "@/helpers/serviceHelper.js";
+import Status from "../models/Status";
 
 
 async function getEmployerInfo(employerID) {
     const serverStore = useServerStore()
     try {
         const url = serverStore.employerURL;
-        const params = { ...jwtHeader(), params: { EmployerID : employerID } };
+        const params = { ...jwtHeader(), params: { EmployerID: employerID } };
         const response = await axios.get(url, params);
         const info = response.data.EmployerInfo;
-        const candidate = new User(info.ID, info.NameOrganization, info.PhoneNumber, info.Email, null, info.Status.ID, info.CreatedAt, info.UpdatedAt, info.INN);
+        const candidate = new User(info.ID, info.NameOrganization, info.PhoneNumber, info.Email, null, info.Status.ID, info.CreatedAt, info.UpdatedAt, info.INN, new Status(info.Status.ID, info.Status.Name, info.Status.CreatedAt));
         return new Result(true, "", candidate);
     }
     catch (error) {

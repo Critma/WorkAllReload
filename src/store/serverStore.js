@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 
 export const useServerStore = defineStore("serverStore", () => {
     const baseURL = "https://isp-workall.online/api/v1/"
+    const auth = baseURL + 'auth';
     const empURL = baseURL + 'emp';
     const candidateURL = baseURL + 'user';
     const employerURL = baseURL + 'emp';
@@ -19,6 +20,7 @@ export const useServerStore = defineStore("serverStore", () => {
         adminURL,
         experienceURL,
         resumeURL,
-        statusURL
+        statusURL,
+        auth,
     }
 });

@@ -28,6 +28,7 @@ import useApi from '../composibles/useApi';
 import VacancyResponseCard from '../components/VacancyResponseCard.vue';
 import { getStatuses } from '../service/adminService';
 import paths from '../router/paths';
+import statusNames from '@/helpers/statuses';
 
 
 const vacancies = ref([]);
@@ -42,7 +43,7 @@ onMounted(async () => {
     await LoadResponses();
     statuses.value = statuses.value.filter((val, index) => {
         const name = val.name.toLowerCase();
-        if (name == 'на рассмотрении' || name == 'приглашение' || name == 'отказ') {
+        if (name == statusNames.toSee || name == statusNames.invitation || name == statusNames.deny) {
             return true;
         }
         return false;

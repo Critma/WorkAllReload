@@ -31,7 +31,6 @@
             </section>
             <div class="register__links">
                 <RouterLink :to="paths.Reg" class="router__link">Нету аккаунта? Создайте!</RouterLink>
-                <!-- TODO: <RouterLink :to="paths.ForgetPassword" class="router__link">Забыли пароль?</RouterLink> -->
             </div>
         </main>
     </div>
@@ -74,7 +73,7 @@ async function onSubmit() {
         router.push({ name: names.Account, });
     }
     else {
-        errorMessage.value = `Ошибка авторизации - ${result.error}`;
+        errorMessage.value = `Ошибка авторизации - Неправильные данные для входа`;
     }
 }
 

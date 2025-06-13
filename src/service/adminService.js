@@ -7,6 +7,7 @@ import CandidateResponse from "../models/CandidateResponse";
 import Status from "../models/Status";
 import Experience from "../models/Experience";
 import { jwtHeader } from "@/helpers/serviceHelper.js";
+import User from "../models/User";
 
 async function isValidJwt(jwt) {
     const serverStore = useServerStore();
@@ -42,4 +43,39 @@ async function getStatuses() {
     }
 }
 
-export { isValidJwt, getStatuses }
+
+async function getAllEmployers() {
+    const serverStore = useServerStore();
+    const url = `${serverStore.adminURL}/emp`;
+    try {
+        const result = await axios.get(url, jwtHeader());
+        const employerList = result.data.EmployersInfo.map(emp => {
+            return new User(emp.ID, emp.NameOrganization, emp.PhoneNumber, emp.Email, null, emp.Status.ID, emp.CreatedAt, emp.UpdatedAt, emp.INN, new Status(emp.Status.ID, emp.Status.Name, emp.Status.CreatedAt));
+        });
+        return new Result(true, '', employerList);
+    }
+    catch (error) {
+        console.log(error);
+        return new Result(false, error.response.data.Info, []);
+    }
+
+}
+
+async function setEmployerStatus(EmployerID, StatusID) {
+    const serverStore = useServerStore();
+    const url = `${serverStore.adminURL}/emp`;
+    const queryData = {
+        EmployerID: EmployerID,
+        StatusID: StatusID
+    }
+    try {
+        const result = await axios.patch(url, null, { params: queryData, ...jwtHeader() });
+        return new Result(true, '', result.data);
+    }
+    catch (error) {
+        console.log(error);
+        return new Result(false, error.response.data.Info, null);
+    }
+}
+
+export { isValidJwt, getStatuses, getAllEmployers, setEmployerStatus }

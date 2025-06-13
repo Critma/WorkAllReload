@@ -4,98 +4,61 @@ import axios from "axios";
 import Result from "../models/Result";
 import { isValidJwt } from "./adminService";
 import router from "../router/router";
+import { getCandidateSelf } from "./candidateService";
+import { getEmployerSelf } from "./employerService";
+import statuses from "../helpers/statuses";
 
 
 async function login(email, password) {
-    var result = {};
-    result = await loginCandidate(email, password);
-    if (!result.success) {
-        result = await loginEmployer(email, password);
-    }
-    // result.error = 'Неправильные данные для входа';
-    return result;
-}
+    const userStore = useUserStore();
+    const serverStore = useServerStore();
 
-async function loginCandidate(email, password) {
-    const userStore = useUserStore()
-    const serverStore = useServerStore()
-
-    userStore.isLoading = true;
-    const url = `${serverStore.candidateURL}/auth`
+    const url = `${serverStore.auth}`
     const userData = {
         Email: email,
         Password: password
     }
-    let result = {};
     try {
         const response = (await axios.get(url, { params: userData }))
         const data = response.data
-        const user = {
-            jwt: data.Token,
-            login: data.CandidateInfo.Email,
-            id: data.CandidateInfo.ID,
-            name: data.CandidateInfo.Name,
-            isEmployer: false
+        let user;
+        if ('CandidateInfo' in data) {
+            user = await ParseCandidate(data)
+        } else {
+            user = await ParseEmployer(data)
         }
         localStorage.setItem('user', JSON.stringify(user));
         userStore.asignUser(user);
-        result = new Result(true, "", response);
+        await fetchRoleStatus();
+        return new Result(true, "", user);
     }
     catch (error) {
         console.log(error)
-        result = new Result(false, error.response.data.Error, error);
+        return new Result(false, error.response.data.Error, error);
     }
     finally {
         userStore.isLoading = false
     }
-    return result
 }
 
-async function loginEmployer(email, password) {
-    const userStore = useUserStore()
-    const serverStore = useServerStore()
-    userStore.isLoading = true;
-    const url = `${serverStore.empURL}/auth`
-    const userData = {
-        Email: email,
-        Password: password
+async function ParseCandidate(data) {
+    return {
+        jwt: data.Token,
+        login: data.CandidateInfo.Email,
+        id: data.CandidateInfo.ID,
+        name: data.CandidateInfo.Name,
+        isEmployer: false
     }
-    let result = {
-        success: false,
-        error: "",
-        obj: "",
-    };
-    try {
-        const response = (await axios.get(url, { params: userData }))
-        const data = response.data
-        const user = {
-            jwt: data.Token,
-            login: data.EmployerInfo.Email,
-            id: data.EmployerInfo.ID,
-            name: data.EmployerInfo.NameOrganization,
-            isEmployer: true
-        }
-        localStorage.setItem('user', JSON.stringify(user));
-        userStore.asignUser(user);
-        result = {
-            ...result,
-            success: true,
-            obj: response
-        }
+}
+
+async function ParseEmployer(data) {
+    return {
+        jwt: data.Token,
+        login: data.EmployerInfo.Email,
+        id: data.EmployerInfo.ID,
+        name: data.EmployerInfo.NameOrganization,
+        isEmployer: true
     }
-    catch (error) {
-        console.log(error)
-        result = {
-            ...result,
-            success: false,
-            error: error.response.data.Error,
-            obj: ""
-        }
-    }
-    finally {
-        userStore.isLoading = false
-    }
-    return result
 }
 
 async function logout() {
@@ -104,12 +67,12 @@ async function logout() {
     localStorage.removeItem('accountSection');
     userStore.clearUser();
 
-    router.push('/');
+    router.push({ path: '/' });
 }
 
-async function checkJWT() {
+async function OnFirstRun() {
     const userStore = useUserStore();
-    userStore.jwtLastCheck = new Date().getTime();
+    userStore.isFirst = true;
     userStore.isLoading = true;
     const retrievedUser = localStorage.getItem('user');
     if (retrievedUser) {
@@ -117,18 +80,22 @@ async function checkJWT() {
         const user = JSON.parse(retrievedUser);
         if (await isJwtValid(user.jwt)) {
             userStore.asignUser(user);
+            await fetchRoleStatus();
+            return true;
         } else {
             await logout();
         }
     } else {
         console.log('Saved session not found');
-        await logout();
     }
     userStore.isLoading = false;
+    return false;
 }
 
 async function isJwtValid(jwt) {
-    console.log('Checking JWT');
+    const userStore = useUserStore();
+    console.log('checking jwt...');
+    userStore.jwtLastCheck = new Date().getTime();
     const result = await isValidJwt(jwt);
     if (!result.success) {
         console.log('JWT expired')
@@ -138,4 +105,22 @@ async function isJwtValid(jwt) {
     return true
 }
 
-export { login, logout, checkJWT, isJwtValid }
+async function fetchRoleStatus() {
+    const userStore = useUserStore();
+    let result;
+    if (userStore.isEmployer) {
+        result = await getEmployerSelf();
+    }
+    else {
+        result = await getCandidateSelf();
+    }
+    if (result.success) {
+        const status = result.data.status.name.toLowerCase();
+        if (status.includes(statuses.admin)) {
+            userStore.isAdmin = true;
+        }
+        userStore.status = status;
+    }
+}
+
+export { login, logout, OnFirstRun, isJwtValid, fetchRoleStatus }

@@ -13,8 +13,7 @@
             </p>
             <p><strong>Локация:</strong> <span id="vacancy-location">{{ vacancy.location }}</span></p>
             <p><strong>Описание работы:</strong></p>
-            <textarea class="form-control" id="vacancy-aboutWork" rows="2" :value="vacancy.aboutWork"
-                readonly></textarea>
+            <textarea class="form-control vacancy-aboutWork" rows="2" :value="vacancy.aboutWork" readonly></textarea>
             <p><small>Создано: <span id="vacancy-created_at">{{ formatDate(vacancy.created_at) }}</span> |
                     Обновлено: <span id="vacancy-updated_at">{{ formatDate(vacancy.updated_at) }}</span></small>
             </p>
@@ -38,14 +37,14 @@ import useApi from "../composibles/useApi";
 
 const router = useRouter();
 const props = defineProps(['vacancy', 'reload']);
-const { isLoading, errorMessage, successMesage, ExecuteApiCommand } = useApi();
+const { ExecuteApiCommand } = useApi();
 
 
 async function delVacancy() {
-    if (confirm("Вы действительно хотите удалить вакансию?") == false) {
+    if (confirm(`Вы действительно хотите удалить вакансию: ${props.vacancy.name}?`) == false) {
         return;
     }
-    await ExecuteApiCommand(() => deleteVacancy(props.vacancy.id), (result) => {
+    await ExecuteApiCommand(() => deleteVacancy(props.vacancy.id), () => {
         alert("Вакансия успешно удалена");
         props.reload();
     }, (result) => { console.log(result.error) });
@@ -55,7 +54,6 @@ async function hideVacancy() {
     await ExecuteApiCommand(() => toggleVisibilityVacancy(props.vacancy),
         () => {
             props.vacancy.visible = !props.vacancy.visible;
-            // props.reload();
         },
         (result) => {
             console.log(result.error)
@@ -111,7 +109,7 @@ function GoToVacancy() {
     justify-content: space-between;
 }
 
-#vacancy-aboutWork {
+.vacancy-aboutWork {
     border: 1px solid colors.$black;
 }
 

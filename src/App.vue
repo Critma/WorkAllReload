@@ -12,6 +12,7 @@ import useTheming from '@/composibles/useTheming.js'
 import { isJwtValid } from './service/accessingService';
 import { useUserStore } from './store/userStore';
 import { logout } from './service/accessingService';
+import { fetchRoleStatus } from './service/accessingService';
 
 // auto adjust height of menu panel
 const menuPanelHeight = ref(0);
@@ -41,6 +42,7 @@ onMounted(() => {
       if (!await isJwtValid(userStore.jwt)) {
         await logout();
       }
+      await fetchRoleStatus();
     }
   }, 300000);
 });

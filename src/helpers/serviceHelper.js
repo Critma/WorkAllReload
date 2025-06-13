@@ -1,9 +1,15 @@
 import { useUserStore } from "@/store/userStore.js";
 
-const jwtHeader = () => {
+const jwtHeader = (token = null) => {
     const store = useUserStore();
-    return {
-        headers: { Authorization: `Bearer ${store.jwt}` }
+    if (token === null) {
+        return {
+            headers: { Authorization: `Bearer ${store.jwt}` }
+        }
+    } else {
+        return {
+            headers: { Authorization: `Bearer ${token}` }
+        }
     }
 };
 

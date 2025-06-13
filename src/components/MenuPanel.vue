@@ -16,6 +16,7 @@
                     <RouterLink :to="paths.Reg">Регистрация</RouterLink>
                 </template>
                 <template v-else>
+                    <RouterLink v-if="userStore.isAdmin" :to="paths.Admin" class="text-muted">admin</RouterLink>
                     <template v-if="userStore.isEmployer">
                         <RouterLink :to="paths.Vacancies">Все Вакансии</RouterLink>
                         <RouterLink :to="paths.CompanyVacancies">Ваши Вакансии</RouterLink>

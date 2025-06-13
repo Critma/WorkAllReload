@@ -18,7 +18,7 @@
             <p class="card-text"><strong>Опыт:</strong> {{ response.vacancy.experience.name }}</p>
             <!-- <p class="card-text"><strong>Описание работы:</strong> {{ response.vacancy.aboutWork }}</p> -->
             <p class="card-text"><small class="text-muted">Вакансия создана: {{ formatDate(response.vacancy.created_at)
-            }}</small></p>
+                    }}</small></p>
             <p class="card-text"><small class="text-muted">Вакансия обновлена: {{
                 formatDate(response.vacancy.updated_at) }}</small></p>
         </div>
@@ -34,6 +34,7 @@ import { useRouter } from 'vue-router';
 import { ref, computed } from 'vue';
 import useApi from '../composibles/useApi';
 import { deleteResponse } from '../service/responseService';
+import names from '@/router/names.js'
 
 const props = defineProps(['response', 'reload'])
 const router = useRouter();
@@ -55,7 +56,7 @@ const background = computed(() => {
 })
 
 function pushToVacancy(id) {
-    router.push({ name: 'Vacancy', params: { id: id } });
+    router.push({ name: names.Vacancy, params: { id: id } });
 }
 
 function delReponse(id) {

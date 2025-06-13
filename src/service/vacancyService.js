@@ -239,8 +239,6 @@ async function searchVacancies(text) {
     }
     try {
         const result = await axios.get(url, { params: queryData });
-        console.log(12312312)
-        console.log(result.data.VacancyInfo)
         return new Result(true, "", toVacancy(result.data.VacancyInfo))
     }
     catch (error) {
@@ -251,7 +249,7 @@ async function searchVacancies(text) {
 
 async function filterVacancies(filterObj) {
     const serverStore = useServerStore()
-    const url = `${serverStore.vacancyURL}/filter`;
+    const url = `${serverStore.vacancyURL}/search`;
     const queryData = {
         Min: filterObj.minSalary == '' ? 0 : filterObj.minSalary,
     }
