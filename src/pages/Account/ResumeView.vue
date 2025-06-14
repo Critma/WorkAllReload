@@ -2,7 +2,6 @@
     <div class="container resume-container">
         <form class="form-card" @submit.prevent="handleSave()">
             <label for="resume" class="form-title mb-2">Резюме</label>
-            <Loader v-if="isLoading" />
             <section class="resume-card">
                 <div class="resume-title">Расскажите о себе:</div>
                 <div class="info-block">
@@ -24,13 +23,17 @@
                     <h3 class="info-label" id="additional-info-label">Дополнительные контакты</h3>
                 </div>
             </section>
-            <textarea id="resume" class="form-control" rows="8" v-model="resume.description"
-                placeholder="Ваше резюме"></textarea>
+            <textarea id="resume" class="form-control" rows="8" v-model="resume.description" placeholder="Ваше резюме"
+                maxlength="6000"></textarea>
             <label for="experience" class="form-label">Опыт <span style="color: red;">*</span></label>
             <select id="experience" class="form-control" v-model="resume.experience_id" required>
                 <option v-for="exp in experiences" :value="exp.id">{{ exp.name }}</option>
             </select>
-            <button id="save-button" class="account-button fbtn">Сохранить</button>
+            <button id="save-button" class="account-button fbtn" :disabled="isLoading">Сохранить</button>
+            <Loader v-if="isLoading" />
+            <div class="d-flex" style="justify-content: center;">
+                <Success v-if="successMesage" :success="successMesage"></Success>
+            </div>
         </form>
     </div>
 </template>
@@ -71,7 +74,11 @@ async function Getexps() {
 
 async function handleSave() {
     await ExecuteApiCommand(() => AddOrUpdateResume(resume.value),
-        (_) => { successMesage.value = 'Резюме сохранено' },
+        (_) => {
+            successMesage.value = 'Резюме сохранено'; setTimeout(() => {
+                successMesage.value = '';
+            }, 2000);
+        },
         (result) => { errorMessage.value = 'Ошибка при сохранении Резюме$ {result.error}' });
 }
 

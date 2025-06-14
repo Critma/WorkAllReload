@@ -12,6 +12,7 @@
                     }}</a>
             </p>
             <p><strong>Локация:</strong> <span id="vacancy-location">{{ vacancy.location }}</span></p>
+            <p><strong>Опыт:</strong> <span id="vacancy-location">{{ vacancy.experience.name }}</span></p>
             <p><strong>Описание работы:</strong></p>
             <textarea class="form-control vacancy-aboutWork" rows="2" :value="vacancy.aboutWork" readonly></textarea>
             <p><small>Создано: <span id="vacancy-created_at">{{ formatDate(vacancy.created_at) }}</span> |

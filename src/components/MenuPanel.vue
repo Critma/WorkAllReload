@@ -3,7 +3,7 @@
         <div class="menu__container">
             <div class="logo">
                 <div class="logo__text">
-                    <RouterLink :to="paths.Home" id="logo-title">
+                    <RouterLink :to="paths.Home" id="logo-title" tabindex="-1">
                         <h1>WorkAll</h1>
                     </RouterLink>
                     <h3>Челябинск</h3>

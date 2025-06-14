@@ -52,7 +52,6 @@ async function adjustMenuPanelHeight() {
   menuPanelHeight.value = menu.clientHeight * 1.2;
 }
 
-
 </script>
 
 <style lang="scss"></style>

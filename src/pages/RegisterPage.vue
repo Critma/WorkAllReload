@@ -4,38 +4,38 @@
         <div class="title__line"></div>
         <main class="registration-page">
             <section class="form-card">
-                <form @submit.prevent="onSubmit" novalidate>
+                <form @submit.prevent="onSubmit">
                     <div class="row">
                         <div class="col">
                             <div class="mb-4">
                                 <label for="name" class="form-label">{{ isUserRegister ? 'Имя' : 'Название организация'
-                                }} <span style="color: red;">*</span></label>
+                                    }} <span style="color: red;">*</span></label>
                                 <input id="name" type="text" v-model="form.Name" required class="form-control"
-                                    placeholder="Введите имя" autocomplete="name" />
+                                    placeholder="Введите имя" autocomplete="name" maxlength="150" />
                             </div>
                             <div class="mb-4">
                                 <label for="email" class="form-label">Email <span style="color: red;">*</span></label>
                                 <input id="email" type="email" v-model="form.Email" required class="form-control"
-                                    placeholder="Введите email" autocomplete="email" />
+                                    placeholder="Введите email" autocomplete="email" maxlength="320" />
                             </div>
                             <div v-if="!isUserRegister" class="mb-4">
                                 <label for="inn" class="form-label">INN <span style="color: red;">*</span></label>
                                 <input id="inn" type="inn" v-model="form.INN" required class="form-control"
-                                    placeholder="Введите INN" autocomplete="inn" />
+                                    placeholder="Введите INN" autocomplete="inn" maxlength="10" />
                             </div>
                         </div>
                         <div class="col">
                             <div class="mb-4">
                                 <label for="phone" class="form-label">Телефон <span style="color: red;">*</span></label>
                                 <input id="phone" type="tel" v-model="form.PhoneNumber" placeholder="+7 (999) 999-99-99"
-                                    class="form-control" autocomplete="tel" pattern="^\\+?\\d{6,15}$" />
+                                    class="form-control" autocomplete="tel" pattern="^\+?\d{6,15}$" maxlength="16" />
                             </div>
                             <div class="mb-4 position-relative">
                                 <label for="password" class="form-label">Пароль <span
                                         style="color: red;">*</span></label>
                                 <input :type="showPassword ? 'text' : 'password'" id="password" v-model="form.Password"
                                     required class="form-control pe-5" placeholder="Введите пароль"
-                                    autocomplete="new-password" minlength="6" />
+                                    autocomplete="new-password" minlength="6" maxlength="120" />
                                 <button type="button" class="password-toggle" @click="togglePasswordVisibility"
                                     :aria-label="showPassword ? 'Скрыть пароль' : 'Показать пароль'">
                                     <img :src="showPassword ? Eye : EyeOff" alt="" />
@@ -46,7 +46,8 @@
                                         style="color: red;">*</span></label>
                                 <input :type="showConfirmPassword ? 'text' : 'password'" id="passwordConfirm"
                                     v-model="form.PasswordConfirm" required class="form-control pe-5"
-                                    placeholder="Подтвердите пароль" autocomplete="new-password" minlength="6" />
+                                    placeholder="Подтвердите пароль" autocomplete="new-password" minlength="6"
+                                    maxlength="120" />
                                 <button type="button" class="password-toggle" @click="toggleConfirmPasswordVisibility"
                                     :aria-label="showConfirmPassword ? 'Скрыть подтверждение пароля' : 'Показать подтверждение пароля'">
                                     <img :src="showConfirmPassword ? Eye : EyeOff" alt="" />

@@ -13,14 +13,6 @@
             </KeepAlive>
             <loader v-if="isLoading"></loader>
         </div>
-        <!-- <div class="message__container">
-            <div v-if="isSuccess" class="message">
-                <Success success="Данные успешно сохранены" />
-            </div>
-            <div v-if="errorMessage != ''" class="message__container">
-                <Error :errorMessage="errorMessage" />
-            </div>
-        </div> -->
         <div class="account-buttons">
             <button id="logout-button" class="account-button fbtn" @click="Logout()">Выйти из аккаунта</button>
         </div>
@@ -34,8 +26,6 @@ import ResumeView from './ResumeView.vue';
 import paths from '@/router/paths.js';
 import { useUserStore } from '@/store/userStore';
 import { logout } from '@/service/accessingService';
-import { getCandidateSelf, saveCandidate } from '../../service/candidateService';
-import { getEmployerSelf, saveEmployer } from '../../service/employerService';
 import useApi from '../../composibles/useApi';
 import Resume from '../../models/Resume';
 
@@ -43,15 +33,14 @@ const userStore = useUserStore();
 const user = ref(null);
 const isSuccess = ref(false);
 const accountSection = ref("InfoView")
-const resume = ref(new Resume());
-const { isLoading, errorMessage, successMesage, ExecuteApiCommand } = useApi();
+const { isLoading } = useApi();
 
 watch(accountSection, () => {
     isSuccess.value = false;
 })
 
-function Logout() {
-    logout();
+async function Logout() {
+    await logout();
 }
 
 const section = computed(() => {

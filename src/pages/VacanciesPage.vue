@@ -8,7 +8,7 @@
             <template v-if="isSearch">
                 <label for="search" class="form-label mb-1">Поиск:</label>
                 <input id="search" class="form-control" v-model="options.searchText" type="search"
-                    placeholder="Поиск по названию вакансии" :disabled="isLoading">
+                    placeholder="Поиск по названию вакансии" :disabled="isLoading" maxlength="100">
             </template>
             <template v-else>
                 <div class="options__filter">
@@ -22,11 +22,12 @@
                         <div class="d-flex" style="gap: 10px;">
                             <label for="minSalary" class="form-label">Мин:</label>
                             <input id="minSalary" class="form-control" type="number" v-model="options.minSalary"
-                                maxlength="15" min="0" />
+                                maxlength="15" min="0" max="99900000" />
                         </div>
                         <div class="d-flex" style="gap: 10px;">
                             <label for="maxSalary" class="form-label">Макс:</label>
-                            <input id="maxSalary" class="form-control" type="number" v-model="options.maxSalary" />
+                            <input id="maxSalary" class="form-control" type="number" v-model="options.maxSalary" min="0"
+                                max="99900000" />
                         </div>
                     </div>
                 </div>
@@ -48,19 +49,21 @@
                 <template v-if="vacancies.length > 0" v-for="vacancy in vacancies" :key="vacancy.id">
                     <VacancyCard :vacancy="vacancy" />
                 </template>
-                <template v-else>
+                <template v-else-if="!isLoading">
                     <h2 class="text-center mt-5">Вакансии не найдены</h2>
                 </template>
             </div>
             <div v-show="!isLoading && !disableTabs" class="vacancies__tabs">
-                <span class="vacancies__tab" @click="goBack" :disabled="isLoading">&lt;</span>
+                <span class="vacancies__tab" @click="goBack" :disabled="isLoading" tabindex="0"
+                    @keyup.enter="goBack">&lt;</span>
                 <div class="pages">
                     <div v-for="i in pages" :key="i" :class="{ 'page': true, 'page__active': page == i }"
-                        @click="goToPage(i)" :disabled="isLoading">
+                        @click="goToPage(i)" :disabled="isLoading" tabindex="0" @keyup.enter="goToPage(i)">
                         {{ i
                         }}</div>
                 </div>
-                <span class="vacancies__tab" @click="goNext" :disabled="isLoading">&gt;</span>
+                <span class="vacancies__tab" @click="goNext" :disabled="isLoading" tabindex="0"
+                    @keyup.enter="goNext">&gt;</span>
             </div>
         </div>
     </main>
@@ -100,6 +103,7 @@ onMounted(async () => {
 
 watch(page, async () => {
     await FetchData(page.value, vacCount);
+    window.scroll(0, 0);
 })
 
 async function FetchVacanciesCount() {

@@ -83,7 +83,8 @@ async function getVacansiesFromSelfEmployer() {
             vacancy.IsVisible,
             response.data.EmployerID,
             vacancy.CreatedAt,
-            vacancy.UpdatedAt
+            vacancy.UpdatedAt,
+            new Experience(vacancy.Experience.ID, vacancy.Experience.Name, vacancy.Experience.CreatedAt),
         );
     })
     result = new Result(true, "", data)

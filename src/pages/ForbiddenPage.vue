@@ -7,7 +7,7 @@
                 <br>Обратитесь к администратору
             </p>
             <p v-else id="notFoundDesc" class="lead">
-                <span>Возможно, у вас не хватает прав для просмотра данной страницы</span>
+                <span>Возможно, у вас не хватает прав для просмотра данной страницы: {{ status }}</span>
             </p>
             <a href="/" class="btn btn-primary" role="button">Вернуться на главную</a>
         </div>

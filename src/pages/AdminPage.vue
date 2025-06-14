@@ -53,13 +53,22 @@ import useApi from '@/composibles/useApi'
 import { getAllEmployers, getStatuses, setEmployerStatus } from '@/service/adminService'
 import { formatDate } from '@/helpers/componentHelper'
 import statusesName from '@/helpers/statuses.js'
+import { useUserStore } from '../store/userStore'
 
 const users = ref([])
 const statuses = ref([])
 const { isLoading, ExecuteApiCommand } = useApi()
+const userStore = useUserStore();
 
 async function fetchUsers() {
-    return await ExecuteApiCommand(() => getAllEmployers(), (result) => { users.value = result.data }, (_) => { });
+    return await ExecuteApiCommand(() => getAllEmployers(), (result) => {
+        users.value = result.data;
+        if (userStore.isEmployer) {
+            users.value = users.value.filter(u => {
+                return u.id != userStore.ID;
+            });
+        }
+    }, (_) => { });
 }
 
 async function fetchStatuses() {

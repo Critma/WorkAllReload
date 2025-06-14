@@ -4,29 +4,25 @@
             Создать вакансию
         </div>
         <section class="form-card">
-            <div class="reg__alert" role="alert">
-                <Error v-if="errorMessage != ''" :errorMessage="errorMessage" />
-                <Success v-if="successMesage != ''" :success="successMesage" />
-            </div>
             <Loader v-if="isLoading" />
-            <form @submit.prevent="onSubmit" novalidate>
+            <form @submit.prevent="onSubmit">
                 <div class="row">
                     <div class="col">
                         <div class="mb-4">
                             <label for="name" class="form-label">Название вакансии <span
                                     style="color: red;">*</span></label>
                             <input id="name" type="text" v-model="vacancy.name" required class="form-control"
-                                placeholder="Введите имя вакансии" autocomplete="companyName" />
+                                placeholder="Введите имя вакансии" autocomplete="companyName" maxlength="100" />
                         </div>
                         <div class="mb-4">
                             <label for="email" class="form-label">Email <span style="color: red;"> *</span></label>
                             <input id="email" type="email" v-model="vacancy.email" required class="form-control"
-                                placeholder="Введите email" autocomplete="email" />
+                                placeholder="Введите email" autocomplete="email" maxlength="320" />
                         </div>
                         <div class="mb-4">
                             <label for="location" class="form-label">Город <span style="color: red;"> *</span></label>
                             <input id="location" type="text" v-model="vacancy.location" required class="form-control"
-                                placeholder="Введите город" autocomplete="location" />
+                                placeholder="Введите город" autocomplete="location" maxlength="100" />
                         </div>
                     </div>
                     <div class="col">
@@ -34,12 +30,12 @@
                             <label for="phone" class="form-label">Номер телефона <span
                                     style="color: red;">*</span></label>
                             <input id="phone" type="tel" v-model="vacancy.phoneNumber" placeholder="+7 (999) 999-99-99"
-                                class="form-control" autocomplete="tel" />
+                                class="form-control" autocomplete="tel" pattern="^\+?\d{6,15}$" maxlength="16" />
                         </div>
                         <div class="mb-4">
                             <label for="salary" class="form-label">Зарплата<span style="color: red;"> *</span></label>
                             <input id="salary" type="number" v-model.number="vacancy.salary" placeholder="90000"
-                                class="form-control" autocomplete="salary" />
+                                class="form-control" autocomplete="salary" min="0" max="99900000" />
                         </div>
                         <div class="mb-4">
                             <label for="experience" class="form-label">Опыт <span style="color: red;">*</span></label>
@@ -52,13 +48,18 @@
                 <div class="row">
                     <div class="mb-4">
                         <label for="about" class="form-label">О работе <span style="color: red;">*</span></label>
-                        <textarea id="about" class="form-control" v-model="vacancy.aboutWork" rows="2"></textarea>
+                        <textarea id="about" class="form-control" v-model="vacancy.aboutWork" rows="2"
+                            maxlength="3000"></textarea>
                     </div>
                 </div>
                 <button type="submit" class="btn btn__contrast__primary w-100 py-3 fw-semibold"
                     :disabled="isLoading || !isActive">
                     {{ isLoading ? 'Загрузка...' : 'Сохранить' }}
                 </button>
+                <div class="reg__alert mt-3" role="alert">
+                    <Error v-if="errorMessage != ''" :errorMessage="errorMessage" />
+                    <Success v-if="successMesage != ''" :success="successMesage" />
+                </div>
             </form>
         </section>
         <button id="back" class="btn btn-warning btn-lg w-50" @click="GoBack()">Назад</button>
@@ -118,11 +119,11 @@ async function onSubmit() {
     if (isEdit.value) {
         await ExecuteApiCommand(() => updateVacancy(vacancy.value),
             () => {
-                successMesage.value = "Вакансия успешно обновлена! Переход обратно через 3 секунды...";
+                successMesage.value = "Вакансия успешно обновлена! Переход обратно через 2 секунды...";
                 isActive.value = false;
                 setTimeout(() => {
                     router.push(paths.CompanyVacancies);
-                }, 3000);
+                }, 1500);
             },
             (result) => {
                 errorMessage.value = result.error;
@@ -130,11 +131,11 @@ async function onSubmit() {
     } else {
         await ExecuteApiCommand(() => addVacancy(vacancy.value),
             () => {
-                successMesage.value = "Вакансия успешно создана! Переход обратно через 3 секунды...";
+                successMesage.value = "Вакансия успешно создана! Переход обратно через 2 секунды...";
                 isActive.value = false;
                 setTimeout(() => {
                     router.push(paths.CompanyVacancies);
-                }, 3000);
+                }, 1500);
             }, (result) => {
                 errorMessage.value = result.error;
             })

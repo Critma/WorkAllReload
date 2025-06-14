@@ -24,10 +24,11 @@ const routes = [
     { path: paths.Home, component: Vacancies, name: names.Home },
     { path: paths.Vacancies, component: Vacancies },
     { path: paths.Vacancy, component: VacancyPage, name: names.Vacancy, props: true },
-    { path: paths.CompanyVacancies, component: CompanyVacancies },
-    { path: paths.CreateVacancy, component: CreateVacancy },
-    { path: paths.EditVacancy, component: CreateVacancy, name: names.EditVacancy },
-    { path: paths.VacancyResponses, component: VacancyResponses },
+
+    { path: paths.CompanyVacancies, component: CompanyVacancies, meta: { empOnly: true, requiresAuth: true } },
+    { path: paths.CreateVacancy, component: CreateVacancy, meta: { empOnly: true, requiresAuth: true } },
+    { path: paths.EditVacancy, component: CreateVacancy, name: names.EditVacancy, meta: { empOnly: true, requiresAuth: true } },
+    { path: paths.VacancyResponses, component: VacancyResponses, meta: { empOnly: true, requiresAuth: true } },
 
     { path: paths.Auth, component: AuthPage, meta: { authExit: true } },
     { path: paths.Reg, component: Reg, meta: { authExit: true } },
@@ -44,7 +45,7 @@ const routes = [
     { path: paths.ForgetPassword, component: ForgetPasswordPage, meta: { authExit: true } },
 
     { path: paths.Account, component: AccountPage, name: names.Account, meta: { requiresAuth: true } },
-    { path: paths.Responses, component: Responses, name: names.Responses, meta: { requiresAuth: true } },
+    { path: paths.Responses, component: Responses, name: names.Responses, meta: { requiresAuth: true, candidateOnly: true } },
 
     { path: paths.Forbidden, component: ForbiddenPage, name: names.Forbidden },
     { path: '/:pathMatch(.*)*', name: names.NotFound, component: NotFound },
@@ -56,7 +57,6 @@ const router = createRouter({
 })
 
 
-// TODO: guard
 router.beforeEach(async (to) => {
     const userStore = useUserStore();
 
@@ -72,13 +72,21 @@ router.beforeEach(async (to) => {
     if (to.meta.requiresAuth) {
         if (!userStore.isAuthenticated) {
             return { path: paths.Auth }
-        } else {
-            return;
         }
-    } else if (userStore.isAuthenticated && to.meta.authExit) {
+    } else if (to.meta.authExit && userStore.isAuthenticated) {
         console.log("authExit")
         return { name: names.Account }
     }
+
+    if (to.meta.candidateOnly && isEmployer()) {
+        return { name: names.Forbidden, params: { status: statuses.candidateOnly } };
+    }
+
+    if (to.meta.empOnly && !isEmployer()) {
+        return { name: names.Forbidden, params: { status: statuses.empOnly } };
+    }
+
+
     return
 })
 
@@ -92,6 +100,11 @@ function isAdmin() {
 function isBanned() {
     const userStore = useUserStore();
     return userStore.status.includes(statuses.blocked);
+}
+
+function isEmployer() {
+    const userStore = useUserStore();
+    return userStore.isEmployer;
 }
 
 function IsBanAllowedDests(name) {
