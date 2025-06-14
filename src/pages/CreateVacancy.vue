@@ -29,8 +29,8 @@
                         <div class="mb-4">
                             <label for="phone" class="form-label">Номер телефона <span
                                     style="color: red;">*</span></label>
-                            <input id="phone" type="tel" v-model="vacancy.phoneNumber" placeholder="+7 (999) 999-99-99"
-                                class="form-control" autocomplete="tel" pattern="^\+?\d{6,15}$" maxlength="16" />
+                            <input id="phone" type="tel" v-model="vacancy.phoneNumber" placeholder="+79000000000"
+                                class="form-control" autocomplete="tel" pattern="^\+?\d{6,15}$" maxlength="15" />
                         </div>
                         <div class="mb-4">
                             <label for="salary" class="form-label">Зарплата<span style="color: red;"> *</span></label>

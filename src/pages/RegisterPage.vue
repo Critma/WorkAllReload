@@ -21,14 +21,16 @@
                             <div v-if="!isUserRegister" class="mb-4">
                                 <label for="inn" class="form-label">INN <span style="color: red;">*</span></label>
                                 <input id="inn" type="inn" v-model="form.INN" required class="form-control"
-                                    placeholder="Введите INN" autocomplete="inn" maxlength="10" />
+                                    placeholder="Введите INN (10 символов)" autocomplete="inn" maxlength="10"
+                                    pattern="\d{10}" />
                             </div>
                         </div>
                         <div class="col">
                             <div class="mb-4">
                                 <label for="phone" class="form-label">Телефон <span style="color: red;">*</span></label>
-                                <input id="phone" type="tel" v-model="form.PhoneNumber" placeholder="+7 (999) 999-99-99"
-                                    class="form-control" autocomplete="tel" pattern="^\+?\d{6,15}$" maxlength="16" />
+                                <input id="phone" type="tel" v-model="form.PhoneNumber"
+                                    placeholder="+79000000000" class="form-control" autocomplete="tel"
+                                    pattern="^\+?\d{6,15}$" maxlength="15" />
                             </div>
                             <div class="mb-4 position-relative">
                                 <label for="password" class="form-label">Пароль <span
@@ -186,5 +188,9 @@ async function onSubmit() {
 
 .router__link {
     font-size: components.$fs-regular;
+}
+
+@media (max-width: 768px) {
+
 }
 </style>

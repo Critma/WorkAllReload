@@ -235,6 +235,9 @@ async function getVacansiesCount() {
 async function searchVacancies(text) {
     const serverStore = useServerStore()
     const url = `${serverStore.vacancyURL}/search`;
+    if (text !== '' && text !== null) {
+        text = text.trim();
+    }
     const queryData = {
         Text: text,
     }

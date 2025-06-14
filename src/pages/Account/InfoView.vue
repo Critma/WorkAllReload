@@ -7,7 +7,7 @@
                 maxlength="150">
             <label class="form-label" for="phone">Номер телефона <span class="red-text">*</span></label>
             <input id="phone" class="input form-control" type="tel" name="phone" v-model="user.phone" required
-                pattern="^\+?\d{6,15}$" maxlength="16">
+                pattern="^\+?\d{6,15}$" maxlength="15">
             <label class="form-label" for="email">Почта</label>
             <input id="email" class="input form-control" type="email" name="email" v-model="user.email" required
                 readonly style="cursor: default;">
