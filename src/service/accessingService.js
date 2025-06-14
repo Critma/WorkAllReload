@@ -123,4 +123,22 @@ async function fetchRoleStatus() {
     }
 }
 
-export { login, logout, OnFirstRun, isJwtValid, fetchRoleStatus }
+async function recover(email) {
+    const serverStore = useServerStore();
+    const url = serverStore.recoverURL;
+    const queryParams = {
+        Email: email
+    }
+    console.log(url)
+    console.log(queryParams)
+    try {
+        await axios.get(url, { params: queryParams })
+        return new Result(true, '', null);
+    }
+    catch (error) {
+        console.log(error)
+        return new Result(false, 'Ошибка при операции', error);
+    }
+}
+
+export { login, logout, OnFirstRun, isJwtValid, fetchRoleStatus, recover }

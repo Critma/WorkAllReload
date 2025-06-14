@@ -11,6 +11,7 @@ export const useServerStore = defineStore("serverStore", () => {
     const experienceURL = baseURL + 'exp';
     const resumeURL = `${candidateURL}/resume`;
     const statusURL = baseURL + 'status';
+    const recoverURL = `${candidateURL}/recover`
 
     return {
         empURL,
@@ -22,5 +23,6 @@ export const useServerStore = defineStore("serverStore", () => {
         resumeURL,
         statusURL,
         auth,
+        recoverURL
     }
 });

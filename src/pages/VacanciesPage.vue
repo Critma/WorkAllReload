@@ -159,6 +159,7 @@ async function goToPage(p) {
 <style lang="scss" scoped>
 @use "@/assets/styles/components.scss";
 @use "@/assets/styles/colors.scss";
+@use "@/assets/styles/form.scss";
 
 .vacancies-list {
     margin: 0 components.$pd-medium;
@@ -234,7 +235,7 @@ async function goToPage(p) {
 }
 
 .salary label {
-    width: 100px;
+    width: 120px;
 }
 
 #search {

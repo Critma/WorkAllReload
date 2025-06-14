@@ -4,7 +4,7 @@
         <div class="title__line"></div>
         <main class="auth-page">
             <section class="form-card">
-                <form @submit.prevent="onSubmit" novalidate>
+                <form @submit.prevent="onSubmit">
                     <div class="mb-4">
                         <label for="email" class="form-label">Email</label>
                         <input id="email" type="email" v-model="form.Email" required class="form-control"
@@ -14,7 +14,7 @@
                         <label for="password" class="form-label">Пароль</label>
                         <input :type="showPassword ? 'text' : 'password'" id="password" v-model="form.Password" required
                             class="form-control pe-5" placeholder="Введите пароль" autocomplete="new-password"
-                            minlength="6" />
+                            minlength="3" />
                         <button type="button" class="password-toggle" @click="togglePasswordVisibility"
                             :aria-label="showPassword ? 'Скрыть пароль' : 'Показать пароль'">
                             <img :src="showPassword ? Eye : EyeOff" alt="" />
@@ -31,6 +31,7 @@
             </section>
             <div class="register__links">
                 <RouterLink :to="paths.Reg" class="router__link">Нету аккаунта? Создайте!</RouterLink>
+                <RouterLink :to="paths.ForgetPassword" class="router__link">Забыли пароль?</RouterLink>
             </div>
         </main>
     </div>
@@ -47,7 +48,6 @@ import { login } from '@/service/accessingService.js';
 import { isFormValid } from '@/helpers/formHelper.js';
 import Eye from '@/assets/images/Eye.png'
 import EyeOff from '@/assets/images/EyeOff.png'
-import Loader from '@/components/global/Loader.vue';
 
 const userStore = useUserStore();
 const form = reactive({ Email: '', Password: '' });
