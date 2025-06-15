@@ -28,16 +28,15 @@
                         <div class="col">
                             <div class="mb-4">
                                 <label for="phone" class="form-label">Телефон <span style="color: red;">*</span></label>
-                                <input id="phone" type="tel" v-model="form.PhoneNumber"
-                                    placeholder="+79000000000" class="form-control" autocomplete="tel"
-                                    pattern="^\+?\d{6,15}$" maxlength="15" />
+                                <input id="phone" type="tel" v-model="form.PhoneNumber" placeholder="+79000000000"
+                                    class="form-control" autocomplete="tel" pattern="^\+?\d{6,15}$" maxlength="15" />
                             </div>
                             <div class="mb-4 position-relative">
                                 <label for="password" class="form-label">Пароль <span
                                         style="color: red;">*</span></label>
                                 <input :type="showPassword ? 'text' : 'password'" id="password" v-model="form.Password"
                                     required class="form-control pe-5" placeholder="Введите пароль"
-                                    autocomplete="new-password" minlength="6" maxlength="120" />
+                                    autocomplete="new-password" minlength="4" maxlength="120" />
                                 <button type="button" class="password-toggle" @click="togglePasswordVisibility"
                                     :aria-label="showPassword ? 'Скрыть пароль' : 'Показать пароль'">
                                     <img :src="showPassword ? Eye : EyeOff" alt="" />
@@ -48,8 +47,7 @@
                                         style="color: red;">*</span></label>
                                 <input :type="showConfirmPassword ? 'text' : 'password'" id="passwordConfirm"
                                     v-model="form.PasswordConfirm" required class="form-control pe-5"
-                                    placeholder="Подтвердите пароль" autocomplete="new-password" minlength="6"
-                                    maxlength="120" />
+                                    placeholder="Подтвердите пароль" autocomplete="new-password" maxlength="120" />
                                 <button type="button" class="password-toggle" @click="toggleConfirmPasswordVisibility"
                                     :aria-label="showConfirmPassword ? 'Скрыть подтверждение пароля' : 'Показать подтверждение пароля'">
                                     <img :src="showConfirmPassword ? Eye : EyeOff" alt="" />
@@ -154,10 +152,10 @@ async function onSubmit() {
     }
     console.log(result)
     if (result.success) {
-        success.value = "Вы успешно зарегестрировались! Теперь войдите в аккаунт! Автоматический переход через 5 секунд...";
+        success.value = "Вы успешно зарегистрировались! Теперь войдите в аккаунт! Автоматический переход через 2 секунды...";
         setTimeout(() => {
             router.push(paths.Auth);
-        }, 5000);
+        }, 2000);
     } else {
         errorMessage.value = 'Ошибка регистрации. Пожалуйста, проверьте данные и попробуйте еще раз.';
         isLoading.value = false;
@@ -190,7 +188,5 @@ async function onSubmit() {
     font-size: components.$fs-regular;
 }
 
-@media (max-width: 768px) {
-
-}
+@media (max-width: 768px) {}
 </style>

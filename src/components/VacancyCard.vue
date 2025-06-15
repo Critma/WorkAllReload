@@ -13,12 +13,12 @@
                 <p class="card-text"><strong>Город:</strong> {{ vacancy.location }}</p>
                 <p class="card-text"><strong>Опыт:</strong> {{ vacancy.experience.name }}</p>
                 <p class="card-text"><small class="text-muted">Вакансия создана: {{ formatDate(vacancy.created_at)
-                        }}</small></p>
+                }}</small></p>
                 <p class="card-text"><small class="text-muted">Вакансия обновлена: {{
                     formatDate(vacancy.updated_at) }}</small></p>
             </div>
             <div class="col-md-2 d-flex justify-content-center buttons">
-                <button class="btn btn-outline-primary" @click="pushToVacancy(vacancy.id)">Подробнее</button>
+                <button class="btn btn-outline-primary btn-lg" @click="pushToVacancy(vacancy.id)">Подробнее</button>
             </div>
         </div>
     </div>
