@@ -10,7 +10,7 @@
             <VacancyResponseCard v-for="response in responses" :key="response.id" :vacancyResponse="response"
                 :statusList="statuses" />
         </div>
-        <div v-if="responses.length === 0">
+        <div v-if="responses.length === 0 && !isLoading">
             <div class="info-block">
                 <h3>Ваши вакансии пока не имеют откликов</h3>
             </div>

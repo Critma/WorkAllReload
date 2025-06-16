@@ -3,37 +3,50 @@
         <div class="title">
             Список вакансий
         </div>
-        <div class="line"></div>
+        <div class="title__line"></div>
         <form class="options" @submit.prevent="handleOptions">
-            <template v-if="isSearch">
-                <label for="search" class="form-label mb-1">Поиск:</label>
-                <input id="search" class="form-control" v-model="options.searchText" type="search"
-                    placeholder="Поиск по названию вакансии" :disabled="isLoading" maxlength="100">
-            </template>
-            <template v-else>
-                <div class="options__filter">
-                    <div class="exp" style="gap: 10px;">
-                        <label for="exp" class="form-label">Опыт:</label>
-                        <select id="exp" class="form-control" aria-label="Exp select" v-model="options.experienceId">
-                            <option v-for="exp in experiences" :value="exp.id" :key="exp.id">{{ exp.name }}</option>
-                        </select>
+            <div class="options__content">
+                <template v-if="isSearch">
+                    <div class="options__search">
+                        <label for="search" class="form-label mb-1">Поиск:</label>
+                        <input id="search" class="form-control" v-model="options.searchText" type="search"
+                            placeholder="Поиск по названию вакансии" :disabled="isLoading" maxlength="100">
                     </div>
-                    <div class="salary">
-                        <div class="d-flex" style="gap: 10px;">
-                            <label for="minSalary" class="form-label">Мин:</label>
-                            <input id="minSalary" class="form-control" type="number" v-model="options.minSalary"
-                                maxlength="15" min="0" max="99900000" />
-                        </div>
-                        <div class="d-flex" style="gap: 10px;">
-                            <label for="maxSalary" class="form-label">Макс:</label>
-                            <input id="maxSalary" class="form-control" type="number" v-model="options.maxSalary" min="0"
-                                max="99900000" />
+                </template>
+                <template v-else>
+                    <div class="options__filter__container">
+                        <div class="options__filter">
+                            <div class="exp">
+                                <label for="exp" class="form-label">Опыт работы</label>
+                                <select id="exp" style="text-align: center;" class="form-control"
+                                    aria-label="Exp select" v-model="options.experienceId">
+                                    <option v-for="exp in experiences" :value="exp.id" :key="exp.id">{{ exp.name }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="salary">
+                                <div class="d-flex flex-column" style="gap: 10px;">
+                                    <label for="minSalary" class="form-label">Мин<span
+                                            class="adapt__hide">имальная</span> зарплата</label>
+                                    <input id="minSalary" class="form-control" type="number" v-model="options.minSalary"
+                                        maxlength="15" min="0" max="99900000" />
+                                </div>
+                                <div class="d-flex flex-column" style="gap: 10px;">
+                                    <label for="maxSalary" class="form-label">Макc<span
+                                            class="adapt__hide">имальная</span> зарплата</label>
+                                    <input id="maxSalary" class="form-control" type="number" v-model="options.maxSalary"
+                                        min="0" max="99900000" />
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </template>
+                </template>
+            </div>
             <div class="options__buttons">
-                <button type="submit" class="btn btn-success submit__button" :disabled="isLoading">Найти</button>
+                <button type="submit" class="btn btn-success submit__button" :disabled="isLoading">{{ isSearch ?
+                    'Поиск'
+                    : 'Фильтр'
+                }}</button>
                 <button type="button" class="btn btn-danger" @click="handleReset"
                     :disabled="isLoading">Сбросить</button>
                 <button type="button" class="btn btn-warning" @click="isSearch = !isSearch" :disabled="isLoading">
@@ -83,7 +96,7 @@ const vacCount = 5; // количество вакансий на страниц
 const vacAllCount = ref(0);
 const page = ref(1);
 const pages = ref([]);
-const { isLoading, errorMessage, successMesage, ExecuteApiCommand } = useApi();
+const { isLoading, ExecuteApiCommand } = useApi();
 const isSearch = ref(true);
 const disableTabs = ref(false);
 const experiences = ref([]);
@@ -103,7 +116,7 @@ onMounted(async () => {
 
 watch(page, async () => {
     await FetchData(page.value, vacCount);
-    window.scroll(0, 0);
+    window.scroll(0, 110);
 })
 
 async function FetchVacanciesCount() {
@@ -161,6 +174,83 @@ async function goToPage(p) {
 @use "@/assets/styles/colors.scss";
 @use "@/assets/styles/form.scss";
 
+.options {
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+    margin-bottom: 15px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.options__content {
+    width: 100%;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.options__search {
+    width: 100%;
+}
+
+.options__filter__container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.options__filter {
+    display: flex;
+    padding: 5px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.options__buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.btn {
+    min-width: 150px;
+    margin: 0px 10px;
+}
+
+.salary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-left: 15px;
+}
+
+.exp {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.form-label {
+    margin: 0px;
+    padding: 0px;
+    font-weight: 600;
+    text-align: center;
+    align-self: center;
+}
+
+.form-control {
+    margin: 0px;
+    border: 3px solid colors.$blue;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
 .vacancies-list {
     margin: 0 components.$pd-medium;
 }
@@ -200,54 +290,6 @@ async function goToPage(p) {
     text-decoration: underline;
 }
 
-.options {
-    display: flex;
-    flex-direction: column;
-    margin: 0px 20px;
-    margin-bottom: 15px;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.options__filter {
-    max-width: 1000px;
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    background-color: colors.$form-background;
-    border: 2px solid colors.$blue;
-}
-
-.options__buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-}
-
-.salary {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px
-}
-
-.salary label {
-    width: 120px;
-}
-
-#search {
-    max-width: 1000px;
-    border: 2px solid colors.$blue;
-}
-
-#exp {
-    max-width: 400px;
-    text-align: center;
-}
-
 input {
     border: 1px solid black;
 }
@@ -259,20 +301,35 @@ input {
 
     .exp {
         flex-direction: column;
-        width: 140px;
+        width: 110px;
     }
 
     .form-control {
         height: 35px;
+        padding: 5px;
     }
 
     .salary label {
         width: 70px;
+        flex-direction: column;
     }
 
     select {
         padding: 0px 5px;
         font-size: components.$fs-xsmall * 0.9;
     }
+
+    .options__content {
+        height: 100px
+    }
+
+    .adapt__hide {
+        display: none;
+    }
+
+    .form-control {
+        border: 2px solid colors.$blue;
+    }
+
 }
 </style>

@@ -12,8 +12,8 @@
                             <Success v-if="successMesage" :successMessage="successMesage" />
                         </div>
                         <p class="card-text"><strong>Статус отклика:</strong></p>
-                        <select class="status form-control" @change="onChange()" v-model="vacancyResponse.status.id"
-                            required :disabled="isLoading">
+                        <select class="status form-control" style="text-align: center;" @change="onChange()"
+                            v-model="vacancyResponse.status.id" required :disabled="isLoading">
                             <option v-for="status in statusList" :value="status.id" :key="status.id">{{ status.name }}
                             </option>
                         </select>
@@ -32,14 +32,15 @@
                         <p class="card-text"><strong>Email: </strong>{{ vacancyResponse.candidate.email }}</p>
                     </div>
                 </div>
-                <div class="row">
-                    <button :class="['btn mb-2', resume ? 'btn-danger' : 'btn-warning']" @click="checkResume"> {{ resume
-                        ?
-                        'Закрыть резюме' : 'Рассмотреть резюме' }} </button>
+                <div class="row row__resume">
+                    <button class="mt-2" :class="['btn mb-2', resume ? 'btn-danger' : 'btn-warning']"
+                        @click="checkResume"> {{ resume
+                            ?
+                            'Закрыть резюме' : 'Рассмотреть резюме' }} </button>
                     <template v-if="resume">
                         <p class="card-text"><strong>Опыт: </strong>{{ resume.experience.name ?? 'Не указано' }}</p>
                         <strong class="card-text">Резюме:</strong>
-                        <textarea class="resume form-control" v-model="resume.description" readonly></textarea>
+                        <textarea class="resume form-control" rows="5" v-model="resume.description" readonly></textarea>
                     </template>
                 </div>
             </div>
@@ -112,7 +113,6 @@ async function onChange() {
 }
 
 .card-body {
-    // padding: 10px;
     margin: 0px;
 }
 
@@ -152,8 +152,6 @@ async function onChange() {
     max-height: 250px;
 }
 
-.status {}
-
 .candidate {
     border: 2px solid colors.$green;
     align-self: flex-start;
@@ -161,6 +159,10 @@ async function onChange() {
 
 .btn {
     font-size: components.$button-fs;
+}
+
+.row__resume {
+    margin: 0px 10px;
 }
 
 @media (max-width: 760px) {
