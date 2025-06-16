@@ -2,15 +2,23 @@
     <div class="title">
         Все отклики
     </div>
+    <div class="title__line"></div>
     <div class="container">
-        <div class="title__line"></div>
+        <div class="selector" style="width: 100%; max-width: 700px;">
+            <label for="selection" class="form-label" style="font-weight: bold;">Выберите вакансию</label>
+            <select id="selection" class="form-control" v-model="selectVacancyid" @change="handleSelectChange($event)"
+                :disabled="isLoading" title="Выберите вакансию, чтобы вывести отклики принадлежащие только ей">
+                <option value="0"></option>
+                <option v-for="vacancy in vacancies" :value="vacancy.id" :key="vacancy.id">{{ vacancy.name }}</option>
+            </select>
+        </div>
         <button @click="router.push(paths.CompanyVacancies)" class="btn btn-success px-4">Назад</button>
         <Loader v-if="isLoading" />
-        <div v-if="responses.length > 0" class="container">
-            <VacancyResponseCard v-for="response in responses" :key="response.id" :vacancyResponse="response"
+        <div v-if="currentResponses.length > 0" class="container">
+            <VacancyResponseCard v-for="response in currentResponses" :key="response.id" :vacancyResponse="response"
                 :statusList="statuses" />
         </div>
-        <div v-if="responses.length === 0 && !isLoading">
+        <div v-if="currentResponses.length === 0 && !isLoading">
             <div class="info-block">
                 <h3>Ваши вакансии пока не имеют откликов</h3>
             </div>
@@ -32,10 +40,12 @@ import statusNames from '@/helpers/statuses';
 
 
 const vacancies = ref([]);
+const selectVacancyid = ref(0);
+const currentResponses = ref([]);
 const responses = ref([]);
 const statuses = ref([]);
 const router = useRouter();
-const { isLoading, errorMessage, successMesage, ExecuteApiCommand } = useApi();
+const { isLoading, errorMessage, ExecuteApiCommand } = useApi();
 
 onMounted(async () => {
     await getStatusList();
@@ -49,6 +59,18 @@ onMounted(async () => {
         return false;
     })
 })
+
+function handleSelectChange(event) {
+    const val = event.target.value;
+    console.log(val);
+    if (val == 0) {
+        console.log(responses.value);
+        currentResponses.value = responses.value;
+    }
+    else {
+        currentResponses.value = responses.value.filter(resp => resp.vacancy.id == val);
+    }
+}
 
 async function getStatusList() {
     return ExecuteApiCommand(() => getStatuses(), (result) => statuses.value = result.data, () => { });
@@ -65,6 +87,7 @@ async function LoadResponses() {
                 result.data.forEach(response => {
                     responses.value.push(response);
                 });
+                currentResponses.value = responses.value;
             }
         });
     })
@@ -85,5 +108,14 @@ async function LoadResponses() {
 
 .spacer {
     height: 30px;
+}
+
+
+@media (max-width: 760px) {
+    #selection {
+        height: 35px;
+        font-size: components.$fs-xsmall;
+        padding: 5px;
+    }
 }
 </style>

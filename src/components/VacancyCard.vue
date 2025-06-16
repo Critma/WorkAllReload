@@ -44,6 +44,7 @@ function pushToVacancy() {
 <style lang="scss" scoped>
 @use "@/assets/styles/colors.scss";
 @use "@/assets/styles/components.scss";
+// @use "@/assets/styles/form.scss";
 
 .card {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);

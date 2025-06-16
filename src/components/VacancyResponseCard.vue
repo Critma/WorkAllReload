@@ -110,6 +110,7 @@ async function onChange() {
     max-width: 1400px;
     width: 100%;
     margin: 0px;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
 }
 
 .card-body {
